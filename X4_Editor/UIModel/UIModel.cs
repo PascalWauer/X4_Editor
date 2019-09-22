@@ -357,18 +357,34 @@ namespace X4_Editor
             }
         }
 
-        private string m_ModPath;
-        public string ModPath
+        private string m_ModPath1;
+        public string ModPath1
         {
             get
             {
-                if (!Directory.Exists(m_ModPath))
+                if (!Directory.Exists(m_ModPath1))
                     return "enter valid folder path here...";
-                return m_ModPath;
+                return m_ModPath1;
             }
             set
             {
-                m_ModPath = value;
+                m_ModPath1 = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private string m_ModPath2;
+        public string ModPath2
+        {
+            get
+            {
+                if (!Directory.Exists(m_ModPath2))
+                    return "enter valid folder path here...";
+                return m_ModPath2;
+            }
+            set
+            {
+                m_ModPath2 = value;
                 NotifyPropertyChanged();
             }
         }

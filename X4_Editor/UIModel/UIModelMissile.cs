@@ -193,17 +193,17 @@ namespace X4_Editor
             }
         }
 
-        private double m_InertiaMass;
-        public double InertiaMass
-        {
-            get { return m_InertiaMass; }
-            set
-            {
-                m_InertiaMass = value;
-                Changed = true;
-                NotifyPropertyChanged();
-            }
-        }
+        //private double m_InertiaMass;
+        //public double InertiaMass
+        //{
+        //    get { return m_InertiaMass; }
+        //    set
+        //    {
+        //        m_InertiaMass = value;
+        //        Changed = true;
+        //        NotifyPropertyChanged();
+        //    }
+        //}
 
         private double m_InertiaPitch;
         public double InertiaPitch
