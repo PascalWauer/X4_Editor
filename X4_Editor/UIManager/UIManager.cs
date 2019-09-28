@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Xml;
 using System.Xml.Linq;
+using X4_Editor.Helper;
 using DataGrid = System.Windows.Controls.DataGrid;
 using DataGridCell = System.Windows.Controls.DataGridCell;
 using MessageBox = System.Windows.MessageBox;
@@ -27,27 +28,27 @@ namespace X4_Editor
         }
     }
 
-    class UIManager
+    public class UIManager
     {
         static System.Collections.Specialized.StringCollection log = new System.Collections.Specialized.StringCollection();
 
-        private string PathToShields = @"\assets\props\SurfaceElements\macros";
-        private string PathToShips = @"\assets\units";
-        private string PathToProjectiles = @"\assets\fx\weaponFx\macros";
-        private string PathToMissiles = @"\assets\props\WeaponSystems\missile\macros";
-        private string PathToTurretsStandard = @"\assets\props\WeaponSystems\standard\macros";
-        private string PathToTurretsHeavy = @"\assets\props\WeaponSystems\heavy\macros";
-        private string PathToTurretsEnergy = @"\assets\props\WeaponSystems\energy\macros";
-        private string PathToTurretsCapital = @"\assets\props\WeaponSystems\capital\macros";
-        private string PathToTurretsGuided = @"\assets\props\WeaponSystems\guided\macros";
-        private string PathToTurretsDumbfire = @"\assets\props\WeaponSystems\dumbfire\macros";
-        private string PathToWares = @"\libraries\wares.xml";
-        private string PathToEngines = @"\assets\props\Engines\macros";
+        public string PathToShields = @"\assets\props\SurfaceElements\macros";
+        public string PathToShips = @"\assets\units";
+        public string PathToProjectiles = @"\assets\fx\weaponFx\macros";
+        public string PathToMissiles = @"\assets\props\WeaponSystems\missile\macros";
+        public string PathToTurretsStandard = @"\assets\props\WeaponSystems\standard\macros";
+        public string PathToTurretsHeavy = @"\assets\props\WeaponSystems\heavy\macros";
+        public string PathToTurretsEnergy = @"\assets\props\WeaponSystems\energy\macros";
+        public string PathToTurretsCapital = @"\assets\props\WeaponSystems\capital\macros";
+        public string PathToTurretsGuided = @"\assets\props\WeaponSystems\guided\macros";
+        public string PathToTurretsDumbfire = @"\assets\props\WeaponSystems\dumbfire\macros";
+        public string PathToWares = @"\libraries\wares.xml";
+        public string PathToEngines = @"\assets\props\Engines\macros";
 
         public MainWindow MainWindow { get; set; }
         public WaresWindow WaresWindow { get; set; }
         public UIModel UIModel { get; set; }
-
+        public XmlExtractor m_XmlExtractor;
         //protected CommandBindingCollection m_CommandBindings;
         //protected virtual CommandBindingCollection CommandBindings
         //{
@@ -65,6 +66,7 @@ namespace X4_Editor
         {
             MainWindow = new MainWindow();
             WaresWindow = new WaresWindow();
+            m_XmlExtractor = new XmlExtractor(this);
             this.UIModel = new UIModel();
             MainWindow.DataContext = this.UIModel;
             WaresWindow.DataContext = this.UIModel;
@@ -389,7 +391,7 @@ namespace X4_Editor
                 MessageBox.Show("Please enter a value <> '0'", "Invalid operation");
                 return;
             }
-            var check = ParseToDouble(this.UIModel.MathParameter.ToString());
+            var check = Utility.ParseToDouble(this.UIModel.MathParameter.ToString());
             if (check == null)
             {
                 MessageBox.Show("Please enter numeric values only", "Invalid operation");
@@ -405,7 +407,7 @@ namespace X4_Editor
                 MessageBox.Show("Please enter a value <> '0'", "Invalid operation");
                 return;
             }
-            var check = ParseToDouble(this.UIModel.MathParameter.ToString());
+            var check = Utility.ParseToDouble(this.UIModel.MathParameter.ToString());
             if (check == null)
             {
                 MessageBox.Show("Please enter numeric values only", "Invalid operation");
@@ -417,7 +419,7 @@ namespace X4_Editor
         {
             Counter counter = new Counter();
             
-            var check = ParseToDouble(this.UIModel.MathParameter.ToString());
+            var check = Utility.ParseToDouble(this.UIModel.MathParameter.ToString());
 
             DataGrid dg_Shields = null;
             dg_Shields = this.MainWindow.DG_Shields;
@@ -1077,7 +1079,7 @@ namespace X4_Editor
         private void ExecuteMultiplyToValueCommand(object sender, ExecutedRoutedEventArgs e)
         {
             Counter counter = new Counter();
-            var check = ParseToDouble(this.UIModel.MathParameter.ToString());
+            var check = Utility.ParseToDouble(this.UIModel.MathParameter.ToString());
 
             DataGrid dg_Shields = null;
             dg_Shields = this.MainWindow.DG_Shields;
@@ -1152,7 +1154,7 @@ namespace X4_Editor
         private void ExecuteSetFixedValueCommand(object sender, ExecutedRoutedEventArgs e)
         {
             Counter counter = new Counter();
-            var check = ParseToDouble(this.UIModel.MathParameter.ToString());
+            var check = Utility.ParseToDouble(this.UIModel.MathParameter.ToString());
 
             DataGrid dg_Shields = null;
             dg_Shields = this.MainWindow.DG_Shields;
@@ -1632,36 +1634,6 @@ namespace X4_Editor
 
             }
 
-            //foreach (var item in this.UIModel.UIModelWares)
-            //{
-            //    var vanillaItem = this.UIModel.UIModelWaresVanilla.Where(x => x.Name == item.Name).ToList()[0];
-
-            //    if (item.Changed)
-            //    {
-            //        if (!Directory.Exists(this.UIModel.ExportPath + PathToWares))
-            //        {
-            //            Directory.CreateDirectory(this.UIModel.ExportPath + PathToWares);
-            //        }
-
-            //        string outputPath = this.UIModel.ExportPath + PathToWares + item.File.Split(new[] { "macros" }, StringSplitOptions.None)[1];
-            //        using (StreamWriter sw = new StreamWriter(outputPath))
-            //        {
-            //            sw.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-            //            sw.WriteLine("<diff> ");
-            //            if (vanillaItem.Min != item.Min)
-            //                sw.WriteLine("\t<replace sel=\"//macros/macro/properties/recharge/@max\">" + String.Format(CultureInfo.InvariantCulture, "{0:0}", item.Max) + "</replace>");
-            //            if (vanillaItem.Max != item.Max)
-            //                sw.WriteLine("\t<replace sel=\"//macros/macro/properties/recharge/@rate\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Rate) + "</replace>");
-            //            if (vanillaItem.Delay != item.Delay)
-            //                sw.WriteLine("\t<replace sel=\"//macros/macro/properties/recharge/@delay\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Delay) + "</replace>");
-            //            if (vanillaItem.MaxHull != item.MaxHull)
-            //                sw.WriteLine("\t<replace sel=\"//macros/macro/properties/hull/@max\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.MaxHull) + "</replace>");
-            //            if (vanillaItem.Threshold != item.Threshold)
-            //                sw.WriteLine("\t<replace sel=\"//macros/macro/properties/hull/@threshold\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Threshold) + "</replace>");
-            //            sw.WriteLine("</diff> ");
-            //        }
-            //    }
-            //}
         }
 
         private List<FileInfo> GetAllXmlInSubFolders(string folderPath, List<FileInfo> xmlList)
@@ -1690,7 +1662,8 @@ namespace X4_Editor
             this.UIModel.UIModelModulesShields.Clear();
             this.UIModel.UIModelWares.Clear();
             this.UIModel.UIModelShips.Clear();
-
+            this.UIModel.UIModelWeapons.Clear();
+            
             this.UIModel.AllWaresLoaded = false;
 
             string folderPath = this.UIModel.Path.Replace(@"\\", @"\");
@@ -1700,12 +1673,12 @@ namespace X4_Editor
                 MessageBox.Show("Enter a valid folder path for extracted vanilla files", "No valid folder");
             }
             string waresPath = folderPath + PathToWares;
-            ReadAllWares(waresPath);
+            m_XmlExtractor.ReadAllWares(waresPath);
 
             string weaponsPath = folderPath + PathToProjectiles;
             List<FileInfo> xmlWeaponsList = new List<FileInfo>();
             xmlWeaponsList = this.GetAllXmlInSubFolders(weaponsPath, xmlWeaponsList);
-            ReadAllProjectiles(xmlWeaponsList);
+            this.ReadAllProjectiles(xmlWeaponsList);
 
             string turretsPath = folderPath + PathToTurretsStandard;
             List<FileInfo> xmlTurretsList = new List<FileInfo>();
@@ -1715,30 +1688,54 @@ namespace X4_Editor
             xmlTurretsList = this.GetAllXmlInSubFolders(folderPath + PathToTurretsCapital, xmlTurretsList);
             xmlTurretsList = this.GetAllXmlInSubFolders(folderPath + PathToTurretsGuided, xmlTurretsList);
             xmlTurretsList = this.GetAllXmlInSubFolders(folderPath + PathToTurretsDumbfire, xmlTurretsList);
-            ReadAllWeapons(xmlTurretsList);
+            this.ReadAllWeapons(xmlTurretsList);
 
             string missilesPath = folderPath + PathToMissiles;
             //string torpedosPath = folderPath + @"\props\WeaponSystems\torpedo\macros";
             List<FileInfo> xmlMissilesList = new List<FileInfo>();
             xmlMissilesList = this.GetAllXmlInSubFolders(missilesPath, xmlMissilesList);
-            //xmlMissilesList.AddRange(this.GetAllXmlInSubFolders(torpedosPath, xmlMissilesList));
-            ReadAllMissiles(xmlMissilesList);
+
+            this.ReadAllMissiles(xmlMissilesList);
 
             string shieldsPath = folderPath + PathToShields;
             List<FileInfo> xmlShieldsList = new List<FileInfo>();
             xmlShieldsList = this.GetAllXmlInSubFolders(shieldsPath, xmlShieldsList);
-            ReadAllShields(xmlShieldsList);
+            this.ReadAllShields(xmlShieldsList);
 
             string enginesPath = folderPath + PathToEngines;
             List<FileInfo> xmlEnginesList = new List<FileInfo>();
             xmlEnginesList = this.GetAllXmlInSubFolders(enginesPath, xmlEnginesList);
-            ReadAllEngines(xmlEnginesList);
+            this.ReadAllEngines(xmlEnginesList);
 
             string shipsPath = folderPath + PathToShips;
             List<FileInfo> xmlShipsList = new List<FileInfo>();
             xmlShipsList = this.GetAllXmlInSubFolders(shipsPath, xmlShipsList);
-            ReadAllShips(xmlShipsList);
+            this.ReadAllShips(xmlShipsList);
 
+        }
+
+        public void ReadAllEngines(List<FileInfo> xmlEnginesList)
+        {
+            string folderPath = this.UIModel.Path.Replace(@"\\", @"\");
+            if (!Directory.Exists(folderPath + this.PathToEngines))
+            {
+                MessageBox.Show("No valid engines found.", "No data found.");
+            }
+            else
+            {
+                foreach (var item in xmlEnginesList)
+                {
+                    UIModelEngine engine = m_XmlExtractor.ReadSingleEngineFile(item);
+                    if (engine.Name.Length > 1)
+                        this.UIModel.UIModelModulesEngines.Add(engine);
+                }
+
+                this.UIModel.UIModelModuleEnginesVanilla.Clear();
+                foreach (var item in this.UIModel.UIModelModulesEngines)
+                {
+                    this.UIModel.UIModelModuleEnginesVanilla.Add(item.Copy());
+                }
+            }
         }
 
         private void ReadAllShields(List<FileInfo> xmlShieldsList)
@@ -1754,455 +1751,15 @@ namespace X4_Editor
 
                 foreach (var item in xmlShieldsList)
                 {
-                    
-                    this.ReadSingleShield(item);
+                    UIModelShield shield = m_XmlExtractor.ReadSingleShield(item);
+                    if (shield.Name.Length > 1)
+                        this.UIModel.UIModelModulesShields.Add(shield);
                 }
 
                 foreach (var item in this.UIModel.UIModelModulesShields)
                 {
                     this.UIModel.UIModelModuleShieldsVanilla.Add(item.Copy());
                 }
-            }
-        }
-
-        private void ReadSingleShield(FileInfo file)
-        {
-            using (XmlReader reader = XmlReader.Create(file.FullName))
-            {
-                while (reader.Read())
-                {
-                    if (reader.NodeType == XmlNodeType.Element && reader.Name == "macros")
-                    {
-                        XDocument doc = XDocument.Load(file.FullName);
-
-                        var shields = doc.Descendants("macro")
-                            .Where(p => (string)p.Attribute("class") == "shieldgenerator");
-
-                        foreach (var shield in shields)
-                        {
-                            XmlDocument xD = new XmlDocument();
-                            xD.LoadXml(shield.ToString());
-                            XmlNode xN = XmlHelper.ToXmlNode(shield);
-                            XmlNodeList shielComponentNode = xN.SelectNodes("//component");
-                            XmlNodeList shielMacroNode = xN.SelectNodes("//macro");
-                            XmlNodeList shielIdentificationNode = xN.SelectNodes("//properties/identification");
-                            XmlNodeList shielRechargedNode = xN.SelectNodes("//properties/recharge");
-                            XmlNodeList shieldHullNode = xN.SelectNodes("//properties/hull");
-
-                            UIModelShield uiModelShield = new UIModelShield()
-                            {
-                                File = file.FullName,
-                                Name = shielMacroNode[0].Attributes["name"].Value,
-                                //Faction = shielIdentificationNode[0].Attributes["makerrace"].Value,
-                                //MK = shielIdentificationNode[0].Attributes["mk"].Value,
-                                Max = Convert.ToInt32(shielRechargedNode[0].Attributes["max"].Value),
-                                Rate = ParseToDouble(shielRechargedNode[0].Attributes["rate"].Value),
-                                Delay = ParseToDouble(shielRechargedNode[0].Attributes["delay"].Value)
-
-                            };
-                            // not neccessary
-                            if (shielIdentificationNode.Count > 0)
-                            {
-                                uiModelShield.Faction = shielIdentificationNode[0].Attributes["makerrace"].Value;
-                                uiModelShield.MK = shielIdentificationNode[0].Attributes["mk"].Value;
-                            }
-                            if (shieldHullNode.Count > 0)
-                            {
-                                if (shieldHullNode[0].Attributes["max"] != null)
-                                    uiModelShield.MaxHull = ParseToDouble(shieldHullNode[0].Attributes["max"].Value);
-                                if (shieldHullNode[0].Attributes["threshold"] != null)
-                                    uiModelShield.Threshold = ParseToDouble(shieldHullNode[0].Attributes["threshold"].Value);
-                            }
-                            uiModelShield.Changed = false;
-                            //this.UIModel.UIModelModuleShieldsVanilla.Add(uiModelShield.Copy());
-                            this.UIModel.UIModelModulesShields.Add(uiModelShield);
-                        }
-                    }
-                }
-            }
-        }
-
-        private void ReadAllEngines(List<FileInfo> xmlEnginesList)
-        {
-            string folderPath = this.UIModel.Path.Replace(@"\\", @"\");
-            if (!Directory.Exists(folderPath + PathToEngines))
-            {
-                MessageBox.Show("No valid engines found.", "No data found.");
-            }
-            else
-            {
-                foreach (var item in xmlEnginesList)
-                {
-                    using (XmlReader reader = XmlReader.Create(item.FullName))
-                    {
-                        while (reader.Read())
-                        {
-                            if (reader.NodeType == XmlNodeType.Element && reader.Name == "macros")
-                            {
-                                XDocument doc = XDocument.Load(item.FullName);
-
-                                var engines = doc.Descendants("macro")
-                                    .Where(p => (string)p.Attribute("class") == "engine");
-
-                                foreach (var engine in engines)
-                                {
-                                    XmlDocument xD = new XmlDocument();
-                                    xD.LoadXml(engine.ToString());
-                                    XmlNode xN = XmlHelper.ToXmlNode(engine);
-                                    XmlNodeList engineComponentNode = xN.SelectNodes("//component");
-                                    XmlNodeList engineMacroNode = xN.SelectNodes("//macro");
-                                    XmlNodeList engineIdentificationNode = xN.SelectNodes("//properties/identification");
-                                    XmlNodeList engineBoostNode = xN.SelectNodes("//properties/boost");
-                                    XmlNodeList engineTravelNode = xN.SelectNodes("//properties/travel");
-                                    XmlNodeList engineThrustlNode = xN.SelectNodes("//properties/thrust");
-                                    XmlNodeList engineAngularNode = xN.SelectNodes("//properties/angular");
-                                    XmlNodeList engineHullNode = xN.SelectNodes("//properties/hull");
-
-                                    UIModelEngine uiModelEngine = new UIModelEngine()
-                                    {
-                                        File = item.FullName,
-                                        Name = engineMacroNode[0].Attributes["name"].Value,
-
-
-                                    };
-                                    if (engineIdentificationNode.Count > 0)
-                                    {
-                                        if (engineIdentificationNode[0].Attributes["makerrace"] != null)
-                                            uiModelEngine.Faction = engineIdentificationNode[0].Attributes["makerrace"].Value;
-                                        if (engineIdentificationNode[0].Attributes["mk"] != null)
-                                            uiModelEngine.MK = engineIdentificationNode[0].Attributes["mk"].Value;
-                                    }
-                                    if (engineBoostNode.Count > 0)
-                                    {
-                                        if (engineBoostNode[0].Attributes["attack"] != null)
-                                            uiModelEngine.BoostAttack = ParseToDouble(engineBoostNode[0].Attributes["attack"].Value);
-                                        if (engineBoostNode[0].Attributes["attack"] != null)
-                                            uiModelEngine.BoostThrust = ParseToDouble(engineBoostNode[0].Attributes["thrust"].Value);
-                                        if (engineBoostNode[0].Attributes["duration"] != null)
-                                            uiModelEngine.BoostRelease = ParseToDouble(engineBoostNode[0].Attributes["release"].Value);
-                                        if (engineBoostNode[0].Attributes["duration"] != null)
-                                            uiModelEngine.BoostDuration = ParseToDouble(engineBoostNode[0].Attributes["duration"].Value);
-                                    }
-                                    if (engineThrustlNode.Count > 0)
-                                    {
-                                        if (engineThrustlNode[0].Attributes["forward"] != null)
-                                            uiModelEngine.Forward = ParseToDouble(engineThrustlNode[0].Attributes["forward"].Value);
-                                        if (engineThrustlNode[0].Attributes["reverse"] != null)
-                                            uiModelEngine.Reverse = ParseToDouble(engineThrustlNode[0].Attributes["reverse"].Value);
-                                        if (engineThrustlNode[0].Attributes["strafe"] != null)
-                                            uiModelEngine.Strafe = ParseToDouble(engineThrustlNode[0].Attributes["strafe"].Value);
-                                        if (engineThrustlNode[0].Attributes["pitch"] != null)
-                                            uiModelEngine.Pitch = ParseToDouble(engineThrustlNode[0].Attributes["pitch"].Value);
-                                        if (engineThrustlNode[0].Attributes["yaw"] != null)
-                                            uiModelEngine.Yaw = ParseToDouble(engineThrustlNode[0].Attributes["yaw"].Value);
-                                        if (engineThrustlNode[0].Attributes["roll"] != null)
-                                            uiModelEngine.Roll = ParseToDouble(engineThrustlNode[0].Attributes["roll"].Value);
-                                    }
-                                    if (engineTravelNode.Count > 0)
-                                    {
-                                        if (engineTravelNode[0].Attributes["attack"] != null)
-                                            uiModelEngine.TravelAttack = ParseToDouble(engineTravelNode[0].Attributes["attack"].Value);
-                                        if (engineTravelNode[0].Attributes["charge"] != null)
-                                            uiModelEngine.TravelCharge = Convert.ToInt32(engineTravelNode[0].Attributes["charge"].Value);
-                                        if (engineTravelNode[0].Attributes["release"] != null)
-                                            uiModelEngine.TravelRelease = ParseToDouble(engineTravelNode[0].Attributes["release"].Value);
-                                        if (engineTravelNode[0].Attributes["thrust"] != null)
-                                            uiModelEngine.TravelThrust = ParseToDouble(engineTravelNode[0].Attributes["thrust"].Value);
-                                    }
-                                    if (engineAngularNode.Count > 0)
-                                    {
-                                        if (engineAngularNode[0].Attributes["roll"] != null)
-                                            uiModelEngine.AngularPitch = ParseToDouble(engineAngularNode[0].Attributes["roll"].Value);
-                                        if (engineAngularNode[0].Attributes["pitch"] != null)
-                                            uiModelEngine.AngularRoll = ParseToDouble(engineAngularNode[0].Attributes["pitch"].Value);
-                                    }
-                                    if (engineHullNode.Count > 0)
-                                    {
-                                        if (engineHullNode[0].Attributes["max"] != null)
-                                            uiModelEngine.MaxHull = ParseToDouble(engineHullNode[0].Attributes["max"].Value);
-                                        if (engineHullNode[0].Attributes["threshold"] != null)
-                                            uiModelEngine.Threshold = ParseToDouble(engineHullNode[0].Attributes["threshold"].Value);
-                                    }
-                                    uiModelEngine.Changed = false;
-
-                                    this.UIModel.UIModelModulesEngines.Add(uiModelEngine);
-                                }
-                            }
-                        }
-                    }
-                }
-                this.UIModel.UIModelModuleEnginesVanilla.Clear();
-                foreach (var item in this.UIModel.UIModelModulesEngines)
-                {
-                    this.UIModel.UIModelModuleEnginesVanilla.Add(item.Copy());
-                }
-            }
-        }
-
-        private void ReadAllWares(string waresPath)
-        {
-            if (!File.Exists(waresPath))
-            {
-                MessageBox.Show("No valid wares found.", "No data found.");
-            }
-            else
-            {
-                using (XmlReader reader = XmlReader.Create(waresPath))
-                {
-                    while (reader.Read())
-                    {
-                        if (reader.NodeType == XmlNodeType.Element && reader.Name == "wares")
-                        {
-                            XDocument doc = XDocument.Load(waresPath);
-
-                            var wares = doc.Descendants("wares");
-
-                            foreach (var ware in wares)
-                            {
-                                XmlDocument xD = new XmlDocument();
-                                xD.LoadXml(ware.ToString());
-                                XmlNode xN = XmlHelper.ToXmlNode(ware);
-                                XmlNodeList wareNodes = xN.SelectNodes("//ware");
-
-                                foreach (XmlNode item in wareNodes)
-                                {
-
-                                    if (item.Attributes["id"] != null)
-                                    {
-
-                                        XmlNode priceNode = null;
-                                        foreach (XmlNode child in item.SelectNodes("price"))
-                                        {
-                                            priceNode = child;
-                                        }
-
-                                        UIModelWare uiModelWare = new UIModelWare()
-                                        {
-                                            File = waresPath,
-                                            Name = item.Attributes["id"].Value,
-                                            ID = item.Attributes["id"].Value,
-                                            Max = Convert.ToInt32(priceNode.Attributes["max"].Value),
-                                            Min = Convert.ToInt32(priceNode.Attributes["min"].Value),
-                                            Avg = Convert.ToInt32(priceNode.Attributes["average"].Value),
-                                        };
-
-                                        if (item.SelectNodes("./production").Count == 1)
-                                        {
-                                            XmlNodeList productionNode = item.SelectNodes("./production");
-                                            if (productionNode.Count > 0)
-                                            {
-                                                uiModelWare.Time = Convert.ToInt32(productionNode[0].Attributes["time"].Value);
-                                                uiModelWare.Amount = Convert.ToInt32(productionNode[0].Attributes["amount"].Value);
-                                            }
-                                            for (int i = 0; i < item.SelectNodes("./production/primary/ware").Count; i++)
-                                            {
-                                                if (i == 0)
-                                                {
-                                                    uiModelWare.Ware1 = item.SelectNodes("./production/primary/ware")[i].Attributes["ware"].Value;
-                                                    uiModelWare.Amount1 = Convert.ToInt32(item.SelectNodes("./production/primary/ware")[i].Attributes["amount"].Value);
-                                                }
-                                                if (i == 1)
-                                                {
-                                                    uiModelWare.Ware2 = item.SelectNodes("./production/primary/ware")[i].Attributes["ware"].Value;
-                                                    uiModelWare.Amount2 = Convert.ToInt32(item.SelectNodes("./production/primary/ware")[i].Attributes["amount"].Value);
-                                                }
-                                                if (i == 2)
-                                                {
-                                                    uiModelWare.Ware3 = item.SelectNodes("./production/primary/ware")[i].Attributes["ware"].Value;
-                                                    uiModelWare.Amount3 = Convert.ToInt32(item.SelectNodes("./production/primary/ware")[i].Attributes["amount"].Value);
-                                                }
-                                                if (i == 3)
-                                                {
-                                                    uiModelWare.Ware4 = item.SelectNodes("./production/primary/ware")[i].Attributes["ware"].Value;
-                                                    uiModelWare.Amount4 = Convert.ToInt32(item.SelectNodes("./production/primary/ware")[i].Attributes["amount"].Value);
-                                                }
-                                                if (i == 4)
-                                                {
-                                                    uiModelWare.Ware5 = item.SelectNodes("./production/primary/ware")[i].Attributes["ware"].Value;
-                                                    uiModelWare.Amount5 = Convert.ToInt32(item.SelectNodes("./production/primary/ware")[i].Attributes["amount"].Value);
-                                                }
-                                            }
-                                        }
-                                        else if (item.SelectNodes("./production").Count == 2)
-                                        {
-                                            int noXenon = 0;
-                                            bool xenon = false;
-
-                                            XmlNodeList productionNodes = item.SelectNodes("./production");
-                                            if (item.SelectNodes("./production")[0].Attributes["method"].Value == "xenon" && item.SelectNodes("./production")[1].Attributes["method"].Value == "default")
-                                            {
-                                                noXenon = 1;
-                                                xenon = true;
-                                            }
-                                            if (item.SelectNodes("./production")[1].Attributes["method"].Value == "xenon" && item.SelectNodes("./production")[0].Attributes["method"].Value == "default")
-                                            {
-                                                noXenon = 0;
-                                                xenon = true;
-                                            }
-                                            // only if one of the two production ways is xenon and the other one is default, show default
-                                            if (xenon)
-                                            {
-                                                productionNodes = item.SelectNodes("./production")[noXenon].ChildNodes[0].ChildNodes;
-
-                                                if (productionNodes.Count > 0)
-                                                {
-                                                    uiModelWare.Time = ParseToDouble(item.SelectNodes("./production")[noXenon].Attributes["time"].Value);
-                                                    uiModelWare.Amount = Convert.ToInt32(item.SelectNodes("./production")[noXenon].Attributes["amount"].Value);
-                                                }
-                                                for (int i = 0; i < item.SelectNodes("./production/primary/ware").Count; i++)
-                                                {
-                                                    if (i == 0 && productionNodes[i] != null)
-                                                    {
-                                                        uiModelWare.Ware1 = productionNodes[i].Attributes["ware"].Value;
-                                                        uiModelWare.Amount1 = Convert.ToInt32(productionNodes[i].Attributes["amount"].Value);
-                                                    }
-                                                    if (i == 1 && productionNodes[i] != null)
-                                                    {
-                                                        uiModelWare.Ware2 = productionNodes[i].Attributes["ware"].Value;
-                                                        uiModelWare.Amount2 = Convert.ToInt32(productionNodes[i].Attributes["amount"].Value);
-                                                    }
-                                                    if (i == 2 && productionNodes[i] != null)
-                                                    {
-                                                        uiModelWare.Ware3 = productionNodes[i].Attributes["ware"].Value;
-                                                        uiModelWare.Amount3 = Convert.ToInt32(productionNodes[i].Attributes["amount"].Value);
-                                                    }
-                                                    if (i == 3 && productionNodes[i] != null)
-                                                    {
-                                                        uiModelWare.Ware4 = productionNodes[i].Attributes["ware"].Value;
-                                                        uiModelWare.Amount4 = Convert.ToInt32(productionNodes[i].Attributes["amount"].Value);
-                                                    }
-                                                    if (i == 4 && productionNodes[i] != null)
-                                                    {
-                                                        uiModelWare.Ware5 = productionNodes[i].Attributes["ware"].Value;
-                                                        uiModelWare.Amount5 = Convert.ToInt32(productionNodes[i].Attributes["amount"].Value);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        uiModelWare.Changed = false;
-
-                                        this.UIModel.UIModelWares.Add(uiModelWare);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                this.UIModel.AllWaresLoaded = true;
-                this.UIModel.CalculateWarePrices();
-
-                this.UIModel.UIModelWaresVanilla.Clear();
-                foreach (var item in this.UIModel.UIModelWares)
-                {
-                    this.UIModel.UIModelWaresVanilla.Add(item.Copy());
-                }
-            }
-        }
-
-        private void ReadAllProjectiles(List<FileInfo> xmlProjectilesList)
-        {
-            string folderPath = this.UIModel.Path.Replace(@"\\", @"\");
-            if (!Directory.Exists(folderPath + PathToProjectiles))
-            {
-                MessageBox.Show("No valid weapons found.", "No data found.");
-            }
-
-            foreach (var item in xmlProjectilesList)
-            {
-                using (XmlReader reader = XmlReader.Create(item.FullName))
-                {
-                    while (reader.Read())
-                    {
-                        if (reader.NodeType == XmlNodeType.Element && reader.Name == "macros")
-                        {
-                            XDocument doc = XDocument.Load(item.FullName);
-
-                            var weapons = doc.Descendants("macro").Where(p => (string)p.Attribute("class") == "bullet");
-
-                            foreach (var weapon in weapons)
-                            {
-                                XmlDocument xD = new XmlDocument();
-                                xD.LoadXml(weapon.ToString());
-                                XmlNode xN = XmlHelper.ToXmlNode(weapon);
-                                XmlNodeList weaponMacroNode = xN.SelectNodes("//macro");
-                                XmlNodeList weaponComponentNode = xN.SelectNodes("//component");
-                                XmlNodeList weaponAmmunitionNode = xN.SelectNodes("//properties/ammunition");
-                                XmlNodeList weaponBulletNode = xN.SelectNodes("//properties/bullet");
-                                XmlNodeList weaponHeatNode = xN.SelectNodes("//properties/heat");
-                                XmlNodeList weaponReloadNode = xN.SelectNodes("//properties/reload");
-                                XmlNodeList weaponDamageNode = xN.SelectNodes("//properties/damage");
-
-                                UIModelProjectile uiModelWeapon = new UIModelProjectile()
-                                {
-                                    File = item.FullName,
-                                    Name = weaponMacroNode[0].Attributes["name"].Value
-                                };
-                                if (weaponAmmunitionNode.Count > 0)
-                                {
-                                    if (weaponAmmunitionNode[0].Attributes["value"] != null)
-                                        uiModelWeapon.Ammunition = Convert.ToInt32(weaponAmmunitionNode[0].Attributes["value"].Value);
-                                    if (weaponAmmunitionNode[0].Attributes["reload"] != null)
-                                        uiModelWeapon.AmmunitionReload = ParseToDouble(weaponAmmunitionNode[0].Attributes["reload"].Value);
-                                }
-                                if (weaponBulletNode.Count > 0)
-                                {
-                                    if (weaponBulletNode[0].Attributes["speed"] != null)
-                                        uiModelWeapon.Speed = Convert.ToInt32(weaponBulletNode[0].Attributes["speed"].Value);
-                                    if (weaponBulletNode[0].Attributes["lifetime"] != null)
-                                        uiModelWeapon.Lifetime = ParseToDouble(weaponBulletNode[0].Attributes["lifetime"].Value);
-                                    if (weaponBulletNode[0].Attributes["amount"] != null)
-                                        uiModelWeapon.Amount = Convert.ToInt32(weaponBulletNode[0].Attributes["amount"].Value);
-                                    if (weaponBulletNode[0].Attributes["range"] != null)
-                                        uiModelWeapon.Range = Convert.ToInt32(weaponBulletNode[0].Attributes["range"].Value);
-                                    if (weaponBulletNode[0].Attributes["maxhits"] != null)
-                                        uiModelWeapon.MaxHits = Convert.ToInt32(weaponBulletNode[0].Attributes["maxhits"].Value);
-                                    if (weaponBulletNode[0].Attributes["ricochet"] != null)
-                                        uiModelWeapon.Ricochet = ParseToDouble(weaponBulletNode[0].Attributes["ricochet"].Value);
-                                    if (weaponBulletNode[0].Attributes["scale"] != null)
-                                        uiModelWeapon.Scale = Convert.ToInt32(weaponBulletNode[0].Attributes["scale"].Value);
-                                    if (weaponBulletNode[0].Attributes["chargetime"] != null)
-                                        uiModelWeapon.ChargeTime = ParseToDouble(weaponBulletNode[0].Attributes["chargetime"].Value);
-                                    if (weaponBulletNode[0].Attributes["timediff"] != null)
-                                        uiModelWeapon.TimeDiff = ParseToDouble(weaponBulletNode[0].Attributes["timediff"].Value);
-                                    if (weaponBulletNode[0].Attributes["angle"] != null)
-                                        uiModelWeapon.Angle = ParseToDouble(weaponBulletNode[0].Attributes["angle"].Value);
-                                }
-                                if (weaponHeatNode.Count > 0)
-                                {
-                                    if (weaponHeatNode[0].Attributes["initial"] != null)
-                                        uiModelWeapon.HeatInitial = Convert.ToInt32(weaponHeatNode[0].Attributes["initial"].Value);
-                                    if (weaponHeatNode[0].Attributes["value"] != null)
-                                        uiModelWeapon.HeatValue = Convert.ToInt32(weaponHeatNode[0].Attributes["value"].Value);
-                                    
-                                }
-                                if (weaponReloadNode.Count > 0)
-                                {
-                                    if (weaponReloadNode[0].Attributes["rate"] != null)
-                                        uiModelWeapon.ReloadRate = ParseToDouble(weaponReloadNode[0].Attributes["rate"].Value);
-                                    if (weaponReloadNode[0].Attributes["time"] != null)
-                                        uiModelWeapon.ReloadTime = ParseToDouble(weaponReloadNode[0].Attributes["time"].Value);
-
-                                }
-                                if (weaponDamageNode.Count > 0)
-                                {
-                                    if (weaponDamageNode[0].Attributes["value"] != null)
-                                        uiModelWeapon.Damage = ParseToDouble(weaponDamageNode[0].Attributes["value"].Value);
-                                    if (weaponDamageNode[0].Attributes["shield"] != null)
-                                        uiModelWeapon.Shield = ParseToDouble(weaponDamageNode[0].Attributes["shield"].Value);
-                                    if (weaponDamageNode[0].Attributes["repair"] != null)
-                                        uiModelWeapon.Repair = ParseToDouble(weaponDamageNode[0].Attributes["repair"].Value);
-                                }
-                                uiModelWeapon.Changed = false;
-                                this.UIModel.UIModelProjectiles.Add(uiModelWeapon);
-                            }
-                        }
-                    }
-                }
-            }
-            this.UIModel.UIModelProjectilesVanilla.Clear();
-            foreach (var item in this.UIModel.UIModelProjectiles)
-            {
-                this.UIModel.UIModelProjectilesVanilla.Add(item.Copy());
             }
         }
 
@@ -2213,92 +1770,13 @@ namespace X4_Editor
             {
                 MessageBox.Show("No valid folder found.", "No data found.");
             }
-
+            
             foreach (var item in xmlWeaponsList)
             {
-                using (XmlReader reader = XmlReader.Create(item.FullName))
-                {
-                    while (reader.Read())
-                    {
-                        if (reader.NodeType == XmlNodeType.Element && reader.Name == "macros")
-                        {
-                            XDocument doc = XDocument.Load(item.FullName);
+                this.UIModel.UIModelWeapons.Add(m_XmlExtractor.ReadSingleWeapon(item));
 
-                            var weapons = doc.Descendants("macro").Where(p => (string)p.Attribute("class") == "turret" || (string)p.Attribute("class") == "weapon");
-
-                            foreach (var weapon in weapons)
-                            {
-                                XmlDocument xD = new XmlDocument();
-                                xD.LoadXml(weapon.ToString());
-                                XmlNode xN = XmlHelper.ToXmlNode(weapon);
-                                XmlNodeList weaponComponentNode = xN.SelectNodes("//component");
-                                XmlNodeList weaponMacroNode = xN.SelectNodes("//macro");
-                                XmlNodeList weaponIdentificationNode = xN.SelectNodes("//properties/identification");
-                                XmlNodeList weaponBulletNode = xN.SelectNodes("//properties/bullet");
-                                XmlNodeList weaponRotationspeedNode = xN.SelectNodes("//properties/rotationspeed");
-                                XmlNodeList weaponRotationAccelerationNode = xN.SelectNodes("//properties/rotationacceleration");
-                                XmlNodeList weaponReloadNode = xN.SelectNodes("//properties/reload");
-                                XmlNodeList weaponHullNode = xN.SelectNodes("//properties/hull");
-                                XmlNodeList weaponHeatNode = xN.SelectNodes("//properties/heat");
-
-                                UIModelWeapon uiModelWeapon = new UIModelWeapon()
-                                {
-                                    File = item.FullName,
-                                    Name = weaponMacroNode[0].Attributes["name"].Value
-                                };
-                                if (weaponBulletNode.Count > 0)
-                                {
-                                    if (weaponBulletNode[0].Attributes["class"] != null)
-                                        uiModelWeapon.Projectile = weaponBulletNode[0].Attributes["class"].Value;
-                                }
-                                if (weaponIdentificationNode.Count > 0)
-                                {
-                                    if (weaponIdentificationNode[0].Attributes["mk"] != null)
-                                        uiModelWeapon.MK = weaponIdentificationNode[0].Attributes["mk"].Value;
-                                }
-                                if (weaponHeatNode.Count > 0)
-                                {
-                                    if (weaponHeatNode[0].Attributes["overheat"] != null)
-                                        uiModelWeapon.Overheat = Convert.ToInt32(weaponHeatNode[0].Attributes["overheat"].Value);
-                                    if (weaponHeatNode[0].Attributes["cooldelay"] != null)
-                                        uiModelWeapon.CoolDelay = ParseToDouble(weaponHeatNode[0].Attributes["cooldelay"].Value);
-                                    if (weaponHeatNode[0].Attributes["coolrate"] != null)
-                                        uiModelWeapon.CoolRate = Convert.ToInt32(weaponHeatNode[0].Attributes["coolrate"].Value);
-                                    if (weaponHeatNode[0].Attributes["reenable"] != null)
-                                        uiModelWeapon.Reenable = Convert.ToInt32(weaponHeatNode[0].Attributes["reenable"].Value);
-
-                                }
-                                if (weaponRotationspeedNode.Count > 0)
-                                {
-                                    if (weaponRotationspeedNode[0].Attributes["max"] != null)
-                                        uiModelWeapon.RotationSpeed = ParseToDouble(weaponRotationspeedNode[0].Attributes["max"].Value);
-                                }
-                                if (weaponRotationAccelerationNode.Count > 0)
-                                {
-                                    if (weaponRotationAccelerationNode[0].Attributes["max"] != null)
-                                        uiModelWeapon.RotationAcceleration = ParseToDouble(weaponRotationAccelerationNode[0].Attributes["max"].Value);
-                                }
-                                if (weaponReloadNode.Count > 0)
-                                {
-                                    if (weaponReloadNode[0].Attributes["rate"] != null)
-                                        uiModelWeapon.ReloadRate = ParseToDouble(weaponReloadNode[0].Attributes["rate"].Value);
-                                    if (weaponReloadNode[0].Attributes["time"] != null)
-                                        uiModelWeapon.ReloadTime = ParseToDouble(weaponReloadNode[0].Attributes["time"].Value);
-                                }
-                                if (weaponHullNode.Count > 0)
-                                {
-                                    if (weaponHullNode[0].Attributes["max"] != null)
-                                        uiModelWeapon.HullMax = ParseToDouble(weaponHullNode[0].Attributes["max"].Value);
-                                    if (weaponHullNode[0].Attributes["threshold"] != null)
-                                        uiModelWeapon.HullThreshold = ParseToDouble(weaponHullNode[0].Attributes["threshold"].Value);
-                                }
-                                uiModelWeapon.Changed = false;
-                                this.UIModel.UIModelWeapons.Add(uiModelWeapon);
-                            }
-                        }
-                    }
-                }
             }
+
             this.UIModel.UIModelWeaponsVanilla.Clear();
             foreach (var item in this.UIModel.UIModelWeapons)
             {
@@ -2306,117 +1784,33 @@ namespace X4_Editor
             }
         }
 
-        private void ReadAllMissiles(List<FileInfo> xmlMissilesList)
+        public void ReadAllProjectiles(List<FileInfo> xmlProjectilesList)
+        {
+            string folderPath = this.UIModel.Path.Replace(@"\\", @"\");
+            if (!Directory.Exists(folderPath + this.PathToProjectiles))
+            {
+                MessageBox.Show("No valid weapons found.", "No data found.");
+            }
+
+            foreach (var item in xmlProjectilesList)
+            {
+                UIModelProjectile projectile = m_XmlExtractor.ReadSingleProjectile(item);
+                if (projectile.Name.Length > 1)
+                    this.UIModel.UIModelProjectiles.Add(projectile);
+            }
+            this.UIModel.UIModelProjectilesVanilla.Clear();
+            foreach (var item in this.UIModel.UIModelProjectiles)
+            {
+                this.UIModel.UIModelProjectilesVanilla.Add(item.Copy());
+            }
+        }
+        public void ReadAllMissiles(List<FileInfo> xmlMissilesList)
         {
             foreach (var item in xmlMissilesList)
             {
-                using (XmlReader reader = XmlReader.Create(item.FullName))
-                {
-                    while (reader.Read())
-                    {
-                        if (reader.NodeType == XmlNodeType.Element && reader.Name == "macros")
-                        {
-                            XDocument doc = XDocument.Load(item.FullName);
-
-                            var missiles = doc.Descendants("macro").Where(p => ((string)p.Attribute("class") == "missile" || (string)p.Attribute("class") == "torpedo"));
-
-                            foreach (var missile in missiles)
-                            {
-                                XmlDocument xD = new XmlDocument();
-                                xD.LoadXml(missile.ToString());
-                                XmlNode xN = XmlHelper.ToXmlNode(missile);
-                                XmlNodeList missileComponentNode = xN.SelectNodes("//component");
-                                XmlNodeList missileMacroNode = xN.SelectNodes("//macro");
-                                XmlNodeList missileAmmunitionNode = xN.SelectNodes("//properties/ammunition");
-                                XmlNodeList missilenMissileNode = xN.SelectNodes("//properties/missile");
-                                XmlNodeList missileHullNode = xN.SelectNodes("//properties/hull");
-                                XmlNodeList missileReloadNode = xN.SelectNodes("//properties/reload");
-                                XmlNodeList missilePhysicsNode = xN.SelectNodes("//properties/physics");
-                                XmlNodeList missileInertiaNode = xN.SelectNodes("//properties/physics/inertia");
-                                XmlNodeList missileDragNode = xN.SelectNodes("//properties/physics/drag");
-                                XmlNodeList missileDamageNode = xN.SelectNodes("//properties/explosiondamage");
-
-                                UIModelMissile uiModelMissile = new UIModelMissile()
-                                {
-                                    File = item.FullName,
-                                    Name = missileMacroNode[0].Attributes["name"].Value
-                                };
-                                if (missileAmmunitionNode.Count > 0)
-                                {
-                                    if (missileAmmunitionNode[0].Attributes["value"] != null)
-                                        uiModelMissile.Ammunition = Convert.ToInt32(missileAmmunitionNode[0].Attributes["value"].Value);
-                                }
-                                if (missilenMissileNode.Count > 0)
-                                {
-                                    if (missilenMissileNode[0].Attributes["amount"] != null)
-                                        uiModelMissile.MissileAmount = Convert.ToInt32(missilenMissileNode[0].Attributes["amount"].Value);
-                                    if (missilenMissileNode[0].Attributes["lifetime"] != null)
-                                        uiModelMissile.Lifetime = ParseToDouble(missilenMissileNode[0].Attributes["lifetime"].Value);
-                                    if (missilenMissileNode[0].Attributes["barrelamount"] != null)
-                                        uiModelMissile.BarrelAmount = Convert.ToInt32(missilenMissileNode[0].Attributes["barrelamount"].Value);
-                                    if (missilenMissileNode[0].Attributes["range"] != null)
-                                        uiModelMissile.Range = Convert.ToInt32(missilenMissileNode[0].Attributes["range"].Value);
-                                    if (missilenMissileNode[0].Attributes["guided"] != null)
-                                        uiModelMissile.Guided = Convert.ToInt32(missilenMissileNode[0].Attributes["guided"].Value);
-                                    if (missilenMissileNode[0].Attributes["swarm"] != null)
-                                        uiModelMissile.Swarm = Convert.ToInt32(missilenMissileNode[0].Attributes["swarm"].Value);
-                                    if (missilenMissileNode[0].Attributes["retarget"] != null)
-                                        uiModelMissile.Retarget = Convert.ToInt32(missilenMissileNode[0].Attributes["retarget"].Value);
-                                }
-                                if (missileDamageNode.Count > 0)
-                                {
-                                    if (missileDamageNode[0].Attributes["value"] != null)
-                                        uiModelMissile.Damage = Convert.ToInt32(missileDamageNode[0].Attributes["value"].Value);
-
-                                }
-                                if (missileReloadNode.Count > 0)
-                                {
-                                    if (missileReloadNode[0].Attributes["time"] != null)
-                                        uiModelMissile.Reload = ParseToDouble(missileReloadNode[0].Attributes["time"].Value);
-
-                                }
-                                if (missileHullNode.Count > 0)
-                                {
-                                    if (missileHullNode[0].Attributes["max"] != null)
-                                        uiModelMissile.Hull = Convert.ToInt32(missileHullNode[0].Attributes["max"].Value);
-                                }
-                                if (missilePhysicsNode.Count > 0)
-                                {
-                                    if (missilePhysicsNode[0].Attributes["mass"] != null)
-                                        uiModelMissile.Mass = ParseToDouble(missilePhysicsNode[0].Attributes["mass"].Value);
-                                }
-                                if (missileInertiaNode.Count > 0)
-                                {
-                                    if (missileInertiaNode[0].Attributes["yaw"] != null)
-                                        uiModelMissile.InertiaYaw = ParseToDouble(missileInertiaNode[0].Attributes["yaw"].Value);
-                                    if (missileInertiaNode[0].Attributes["pitch"] != null)
-                                        uiModelMissile.InertiaPitch = ParseToDouble(missileInertiaNode[0].Attributes["pitch"].Value);
-                                    if (missileInertiaNode[0].Attributes["roll"] != null)
-                                        uiModelMissile.InertiaRoll = ParseToDouble(missileInertiaNode[0].Attributes["roll"].Value);
-                                }
-                                if (missileDragNode.Count > 0)
-                                {
-                                    if (missileDragNode[0].Attributes["forward"] != null)
-                                        uiModelMissile.Forward = ParseToDouble(missileDragNode[0].Attributes["forward"].Value);
-                                    if (missileDragNode[0].Attributes["reverse"] != null)
-                                        uiModelMissile.Reverse = ParseToDouble(missileDragNode[0].Attributes["reverse"].Value);
-                                    if (missileDragNode[0].Attributes["horizontal"] != null)
-                                        uiModelMissile.Horizontal = ParseToDouble(missileDragNode[0].Attributes["horizontal"].Value);
-                                    if (missileDragNode[0].Attributes["vertical"] != null)
-                                        uiModelMissile.Vertical = ParseToDouble(missileDragNode[0].Attributes["vertical"].Value);
-                                    if (missileDragNode[0].Attributes["pitch"] != null)
-                                        uiModelMissile.Pitch = ParseToDouble(missileDragNode[0].Attributes["pitch"].Value);
-                                    if (missileDragNode[0].Attributes["roll"] != null)
-                                        uiModelMissile.Roll = ParseToDouble(missileDragNode[0].Attributes["roll"].Value);
-                                    if (missileDragNode[0].Attributes["yaw"] != null)
-                                        uiModelMissile.Yaw = ParseToDouble(missileDragNode[0].Attributes["yaw"].Value);
-                                }
-                                uiModelMissile.Changed = false;
-                                this.UIModel.UIModelMissiles.Add(uiModelMissile);
-                            }
-                        }
-                    }
-                }
+                UIModelMissile missile = m_XmlExtractor.ReadSingleMissile(item);
+                if (missile.Name.Length > 1)
+                    this.UIModel.UIModelMissiles.Add(missile);
             }
             this.UIModel.UIModelMissilesVanilla.Clear();
             foreach (var item in this.UIModel.UIModelMissiles)
@@ -2424,7 +1818,6 @@ namespace X4_Editor
                 this.UIModel.UIModelMissilesVanilla.Add(item.Copy());
             }
         }
-
         private void ReadAllShips(List<FileInfo> xmlShipsList)
         {
             string folderPath = this.UIModel.Path.Replace(@"\\", @"\");
@@ -2437,7 +1830,9 @@ namespace X4_Editor
                 this.UIModel.UIModelShipsVanilla.Clear();
                 foreach (var item in xmlShipsList)
                 {
-                    this.ReadSingleShipFile(item);
+                    UIModelShip ship = m_XmlExtractor.ReadSingleShipFile(item);
+                    if (ship.Name.Length > 1 && ship.Class != "storage")
+                        this.UIModel.UIModelShips.Add(ship);
                 }
 
                 foreach (var item in this.UIModel.UIModelShips)
@@ -2447,155 +1842,6 @@ namespace X4_Editor
             }
         }
 
-        private void ReadSingleShipFile(FileInfo file)
-        {
-            using (XmlReader reader = XmlReader.Create(file.FullName))
-            {
-                while (reader.Read())
-                {
-                    if (reader.NodeType == XmlNodeType.Element && reader.Name == "macros")
-                    {
-                        XDocument doc = XDocument.Load(file.FullName);
-
-                        var ships = doc.Descendants("macro").Where(p => p.Attribute("class") != null);
-
-                        foreach (var ship in ships)
-                        {
-                            XmlDocument xD = new XmlDocument();
-                            xD.LoadXml(ship.ToString());
-                            XmlNode xN = XmlHelper.ToXmlNode(ship);
-                            XmlNodeList shipComponentNode = xN.SelectNodes("//component");
-                            XmlNodeList shipMacroNode = xN.SelectNodes("/macro");
-                            XmlNodeList shipExplosionNode = xN.SelectNodes("//properties/explosiondamage");
-                            XmlNodeList shipStorageNode = xN.SelectNodes("//properties/storage");
-                            XmlNodeList shipHullNode = xN.SelectNodes("//properties/hull");
-                            XmlNodeList shipSecrecyNode = xN.SelectNodes("//properties/secrecy");
-                            XmlNodeList shipGatherRateNode = xN.SelectNodes("//properties/gatherrate");
-                            XmlNodeList shipPeopleNode = xN.SelectNodes("//properties/people");
-                            XmlNodeList shipPhysicsNode = xN.SelectNodes("//properties/physics");
-                            XmlNodeList shipInertiaNode = xN.SelectNodes("//properties/physics/inertia");
-                            XmlNodeList shipDragNode = xN.SelectNodes("//properties/physics/drag");
-                            XmlNodeList shipShipTypeNode = xN.SelectNodes("//properties/ship");
-                            string CargoFile = file.FullName.Replace("ship", "storage");
-
-
-                            UIModelShip uiModelShip = new UIModelShip()
-                            {
-                                File = file.FullName,
-                                Name = shipMacroNode[0].Attributes["name"].Value,
-                                Class = shipMacroNode[0].Attributes["class"].Value
-
-                            };
-
-                            if (File.Exists(CargoFile))
-                            {
-                                uiModelShip.Cargo = new UIModelShipCargo();
-                                XmlDocument Cargodoc = new XmlDocument();
-                                Cargodoc.Load(CargoFile);
-                                string xmlcontents = Cargodoc.InnerXml;
-                                Cargodoc.LoadXml(xmlcontents);
-
-                                XmlNodeList shipCargoNode = Cargodoc.SelectNodes("//properties/cargo");
-
-                                if (shipCargoNode.Count > 0)
-                                {
-                                    uiModelShip.Cargo.File = CargoFile;
-                                    uiModelShip.Cargo.CargoMax = Convert.ToInt32(shipCargoNode[0].Attributes["max"].Value);
-                                    uiModelShip.Cargo.CargoTags = shipCargoNode[0].Attributes["tags"].Value;
-                                }
-                                uiModelShip.Cargo.Changed = false;
-                            }
-
-                            if (shipShipTypeNode.Count > 0)
-                            {
-                                if (shipShipTypeNode[0].Attributes["type"] != null)
-                                    uiModelShip.Type = shipShipTypeNode[0].Attributes["type"].Value;
-                            }
-
-                            if (uiModelShip.Type == null)
-                                continue;
-
-                            if (shipExplosionNode.Count > 0)
-                            {
-                                if (shipExplosionNode[0].Attributes["value"] != null)
-                                    uiModelShip.ExplosionDamage = Convert.ToInt32(shipExplosionNode[0].Attributes["value"].Value);
-                            }
-                            if (shipStorageNode.Count > 0)
-                            {
-                                if (shipStorageNode[0].Attributes["missile"] != null)
-                                    uiModelShip.StorageMissiles = Convert.ToInt32(shipStorageNode[0].Attributes["missile"].Value);
-                                if (shipStorageNode[0].Attributes["unit"] != null)
-                                    uiModelShip.StorageUnits = Convert.ToInt32(shipStorageNode[0].Attributes["unit"].Value);
-                            }
-                            if (shipHullNode.Count > 0)
-                            {
-                                if (shipHullNode[0].Attributes["max"] != null)
-                                    uiModelShip.HullMax = Convert.ToInt32(shipHullNode[0].Attributes["max"].Value);
-                            }
-                            if (shipGatherRateNode.Count > 0)
-                            {
-                                if (shipGatherRateNode[0].Attributes["gas"] != null)
-                                    uiModelShip.GatherRrate = ParseToDouble(shipGatherRateNode[0].Attributes["gas"].Value);
-                            }
-                            if (shipSecrecyNode.Count > 0)
-                            {
-                                if (shipSecrecyNode[0].Attributes["level"] != null)
-                                    uiModelShip.Secrecy = Convert.ToInt32(shipSecrecyNode[0].Attributes["level"].Value);
-                            }
-                            if (shipPeopleNode.Count > 0)
-                            {
-                                if (shipPeopleNode[0].Attributes["capacity"] != null)
-                                    uiModelShip.People = Convert.ToInt32(shipPeopleNode[0].Attributes["capacity"].Value);
-                            }
-                            if (shipPhysicsNode.Count > 0)
-                            {
-                                if (shipPhysicsNode[0].Attributes["mass"] != null)
-                                    uiModelShip.Mass = ParseToDouble(shipPhysicsNode[0].Attributes["mass"].Value);
-                            }
-                            if (shipInertiaNode.Count > 0)
-                            {
-                                if (shipInertiaNode[0].Attributes["roll"] != null)
-                                    uiModelShip.InertiaRoll = ParseToDouble(shipInertiaNode[0].Attributes["roll"].Value);
-                                if (shipInertiaNode[0].Attributes["yaw"] != null)
-                                    uiModelShip.InertiaYaw = ParseToDouble(shipInertiaNode[0].Attributes["yaw"].Value);
-                                if (shipInertiaNode[0].Attributes["pitch"] != null)
-                                    uiModelShip.InertiaPitch = ParseToDouble(shipInertiaNode[0].Attributes["pitch"].Value);
-                            }
-                            if (shipDragNode.Count > 0)
-                            {
-                                if (shipDragNode[0].Attributes["forward"] != null)
-                                    uiModelShip.Forward = ParseToDouble(shipDragNode[0].Attributes["forward"].Value);
-                                if (shipDragNode[0].Attributes["reverse"] != null)
-                                    uiModelShip.Reverse = ParseToDouble(shipDragNode[0].Attributes["reverse"].Value);
-                                if (shipDragNode[0].Attributes["horizontal"] != null)
-                                    uiModelShip.Horizontal = ParseToDouble(shipDragNode[0].Attributes["horizontal"].Value);
-                                if (shipDragNode[0].Attributes["vertical"] != null)
-                                    uiModelShip.Vertical = ParseToDouble(shipDragNode[0].Attributes["vertical"].Value);
-                                if (shipDragNode[0].Attributes["pitch"] != null)
-                                    uiModelShip.Pitch = ParseToDouble(shipDragNode[0].Attributes["pitch"].Value);
-                                if (shipDragNode[0].Attributes["yaw"] != null)
-                                    uiModelShip.Yaw = ParseToDouble(shipDragNode[0].Attributes["yaw"].Value);
-                                if (shipDragNode[0].Attributes["roll"] != null)
-                                    uiModelShip.Roll = ParseToDouble(shipDragNode[0].Attributes["roll"].Value);
-                            }
-                            uiModelShip.Changed = false;
-
-                            var ShipExistsAlready = this.UIModel.UIModelShips.Where(x => x.File == uiModelShip.File).ToList();
-                            if (ShipExistsAlready.Count == 0)
-                            {
-                                //this.UIModel.UIModelShipsVanilla.Add(uiModelShip.Copy());
-                                this.UIModel.UIModelShips.Add(uiModelShip);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        private double ParseToDouble(string input)
-        {
-            return double.Parse(input, new NumberFormatInfo() { NumberDecimalSeparator = "." });
-        }
         /// <summary>
         /// Updates all entities or creates new entities
         /// </summary>
@@ -2633,13 +1879,22 @@ namespace X4_Editor
                             string fileName = fileDepth[fileDepth.Count() - 1];
                             using (StreamReader sr = new StreamReader(fileStream))
                             {
-                                UIModelShield shield = this.UIModel.UIModelModulesShields.Where(x => x.File.Contains(fileName)).FirstOrDefault();
+                                var shield = this.UIModel.UIModelModulesShields.FirstOrDefault(x => x.File.Contains(fileName));
                                 if (shield != null)
                                 {
+                                    int index = this.UIModel.UIModelModulesShields.IndexOf(shield);
                                     string line;
+
                                     while (!sr.EndOfStream)
                                     {
                                         line = sr.ReadLine();
+
+                                        if (line.Contains(@"<replace") && line.Contains("sel") && line.Contains(@"/macros"))
+                                        {
+                                            this.UIModel.UIModelModulesShields[index] = m_XmlExtractor.ReadSingleShield(new FileInfo(file));
+                                            break;
+                                        }
+
                                         if (line.Contains("@max") && line.Contains("recharge"))
                                         {
                                             string value = line.Split('>')[1].Split('<')[0];
@@ -2648,28 +1903,30 @@ namespace X4_Editor
                                         if (line.Contains("@rate"))
                                         {
                                             string value = line.Split('>')[1].Split('<')[0];
-                                            shield.Rate = ParseToDouble(value);
+                                            shield.Rate = Utility.ParseToDouble(value);
                                         }
                                         if (line.Contains("@delay"))
                                         {
                                             string value = line.Split('>')[1].Split('<')[0];
-                                            shield.Delay = ParseToDouble(value);
+                                            shield.Delay = Utility.ParseToDouble(value);
                                         }
                                         if (line.Contains("@max") && line.Contains("hull"))
                                         {
                                             string value = line.Split('>')[1].Split('<')[0];
-                                            shield.MaxHull = ParseToDouble(value);
+                                            shield.MaxHull = Utility.ParseToDouble(value);
                                         }
                                         if (line.Contains("@threshold") && line.Contains("hull"))
                                         {
                                             string value = line.Split('>')[1].Split('<')[0];
-                                            shield.Threshold = ParseToDouble(value);
+                                            shield.Threshold = Utility.ParseToDouble(value);
                                         }
                                     }
                                 }
                                 else
                                 {
-                                    this.ReadSingleShield(new FileInfo(file));
+                                    UIModelShield extractedShield = m_XmlExtractor.ReadSingleShield(new FileInfo(file));
+                                    if (extractedShield.Name.Length > 1)
+                                        this.UIModel.UIModelModulesShields.Add(extractedShield);
                                 }
                             }
                         }
@@ -2686,101 +1943,119 @@ namespace X4_Editor
                             string fileName = fileDepth[fileDepth.Count() - 1];
                             using (StreamReader sr = new StreamReader(fileStream))
                             {
-                                UIModelEngine engine = this.UIModel.UIModelModulesEngines.Where(x => x.File.Contains(fileName)).First();
-                                string line;
-                                while (!sr.EndOfStream)
+                                var engine = this.UIModel.UIModelModulesEngines.FirstOrDefault(x => x.File.Contains(fileName));
+                                if (engine != null)
                                 {
-                                    line = sr.ReadLine();
-                                    if (line.Contains("@duration") && line.Contains("boost"))
+                                    int index = this.UIModel.UIModelModulesEngines.IndexOf(engine);
+                                    string line;
+
+                                    while (!sr.EndOfStream)
                                     {
-                                        string value = line.Split('>')[1].Split('<')[0];
-                                        engine.BoostDuration = ParseToDouble(value);
+                                        line = sr.ReadLine();
+
+                                        if (line.Contains(@"<replace") && line.Contains("sel") && line.Contains(@"/macros"))
+                                        {
+                                            this.UIModel.UIModelModulesEngines[index] = m_XmlExtractor.ReadSingleEngineFile(new FileInfo(file));
+                                            break;
+                                        }
+
+                                        if (line.Contains("@duration") && line.Contains("boost"))
+                                        {
+                                            string value = line.Split('>')[1].Split('<')[0];
+                                            engine.BoostDuration = Utility.ParseToDouble(value);
+                                        }
+                                        if (line.Contains("@thrust") && line.Contains("boost"))
+                                        {
+                                            string value = line.Split('>')[1].Split('<')[0];
+                                            engine.BoostThrust = Utility.ParseToDouble(value);
+                                        }
+                                        if (line.Contains("@attack") && line.Contains("boost"))
+                                        {
+                                            string value = line.Split('>')[1].Split('<')[0];
+                                            engine.BoostAttack = Utility.ParseToDouble(value);
+                                        }
+                                        if (line.Contains("@release") && line.Contains("boost"))
+                                        {
+                                            string value = line.Split('>')[1].Split('<')[0];
+                                            engine.BoostRelease = Utility.ParseToDouble(value);
+                                        }
+                                        if (line.Contains("@charge") && line.Contains("travel"))
+                                        {
+                                            string value = line.Split('>')[1].Split('<')[0];
+                                            engine.TravelCharge = Convert.ToInt32(value);
+                                        }
+                                        if (line.Contains("@thrust") && line.Contains("travel"))
+                                        {
+                                            string value = line.Split('>')[1].Split('<')[0];
+                                            engine.TravelThrust = Utility.ParseToDouble(value);
+                                        }
+                                        if (line.Contains("@attack") && line.Contains("travel"))
+                                        {
+                                            string value = line.Split('>')[1].Split('<')[0];
+                                            engine.TravelAttack = Utility.ParseToDouble(value);
+                                        }
+                                        if (line.Contains("@release") && line.Contains("travel"))
+                                        {
+                                            string value = line.Split('>')[1].Split('<')[0];
+                                            engine.TravelRelease = Utility.ParseToDouble(value);
+                                        }
+                                        if (line.Contains("@forward"))
+                                        {
+                                            string value = line.Split('>')[1].Split('<')[0];
+                                            engine.Forward = Utility.ParseToDouble(value);
+                                        }
+                                        if (line.Contains("@reverse"))
+                                        {
+                                            string value = line.Split('>')[1].Split('<')[0];
+                                            engine.Reverse = Utility.ParseToDouble(value);
+                                        }
+                                        if (line.Contains("@strafe") && line.Contains("thrust"))
+                                        {
+                                            string value = line.Split('>')[1].Split('<')[0];
+                                            engine.Strafe = Utility.ParseToDouble(value);
+                                        }
+                                        if (line.Contains("@pitch") && line.Contains("thrust"))
+                                        {
+                                            string value = line.Split('>')[1].Split('<')[0];
+                                            engine.Pitch = Utility.ParseToDouble(value);
+                                        }
+                                        if (line.Contains("@yaw") && line.Contains("thrust"))
+                                        {
+                                            string value = line.Split('>')[1].Split('<')[0];
+                                            engine.Yaw = Utility.ParseToDouble(value);
+                                        }
+                                        if (line.Contains("@roll") && line.Contains("thrust"))
+                                        {
+                                            string value = line.Split('>')[1].Split('<')[0];
+                                            engine.Roll = Utility.ParseToDouble(value);
+                                        }
+                                        if (line.Contains("@roll") && line.Contains("angular"))
+                                        {
+                                            string value = line.Split('>')[1].Split('<')[0];
+                                            engine.AngularRoll = Utility.ParseToDouble(value);
+                                        }
+                                        if (line.Contains("@pitch") && line.Contains("angular"))
+                                        {
+                                            string value = line.Split('>')[1].Split('<')[0];
+                                            engine.AngularPitch = Utility.ParseToDouble(value);
+                                        }
+                                        if (line.Contains("@max") && line.Contains("hull"))
+                                        {
+                                            string value = line.Split('>')[1].Split('<')[0];
+                                            engine.MaxHull = Utility.ParseToDouble(value);
+                                        }
+                                        if (line.Contains("@threshold") && line.Contains("hull"))
+                                        {
+                                            string value = line.Split('>')[1].Split('<')[0];
+                                            engine.Threshold = Utility.ParseToDouble(value);
+                                        }
                                     }
-                                    if (line.Contains("@thrust") && line.Contains("boost"))
-                                    {
-                                        string value = line.Split('>')[1].Split('<')[0];
-                                        engine.BoostThrust = ParseToDouble(value);
-                                    }
-                                    if (line.Contains("@attack") && line.Contains("boost"))
-                                    {
-                                        string value = line.Split('>')[1].Split('<')[0];
-                                        engine.BoostAttack = ParseToDouble(value);
-                                    }
-                                    if (line.Contains("@release") && line.Contains("boost"))
-                                    {
-                                        string value = line.Split('>')[1].Split('<')[0];
-                                        engine.BoostRelease = ParseToDouble(value);
-                                    }
-                                    if (line.Contains("@charge") && line.Contains("travel"))
-                                    {
-                                        string value = line.Split('>')[1].Split('<')[0];
-                                        engine.TravelCharge = Convert.ToInt32(value);
-                                    }
-                                    if (line.Contains("@thrust") && line.Contains("travel"))
-                                    {
-                                        string value = line.Split('>')[1].Split('<')[0];
-                                        engine.TravelThrust = ParseToDouble(value);
-                                    }
-                                    if (line.Contains("@attack") && line.Contains("travel"))
-                                    {
-                                        string value = line.Split('>')[1].Split('<')[0];
-                                        engine.TravelAttack = ParseToDouble(value);
-                                    }
-                                    if (line.Contains("@release") && line.Contains("travel"))
-                                    {
-                                        string value = line.Split('>')[1].Split('<')[0];
-                                        engine.TravelRelease = ParseToDouble(value);
-                                    }
-                                    if (line.Contains("@forward"))
-                                    {
-                                        string value = line.Split('>')[1].Split('<')[0];
-                                        engine.Forward = ParseToDouble(value);
-                                    }
-                                    if (line.Contains("@reverse"))
-                                    {
-                                        string value = line.Split('>')[1].Split('<')[0];
-                                        engine.Reverse = ParseToDouble(value);
-                                    }
-                                    if (line.Contains("@strafe") && line.Contains("thrust"))
-                                    {
-                                        string value = line.Split('>')[1].Split('<')[0];
-                                        engine.Strafe = ParseToDouble(value);
-                                    }
-                                    if (line.Contains("@pitch") && line.Contains("thrust"))
-                                    {
-                                        string value = line.Split('>')[1].Split('<')[0];
-                                        engine.Pitch = ParseToDouble(value);
-                                    }
-                                    if (line.Contains("@yaw") && line.Contains("thrust"))
-                                    {
-                                        string value = line.Split('>')[1].Split('<')[0];
-                                        engine.Yaw = ParseToDouble(value);
-                                    }
-                                    if (line.Contains("@roll") && line.Contains("thrust"))
-                                    {
-                                        string value = line.Split('>')[1].Split('<')[0];
-                                        engine.Roll = ParseToDouble(value);
-                                    }
-                                    if (line.Contains("@roll") && line.Contains("angular"))
-                                    {
-                                        string value = line.Split('>')[1].Split('<')[0];
-                                        engine.AngularRoll = ParseToDouble(value);
-                                    }
-                                    if (line.Contains("@pitch") && line.Contains("angular"))
-                                    {
-                                        string value = line.Split('>')[1].Split('<')[0];
-                                        engine.AngularPitch = ParseToDouble(value);
-                                    }
-                                    if (line.Contains("@max") && line.Contains("hull"))
-                                    {
-                                        string value = line.Split('>')[1].Split('<')[0];
-                                        engine.MaxHull = ParseToDouble(value);
-                                    }
-                                    if (line.Contains("@threshold") && line.Contains("hull"))
-                                    {
-                                        string value = line.Split('>')[1].Split('<')[0];
-                                        engine.Threshold = ParseToDouble(value);
-                                    }
+                                }
+                                else
+                                {
+                                    UIModelEngine extractedEngine = m_XmlExtractor.ReadSingleEngineFile(new FileInfo(file));
+                                    if (extractedEngine.Name.Length > 1)
+                                        this.UIModel.UIModelModulesEngines.Add(extractedEngine);
                                 }
                             }
                         }
@@ -2800,170 +2075,121 @@ namespace X4_Editor
                                 // Projectiles
                                 if (this.UIModel.UIModelProjectiles.Any(x => x.File.Contains(fileName)))
                                 {
-                                    UIModelProjectile weapon = this.UIModel.UIModelProjectiles.Where(x => x.File.Contains(fileName)).First();
-                                    string line;
-                                    while (!sr.EndOfStream)
+                                    var weaponProjectile = this.UIModel.UIModelProjectiles.FirstOrDefault(x => x.File.Contains(fileName));
+                                    if (weaponProjectile != null)
                                     {
-                                        line = sr.ReadLine();
-                                        if (line.Contains("@value") && line.Contains("ammunition"))
+                                        int index = this.UIModel.UIModelProjectiles.IndexOf(weaponProjectile);
+
+                                        string line;
+                                        while (!sr.EndOfStream)
                                         {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Ammunition = Convert.ToInt32(value);
-                                        }
-                                        if (line.Contains("@reload") && line.Contains("ammunition"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.AmmunitionReload = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("@speed") && line.Contains("bullet"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Speed = Convert.ToInt32(value);
-                                        }
-                                        if (line.Contains("@lifetime") && line.Contains("bullet"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Lifetime = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("@amount") && line.Contains("bullet"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Amount = Convert.ToInt32(value);
-                                        }
-                                        if (line.Contains("@barrelamount") && line.Contains("bullet"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.BarrelAmount = Convert.ToInt32(value);
-                                        }
-                                        if (line.Contains("@timediff") && line.Contains("bullet"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.TimeDiff = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("@angle") && line.Contains("bullet"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Angle = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("@scale") && line.Contains("bullet"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Scale = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("@ricochet") && line.Contains("bullet"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Ricochet = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("@chargetime") && line.Contains("bullet"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.ChargeTime = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("@value") && line.Contains("heat"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.HeatValue = Convert.ToInt32(value);
-                                        }
-                                        if (line.Contains("@initial") && line.Contains("heat"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.HeatInitial = Convert.ToInt32(value);
-                                        }
-                                        if (line.Contains("@rate") && line.Contains("reload"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.ReloadRate = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("@time") && line.Contains("reload"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.ReloadTime = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("@value") && line.Contains("damage"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Damage = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("@shield") && line.Contains("damage"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Shield = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("@repair") && line.Contains("damage"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Repair = ParseToDouble(value);
+                                            line = sr.ReadLine();
+
+                                            if (line.Contains(@"<replace") && line.Contains("sel") && line.Contains("/macros"))
+                                            {
+                                                this.UIModel.UIModelProjectiles[index] = m_XmlExtractor.ReadSingleProjectile(new FileInfo(file));
+                                                break;
+                                            }
+
+                                            if (line.Contains("@value") && line.Contains("ammunition"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weaponProjectile.Ammunition = Convert.ToInt32(value);
+                                            }
+                                            if (line.Contains("@reload") && line.Contains("ammunition"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weaponProjectile.AmmunitionReload = Utility.ParseToDouble(value);
+                                            }
+                                            if (line.Contains("@speed") && line.Contains("bullet"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weaponProjectile.Speed = Convert.ToInt32(value);
+                                            }
+                                            if (line.Contains("@lifetime") && line.Contains("bullet"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weaponProjectile.Lifetime = Utility.ParseToDouble(value);
+                                            }
+                                            if (line.Contains("@amount") && line.Contains("bullet"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weaponProjectile.Amount = Convert.ToInt32(value);
+                                            }
+                                            if (line.Contains("@barrelamount") && line.Contains("bullet"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weaponProjectile.BarrelAmount = Convert.ToInt32(value);
+                                            }
+                                            if (line.Contains("@timediff") && line.Contains("bullet"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weaponProjectile.TimeDiff = Utility.ParseToDouble(value);
+                                            }
+                                            if (line.Contains("@angle") && line.Contains("bullet"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weaponProjectile.Angle = Utility.ParseToDouble(value);
+                                            }
+                                            if (line.Contains("@scale") && line.Contains("bullet"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weaponProjectile.Scale = Utility.ParseToDouble(value);
+                                            }
+                                            if (line.Contains("@ricochet") && line.Contains("bullet"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weaponProjectile.Ricochet = Utility.ParseToDouble(value);
+                                            }
+                                            if (line.Contains("@chargetime") && line.Contains("bullet"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weaponProjectile.ChargeTime = Utility.ParseToDouble(value);
+                                            }
+                                            if (line.Contains("@value") && line.Contains("heat"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weaponProjectile.HeatValue = Convert.ToInt32(value);
+                                            }
+                                            if (line.Contains("@initial") && line.Contains("heat"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weaponProjectile.HeatInitial = Convert.ToInt32(value);
+                                            }
+                                            if (line.Contains("@rate") && line.Contains("reload"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weaponProjectile.ReloadRate = Utility.ParseToDouble(value);
+                                            }
+                                            if (line.Contains("@time") && line.Contains("reload"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weaponProjectile.ReloadTime = Utility.ParseToDouble(value);
+                                            }
+                                            if (line.Contains("@value") && line.Contains("damage"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weaponProjectile.Damage = Utility.ParseToDouble(value);
+                                            }
+                                            if (line.Contains("@shield") && line.Contains("damage"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weaponProjectile.Shield = Utility.ParseToDouble(value);
+                                            }
+                                            if (line.Contains("@repair") && line.Contains("damage"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weaponProjectile.Repair = Utility.ParseToDouble(value);
+                                            }
                                         }
                                     }
                                 }
-
-                                // Weapons
-                                if (this.UIModel.UIModelWeapons.Any(x => x.File.Contains(fileName)))
+                                else
                                 {
-                                    UIModelWeapon weapon = this.UIModel.UIModelWeapons.Where(x => x.File.Contains(fileName)).First();
-                                    string line;
-                                    while (!sr.EndOfStream)
-                                    {
-                                        line = sr.ReadLine();
-                                        if (line.Contains("@class") && line.Contains("bullet"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Projectile = value;
-                                        }
-                                        if (line.Contains("@rotationspeed") && line.Contains("max"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.RotationSpeed = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("@rotationacceleration") && line.Contains("max"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.RotationAcceleration = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("@reload") && line.Contains("rate"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.ReloadRate = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("@reload") && line.Contains("time"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.ReloadTime = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("@hull") && line.Contains("max"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.HullMax = Convert.ToInt32(value);
-                                        }
-                                        if (line.Contains("@reload") && line.Contains("threshold"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.HullThreshold = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("@overheat") && line.Contains("heat"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Overheat = Convert.ToInt32(value);
-                                        }
-                                        if (line.Contains("@heat") && line.Contains("coolDelay"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.CoolDelay = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("@heat") && line.Contains("coolrate"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.CoolRate = Convert.ToInt32(value);
-                                        }
-                                        if (line.Contains("@heat") && line.Contains("reenable"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Reenable = Convert.ToInt32(value);
-                                        }
-                                    }
+                                    UIModelProjectile extractedProjectile = m_XmlExtractor.ReadSingleProjectile(new FileInfo(file));
+                                    if (extractedProjectile.Name.Length > 1)
+                                        this.UIModel.UIModelProjectiles.Add(extractedProjectile);
                                 }
-
                             }
                         }
                     }
@@ -2972,12 +2198,18 @@ namespace X4_Editor
                     {
                         List<string> files = new List<string>();
 
-                        files.AddRange(Directory.GetFiles(modPath + PathToTurretsStandard).ToList());
-                        files.AddRange(Directory.GetFiles(modPath + PathToTurretsEnergy).ToList());
-                        files.AddRange(Directory.GetFiles(modPath + PathToTurretsCapital).ToList());
-                        files.AddRange(Directory.GetFiles(modPath + PathToTurretsHeavy).ToList());
-                        files.AddRange(Directory.GetFiles(modPath + PathToTurretsGuided).ToList());
-                        files.AddRange(Directory.GetFiles(modPath + PathToTurretsDumbfire).ToList());
+                        if(Directory.Exists(modPath + PathToTurretsStandard))
+                            files.AddRange(Directory.GetFiles(modPath + PathToTurretsStandard).ToList());
+                        if (Directory.Exists(modPath + PathToTurretsEnergy))
+                            files.AddRange(Directory.GetFiles(modPath + PathToTurretsEnergy).ToList());
+                        if (Directory.Exists(modPath + PathToTurretsCapital))
+                            files.AddRange(Directory.GetFiles(modPath + PathToTurretsCapital).ToList());
+                        if (Directory.Exists(modPath + PathToTurretsHeavy))
+                            files.AddRange(Directory.GetFiles(modPath + PathToTurretsHeavy).ToList());
+                        if (Directory.Exists(modPath + PathToTurretsGuided))
+                            files.AddRange(Directory.GetFiles(modPath + PathToTurretsGuided).ToList());
+                        if (Directory.Exists(modPath + PathToTurretsDumbfire))
+                            files.AddRange(Directory.GetFiles(modPath + PathToTurretsDumbfire).ToList());
 
                         foreach (string file in files)
                         {
@@ -2988,73 +2220,86 @@ namespace X4_Editor
                             {
                                 if (this.UIModel.UIModelWeapons.Any(x => x.File.Contains(fileName)))
                                 {
-                                    UIModelWeapon weapon = this.UIModel.UIModelWeapons.Where(x => x.File.Contains(fileName)).First();
-                                    string line;
-                                    while (!sr.EndOfStream)
+                                    var weapon = this.UIModel.UIModelWeapons.FirstOrDefault(x => x.File.Contains(fileName));
+                                    
+                                    if (weapon != null)
                                     {
-                                        line = sr.ReadLine();
-                                        if (line.Contains("class") && line.Contains("bullet"))
+                                        int index = this.UIModel.UIModelWeapons.IndexOf(weapon);
+                                        string line;
+                                        while (!sr.EndOfStream)
                                         {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Projectile = value;
-                                        }
-                                        if (line.Contains("rotationspeed") && line.Contains("@max"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.RotationSpeed = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("rotationacceleration") && line.Contains("@max"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.RotationAcceleration = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("reload") && line.Contains("@rate"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.ReloadRate = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("reload") && line.Contains("@time"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.ReloadTime = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("hull") && line.Contains("@max"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.HullMax = Convert.ToInt32(value);
-                                        }
-                                        if (line.Contains("reload") && line.Contains("@threshold"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.HullThreshold = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("heat") && line.Contains("@overheat"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Overheat = Convert.ToInt32(value);
-                                        }
-                                        if (line.Contains("heat") && line.Contains("@coolDelay"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.CoolDelay = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("heat") && line.Contains("@coolrate"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.CoolRate = Convert.ToInt32(value);
-                                        }
-                                        if (line.Contains("heat") && line.Contains("@reenable"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Reenable = Convert.ToInt32(value);
+                                            line = sr.ReadLine();
+                                            
+                                            if (line.Contains(@"<replace") && line.Contains("sel") && line.Contains(@"/macros"))
+                                            {
+                                                this.UIModel.UIModelWeapons[index] = m_XmlExtractor.ReadSingleWeapon(new FileInfo(file));
+                                                break;
+                                            }
+
+                                            if (line.Contains("class") && line.Contains("bullet"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.Projectile = value;
+                                            }
+                                            if (line.Contains("rotationspeed") && line.Contains("@max"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.RotationSpeed = Utility.ParseToDouble(value);
+                                            }
+                                            if (line.Contains("rotationacceleration") && line.Contains("@max"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.RotationAcceleration = Utility.ParseToDouble(value);
+                                            }
+                                            if (line.Contains("reload") && line.Contains("@rate"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.ReloadRate = Utility.ParseToDouble(value);
+                                            }
+                                            if (line.Contains("reload") && line.Contains("@time"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.ReloadTime = Utility.ParseToDouble(value);
+                                            }
+                                            if (line.Contains("hull") && line.Contains("@max"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.HullMax = Convert.ToInt32(value);
+                                            }
+                                            if (line.Contains("reload") && line.Contains("@threshold"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.HullThreshold = Utility.ParseToDouble(value);
+                                            }
+                                            if (line.Contains("heat") && line.Contains("@overheat"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.Overheat = Convert.ToInt32(value);
+                                            }
+                                            if (line.Contains("heat") && line.Contains("@coolDelay"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.CoolDelay = Utility.ParseToDouble(value);
+                                            }
+                                            if (line.Contains("heat") && line.Contains("@coolrate"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.CoolRate = Convert.ToInt32(value);
+                                            }
+                                            if (line.Contains("heat") && line.Contains("@reenable"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.Reenable = Convert.ToInt32(value);
+                                            }
                                         }
                                     }
+                                    else
+                                         this.UIModel.UIModelWeapons.Add(m_XmlExtractor.ReadSingleWeapon(new FileInfo(file)));
                                 }
 
                             }
                         }
                     }
-
                     // missiles
                     if (dir.Contains(@"assets\props\WeaponSystems\missile\macros"))
                     {
@@ -3067,131 +2312,146 @@ namespace X4_Editor
                             string fileName = fileDepth[fileDepth.Count() - 1];
                             using (StreamReader sr = new StreamReader(fileStream))
                             {
-                                if (this.UIModel.UIModelWeapons.Any(x => x.File.Contains(fileName)))
-                                {
-                                    UIModelMissile weapon = this.UIModel.UIModelMissiles.Where(x => x.File.Contains(fileName)).First();
-                                    string line;
-                                    while (!sr.EndOfStream)
+
+                                var weapon = this.UIModel.UIModelMissiles.FirstOrDefault(x => x.File.Contains(fileName));
+                                if (weapon != null)
                                     {
-                                        line = sr.ReadLine();
-                                        if (line.Contains("ammunition") && line.Contains("@value"))
+                                        int index = this.UIModel.UIModelMissiles.IndexOf(weapon);
+                                        string line;
+                                        while (!sr.EndOfStream)
                                         {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Ammunition = Convert.ToInt32(value);
-                                        }
-                                        if (line.Contains("missile") && line.Contains("@amount"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.MissileAmount = Convert.ToInt32(value);
-                                        }
-                                        if (line.Contains("missile") && line.Contains("@barrelamount"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.BarrelAmount = Convert.ToInt32(value);
-                                        }
-                                        if (line.Contains("missile") && line.Contains("@lifetime"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Lifetime = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("missile") && line.Contains("@range"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Range = Convert.ToInt32(value);
-                                        }
-                                        if (line.Contains("missile") && line.Contains("@guided"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Guided = Convert.ToInt32(value);
-                                        }
-                                        if (line.Contains("missile") && line.Contains("@swarm"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Swarm = Convert.ToInt32(value);
-                                        }
-                                        if (line.Contains("missile") && line.Contains("@retarget"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Retarget = Convert.ToInt32(value);
-                                        }
-                                        if (line.Contains("explosiondamage") && line.Contains("@value"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Damage = Convert.ToInt32(value);
-                                        }
-                                        if (line.Contains("reload") && line.Contains("@time"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Reload = Convert.ToInt32(value);
-                                        }
-                                        if (line.Contains("hull") && line.Contains("@max"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Hull = Convert.ToInt32(value);
-                                        }
-                                        if (line.Contains("drag") && line.Contains("@forward"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Forward = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("drag") && line.Contains("@forward"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Forward = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("drag") && line.Contains("@reverse"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Reverse = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("drag") && line.Contains("@horizontal"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Horizontal = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("drag") && line.Contains("@vertical"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Vertical = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("drag") && line.Contains("@pitch"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Pitch = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("drag") && line.Contains("@yaw"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Yaw = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("drag") && line.Contains("@roll"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Roll = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("physics") && line.Contains("@mass"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.Mass = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("inertia") && line.Contains("@pitch"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.InertiaPitch = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("inertia") && line.Contains("@roll"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.InertiaRoll = ParseToDouble(value);
-                                        }
-                                        if (line.Contains("inertia") && line.Contains("@yaw"))
-                                        {
-                                            string value = line.Split('>')[1].Split('<')[0];
-                                            weapon.InertiaYaw = ParseToDouble(value);
+                                            line = sr.ReadLine();
+
+                                            if (line.Contains(@"<replace") && line.Contains("sel") && line.Contains(@"/macros"))
+                                            {
+                                                this.UIModel.UIModelMissiles[index] = m_XmlExtractor.ReadSingleMissile(new FileInfo(file));
+                                                break;
+                                            }
+
+                                            if (line.Contains("ammunition") && line.Contains("@value"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.Ammunition = Convert.ToInt32(value);
+                                            }
+                                            if (line.Contains("missile") && line.Contains("@amount"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.MissileAmount = Convert.ToInt32(value);
+                                            }
+                                            if (line.Contains("missile") && line.Contains("@barrelamount"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.BarrelAmount = Convert.ToInt32(value);
+                                            }
+                                            if (line.Contains("missile") && line.Contains("@lifetime"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.Lifetime = Utility.ParseToDouble(value);
+                                            }
+                                            if (line.Contains("missile") && line.Contains("@range"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.Range = Convert.ToInt32(value);
+                                            }
+                                            if (line.Contains("missile") && line.Contains("@guided"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.Guided = Convert.ToInt32(value);
+                                            }
+                                            if (line.Contains("missile") && line.Contains("@swarm"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.Swarm = Convert.ToInt32(value);
+                                            }
+                                            if (line.Contains("missile") && line.Contains("@retarget"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.Retarget = Convert.ToInt32(value);
+                                            }
+                                            if (line.Contains("explosiondamage") && line.Contains("@value"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.Damage = Convert.ToInt32(value);
+                                            }
+                                            if (line.Contains("reload") && line.Contains("@time"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.Reload = Convert.ToInt32(value);
+                                            }
+                                            if (line.Contains("hull") && line.Contains("@max"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.Hull = Convert.ToInt32(value);
+                                            }
+                                            if (line.Contains("drag") && line.Contains("@forward"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.Forward = Utility.ParseToDouble(value);
+                                            }
+                                            if (line.Contains("drag") && line.Contains("@forward"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.Forward = Utility.ParseToDouble(value);
+                                            }
+                                            if (line.Contains("drag") && line.Contains("@reverse"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.Reverse = Utility.ParseToDouble(value);
+                                            }
+                                            if (line.Contains("drag") && line.Contains("@horizontal"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.Horizontal = Utility.ParseToDouble(value);
+                                            }
+                                            if (line.Contains("drag") && line.Contains("@vertical"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.Vertical = Utility.ParseToDouble(value);
+                                            }
+                                            if (line.Contains("drag") && line.Contains("@pitch"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.Pitch = Utility.ParseToDouble(value);
+                                            }
+                                            if (line.Contains("drag") && line.Contains("@yaw"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.Yaw = Utility.ParseToDouble(value);
+                                            }
+                                            if (line.Contains("drag") && line.Contains("@roll"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.Roll = Utility.ParseToDouble(value);
+                                            }
+                                            if (line.Contains("physics") && line.Contains("@mass"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.Mass = Utility.ParseToDouble(value);
+                                            }
+                                            if (line.Contains("inertia") && line.Contains("@pitch"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.InertiaPitch = Utility.ParseToDouble(value);
+                                            }
+                                            if (line.Contains("inertia") && line.Contains("@roll"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.InertiaRoll = Utility.ParseToDouble(value);
+                                            }
+                                            if (line.Contains("inertia") && line.Contains("@yaw"))
+                                            {
+                                                string value = line.Split('>')[1].Split('<')[0];
+                                                weapon.InertiaYaw = Utility.ParseToDouble(value);
+                                            }
                                         }
                                     }
+                                
+                                else
+                                {
+                                    UIModelMissile extractedMissile = m_XmlExtractor.ReadSingleMissile(new FileInfo(file));
+                                    if (extractedMissile.Name.Length > 1)
+                                        this.UIModel.UIModelMissiles.Add(extractedMissile);
                                 }
-
                             }
                         }
                     }
@@ -3212,17 +2472,25 @@ namespace X4_Editor
                                 UIModelShip ship = null;
                                 if (fileName.Contains("storage"))
                                 {
-                                    ship = this.UIModel.UIModelShips.Where(x => x.File.Contains(fileName.Replace("storage", "ship"))).FirstOrDefault();
+                                    ship = this.UIModel.UIModelShips.FirstOrDefault(x => x.File.Contains(fileName.Replace("storage", "ship")));
                                 }
                                 else
-                                    ship = this.UIModel.UIModelShips.Where(x => x.File.Contains(fileName)).FirstOrDefault();
+                                    ship = this.UIModel.UIModelShips.FirstOrDefault(x => x.File.Contains(fileName));
 
                                 if (ship != null)
                                 {
+                                    int index = this.UIModel.UIModelShips.IndexOf(ship);
                                     string line;
                                     while (!sr.EndOfStream)
                                     {
                                         line = sr.ReadLine();
+
+                                        if (line.Contains(@"<replace") && line.Contains("sel") && line.Contains(@"/macros"))
+                                        {
+                                            this.UIModel.UIModelShips[index] = m_XmlExtractor.ReadSingleShipFile(new FileInfo(file));
+                                            break;
+                                        }
+
                                         if (line.Contains("@max") && line.Contains("hull"))
                                         {
                                             string value = line.Split('>')[1].Split('<')[0];
@@ -3251,7 +2519,7 @@ namespace X4_Editor
                                         if (line.Contains("@gas") && line.Contains("gatherrate"))
                                         {
                                             string value = line.Split('>')[1].Split('<')[0];
-                                            ship.GatherRrate = ParseToDouble(value);
+                                            ship.GatherRrate = Utility.ParseToDouble(value);
                                         }
                                         if (line.Contains("@capacity") && line.Contains("people"))
                                         {
@@ -3266,52 +2534,52 @@ namespace X4_Editor
                                         if (line.Contains("@pitch") && line.Contains("inertia"))
                                         {
                                             string value = line.Split('>')[1].Split('<')[0];
-                                            ship.InertiaPitch = ParseToDouble(value);
+                                            ship.InertiaPitch = Utility.ParseToDouble(value);
                                         }
                                         if (line.Contains("@yaw") && line.Contains("inertia"))
                                         {
                                             string value = line.Split('>')[1].Split('<')[0];
-                                            ship.InertiaYaw = ParseToDouble(value);
+                                            ship.InertiaYaw = Utility.ParseToDouble(value);
                                         }
                                         if (line.Contains("@roll") && line.Contains("inertia"))
                                         {
                                             string value = line.Split('>')[1].Split('<')[0];
-                                            ship.InertiaRoll = ParseToDouble(value);
+                                            ship.InertiaRoll = Utility.ParseToDouble(value);
                                         }
                                         if (line.Contains("@forward") && line.Contains("drag"))
                                         {
                                             string value = line.Split('>')[1].Split('<')[0];
-                                            ship.Forward = ParseToDouble(value);
+                                            ship.Forward = Utility.ParseToDouble(value);
                                         }
                                         if (line.Contains("@reverse") && line.Contains("drag"))
                                         {
                                             string value = line.Split('>')[1].Split('<')[0];
-                                            ship.Reverse = ParseToDouble(value);
+                                            ship.Reverse = Utility.ParseToDouble(value);
                                         }
                                         if (line.Contains("@horizontal") && line.Contains("drag"))
                                         {
                                             string value = line.Split('>')[1].Split('<')[0];
-                                            ship.Horizontal = ParseToDouble(value);
+                                            ship.Horizontal = Utility.ParseToDouble(value);
                                         }
                                         if (line.Contains("@vertical") && line.Contains("drag"))
                                         {
                                             string value = line.Split('>')[1].Split('<')[0];
-                                            ship.Vertical = ParseToDouble(value);
+                                            ship.Vertical = Utility.ParseToDouble(value);
                                         }
                                         if (line.Contains("@pitch") && line.Contains("drag"))
                                         {
                                             string value = line.Split('>')[1].Split('<')[0];
-                                            ship.Pitch = ParseToDouble(value);
+                                            ship.Pitch = Utility.ParseToDouble(value);
                                         }
                                         if (line.Contains("@yaw") && line.Contains("drag"))
                                         {
                                             string value = line.Split('>')[1].Split('<')[0];
-                                            ship.Yaw = ParseToDouble(value);
+                                            ship.Yaw = Utility.ParseToDouble(value);
                                         }
                                         if (line.Contains("@roll") && line.Contains("drag"))
                                         {
                                             string value = line.Split('>')[1].Split('<')[0];
-                                            ship.Roll = ParseToDouble(value);
+                                            ship.Roll = Utility.ParseToDouble(value);
                                         }
                                         if (line.Contains("@max") && line.Contains("cargo"))
                                         {
@@ -3327,7 +2595,10 @@ namespace X4_Editor
                                 }
                                 else
                                 {
-                                    this.ReadSingleShipFile(new FileInfo(file));
+                                    UIModelShip extractedShip = m_XmlExtractor.ReadSingleShipFile(new FileInfo(file));
+                                    if (extractedShip.Name.Length > 1 && extractedShip.Class != "storage")
+                                        this.UIModel.UIModelShips.Add(extractedShip);
+                                    //this.UIModel.UIModelShips.Add(m_XmlExtractor.ReadSingleShipFile(new FileInfo(file)));
                                 }
                             }
                         }

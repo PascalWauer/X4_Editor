@@ -98,8 +98,8 @@ namespace X4_Editor
             }
         }
 
-        private int m_TravelCharge;
-        public int TravelCharge
+        private double m_TravelCharge;
+        public double TravelCharge
         {
             get { return m_TravelCharge; }
             set
