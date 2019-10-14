@@ -237,7 +237,7 @@ namespace X4_Editor
                                 if (weaponBulletNode[0].Attributes["ricochet"] != null)
                                     uiModelProjectile.Ricochet = Utility.ParseToDouble(weaponBulletNode[0].Attributes["ricochet"].Value);
                                 if (weaponBulletNode[0].Attributes["scale"] != null)
-                                    uiModelProjectile.Scale = Convert.ToInt32(weaponBulletNode[0].Attributes["scale"].Value);
+                                    uiModelProjectile.Scale = Utility.ParseToDouble(weaponBulletNode[0].Attributes["scale"].Value);
                                 if (weaponBulletNode[0].Attributes["chargetime"] != null)
                                     uiModelProjectile.ChargeTime = Utility.ParseToDouble(weaponBulletNode[0].Attributes["chargetime"].Value);
                                 if (weaponBulletNode[0].Attributes["timediff"] != null)
@@ -667,8 +667,10 @@ namespace X4_Editor
                             XmlDocument xD = new XmlDocument();
                             xD.LoadXml(ship.ToString());
                             XmlNode xN = XmlHelper.ToXmlNode(ship);
+
                             XmlNodeList shipComponentNode = xN.SelectNodes("//component");
                             XmlNodeList shipMacroNode = xN.SelectNodes("/macro");
+                            XmlNodeList shipIdentificationNode = xN.SelectNodes("//properties/identification");
                             XmlNodeList shipExplosionNode = xN.SelectNodes("//properties/explosiondamage");
                             XmlNodeList shipStorageNode = xN.SelectNodes("//properties/storage");
                             XmlNodeList shipHullNode = xN.SelectNodes("//properties/hull");
@@ -680,7 +682,7 @@ namespace X4_Editor
                             XmlNodeList shipDragNode = xN.SelectNodes("//properties/physics/drag");
                             XmlNodeList shipShipTypeNode = xN.SelectNodes("//properties/ship");
 
-                            // only for cargo 
+                            #region region for cargo 
                             string CargoFile = file.FullName.Replace(m_UIManager.UIModel.ModPath1, m_UIManager.UIModel.Path).Replace(m_UIManager.UIModel.ModPath2, m_UIManager.UIModel.Path).Replace("ship", "storage");
                             string CargoModFile1 = CargoFile.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath1).Replace("ship", "storage");
                             string CargoModFile2 = CargoFile.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath2).Replace("ship", "storage");
@@ -719,7 +721,7 @@ namespace X4_Editor
                                 }
                                 uiModelShip.Cargo.Changed = false;
                             }
-                            // cargo end 
+                            #endregion 
 
                             if (shipShipTypeNode.Count > 0)
                             {
@@ -727,8 +729,19 @@ namespace X4_Editor
                                     uiModelShip.Type = shipShipTypeNode[0].Attributes["type"].Value;
                             }
 
-                            if (uiModelShip.Type == null)
-                                continue;
+                            if (uiModelShip.Type == null || uiModelShip.Type == "cockpit")
+                            {
+                                return null;
+                            }
+                                
+
+                            if (shipIdentificationNode.Count > 0)
+                            {
+                                if (shipIdentificationNode[0].Attributes["basename"] != null)
+                                    uiModelShip.IGName = this.GetIGName(shipIdentificationNode[0].Attributes["basename"].Value);
+                                else
+                                    uiModelShip.IGName = "'unknown'";
+                            }
 
                             if (shipExplosionNode.Count > 0)
                             {
@@ -808,6 +821,64 @@ namespace X4_Editor
             return uiModelShip;
         }
 
+        private string GetIGName(string id)
+        {
+            if (m_UIManager.TextDictionary.ContainsKey(id.Replace(" ", "")))
+                return m_UIManager.TextDictionary[id.Replace(" ", "")];
+            else
+                return "no name";
+        }
+
+        public Dictionary<string, string> ReadTextXml(string path)
+        {
+            var dict = new Dictionary<string, string>();
+
+            //path = path + m_UIManager.PathToTexts + @"\0001-l044.xml";
+            //string modPath1 = m_UIManager.UIModel.ModPath1 + m_UIManager.PathToTexts + @"\0001.xml";
+            //string modPath2 = m_UIManager.UIModel.ModPath2 + m_UIManager.PathToTexts + @"\0001.xml";
+
+            if (File.Exists(path))
+            {
+                dict = ReadTextxml(m_UIManager.TextDictionary, path);
+            }
+            //if (File.Exists(modPath1))
+            //{
+            //    dict = ReadTextxml(m_UIManager.TextDictionary, modPath1);
+            //}
+            //if (File.Exists(modPath2))
+            //{
+            //    dict = ReadTextxml(m_UIManager.TextDictionary, modPath2);
+            //}
+            return dict;
+        }
+        private Dictionary<string, string> ReadTextxml(Dictionary<string, string> dictionary, string path)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load(path);
+
+            XmlNodeList nodeListPage = doc.GetElementsByTagName("page");
+
+            string page;
+            string textId;
+            string IGName;
+            string id;
+            foreach (XmlNode nodepage in nodeListPage)
+            {
+                XmlNodeList nodeListText = nodepage.SelectNodes("t");
+                foreach (XmlNode nodetext in nodeListText)
+                {
+                    page = nodepage.Attributes["id"].Value.ToString();
+                    textId = nodetext.Attributes["id"].Value.ToString();
+                    id = "{" + page + "," + textId + "}";
+                    IGName = nodetext.InnerText;
+                    if (!dictionary.ContainsKey(id))
+                        dictionary.Add(id, IGName);
+                    else
+                        dictionary[id] = IGName;
+                }
+            }
+            return dictionary;
+        }
     }
 }
 

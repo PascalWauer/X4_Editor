@@ -30,6 +30,7 @@ namespace X4_Editor
         private string m_SpecificWeaponFilter;
 
         public bool FilterWeaponsForWords { get; set; }
+        public string DoubleClickedWeapon;
 
         #region filters
         // Filters
@@ -568,9 +569,13 @@ namespace X4_Editor
             {
                 if (projectile.Name.ToUpper().Contains(m_SpecificWeaponFilter.ToUpper()))
                 {
+                    DoubleClickedWeapon = "";
                     found = true;
                 }
+                DoubleClickedWeapon = "";
             }
+            else 
+                return true;
             return found;
         }
 
@@ -757,7 +762,7 @@ namespace X4_Editor
                         if (searchString.Length > 0)
                         {
 
-                            if (ship.Name.ToUpper().Contains(searchString.ToUpper()))
+                            if (ship.Name.ToUpper().Contains(searchString.ToUpper()) || ship.IGName.ToUpper().Contains(searchString.ToUpper()))
                             {
                                 found = true;
                             }

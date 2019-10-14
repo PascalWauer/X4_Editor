@@ -32,6 +32,8 @@ namespace X4_Editor
     {
         static System.Collections.Specialized.StringCollection log = new System.Collections.Specialized.StringCollection();
 
+        
+
         public string PathToShields = @"\assets\props\SurfaceElements\macros";
         public string PathToShips = @"\assets\units";
         public string PathToProjectiles = @"\assets\fx\weaponFx\macros";
@@ -44,23 +46,14 @@ namespace X4_Editor
         public string PathToTurretsDumbfire = @"\assets\props\WeaponSystems\dumbfire\macros";
         public string PathToWares = @"\libraries\wares.xml";
         public string PathToEngines = @"\assets\props\Engines\macros";
+        public string PathToTexts = @"\t";
 
+
+        public Dictionary<string, string> TextDictionary = new Dictionary<string, string>();
         public MainWindow MainWindow { get; set; }
         public WaresWindow WaresWindow { get; set; }
         public UIModel UIModel { get; set; }
         public XmlExtractor m_XmlExtractor;
-        //protected CommandBindingCollection m_CommandBindings;
-        //protected virtual CommandBindingCollection CommandBindings
-        //{
-        //    get
-        //    {
-        //        if (m_CommandBindings == null)
-        //        {
-        //            m_CommandBindings = new CommandBindingCollection();
-        //        }
-        //        return m_CommandBindings;
-        //    }
-        //}
 
         public UIManager()
         {
@@ -76,15 +69,12 @@ namespace X4_Editor
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.ReadAllMod1FilesCommand, this.ExecuteReadAllMod1FilesCommand));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.ReadAllMod2FilesCommand, this.ExecuteReadAllMod2FilesCommand));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.FilterCommand, this.ExecuteFilterCommand));
-            //MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.ReadAllFBIFilesCommand, this.ExecuteReadAllFBIFilesCommand));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.WriteAllChangedFilesCommand, this.ExecuteWriteAllChangedFilesCommand));
             //MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.PackAllFilesCommand, this.ExecutePackAllFilesCommand));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.AddToValueCommand, this.ExecuteAddToValueCommand, CanExecuteCalculate));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.SubstractToValueCommand, this.ExecuteSubstractToValueCommand, CanExecuteCalculate));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.MultiplyToValueCommand, this.ExecuteMultiplyToValueCommand, CanExecuteCalculate));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.SetFixedValueCommand, this.ExecuteSetFixedValueCommand, CanExecuteCalculate));
-
-            //MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.FilterUnitsCommand, this.ExecuteFilterUnitsCommand));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.ShowWaresWindowCommand, this.ExecuteShowWaresWindowCommand));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.OnMainWindowCellRightClick, this.ExecuteOnMainWindowCellRightClick));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.SelectFolderCommand, this.ExecuteSelectFolderCommand));
@@ -97,6 +87,7 @@ namespace X4_Editor
 
             WaresWindow.CommandBindings.Add(new CommandBinding(X4Commands.OnWaresWindowCellRightClick, this.ExecuteOnWaresWindowCellRightClick));
             this.LoadConfig();
+            this.TextDictionary = m_XmlExtractor.ReadTextXml(this.UIModel.Path + this.PathToTexts + @"\0001-l044.xml");
             MainWindow.Show();
             WaresWindow.Owner = this.MainWindow;
 
@@ -106,12 +97,21 @@ namespace X4_Editor
 
         private void ExecuteOnWeaponDoubleClick(object sender, ExecutedRoutedEventArgs e)
         {
-            if (this.MainWindow.DG_Weapons.SelectedCells.Count == 1)
+
             {
                 DataGridCellInfo dataGridCell = this.MainWindow.DG_Weapons.SelectedCells[0];
                 var item = dataGridCell.Item as UIModelWeapon;
-                this.MainWindow.DG_Weapons.SelectedCells.Clear();
-                this.UIModel.SetProjectileFilter(item.Projectile);
+                if (this.MainWindow.DG_Weapons.SelectedCells.Count == 1 && this.UIModel.DoubleClickedWeapon != item.Projectile)
+                {
+                    this.UIModel.DoubleClickedWeapon = item.Projectile;
+                    this.MainWindow.DG_Weapons.SelectedCells.Clear();
+                    this.UIModel.SetProjectileFilter(item.Projectile);
+                    
+                }
+                else
+                {
+                    this.UIModel.SetProjectileFilter("");
+                }
             }
         }
         private void ExecuteOnProjectileDoubleClick(object sender, ExecutedRoutedEventArgs e)
@@ -891,98 +891,98 @@ namespace X4_Editor
                 var ship = dataGridCell.Item as UIModelShip;
                 if (ship != null)
                 {
-                    if (dataGridCell.Column.DisplayIndex == 4)
+                    if (dataGridCell.Column.DisplayIndex == 5)
                     {
                         ship.HullMax = (int)Calculate(operation, ship.HullMax);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 5)
+                    if (dataGridCell.Column.DisplayIndex == 6)
                     {
                         ship.Cargo.CargoMax = (int)Calculate(operation, ship.Cargo.CargoMax);
                         counter.successcounter++;
                     }
 
-                    if (dataGridCell.Column.DisplayIndex == 7)
+                    if (dataGridCell.Column.DisplayIndex == 8)
                     {
                         ship.StorageUnits = (int)Calculate(operation, ship.StorageUnits);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 8)
+                    if (dataGridCell.Column.DisplayIndex == 9)
                     {
                         ship.StorageMissiles = (int)Calculate(operation, ship.StorageMissiles);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 9)
+                    if (dataGridCell.Column.DisplayIndex == 10)
                     {
                         ship.People = (int)Calculate(operation, ship.People);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 10)
+                    if (dataGridCell.Column.DisplayIndex == 11)
                     {
                         ship.ExplosionDamage = (int)Calculate(operation, ship.ExplosionDamage);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 11)
+                    if (dataGridCell.Column.DisplayIndex == 12)
                     {
                         ship.Secrecy = (int)Calculate(operation, ship.Secrecy);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 12)
+                    if (dataGridCell.Column.DisplayIndex == 13)
                     {
                         ship.GatherRrate = Calculate(operation, ship.GatherRrate);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 13)
+                    if (dataGridCell.Column.DisplayIndex == 14)
                     {
                         ship.Mass = Calculate(operation, ship.Mass);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 14)
+                    if (dataGridCell.Column.DisplayIndex == 15)
                     {
                         ship.Forward = Calculate(operation, ship.Forward);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 15)
+                    if (dataGridCell.Column.DisplayIndex == 16)
                     {
                         ship.Reverse = Calculate(operation, ship.Reverse);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 16)
+                    if (dataGridCell.Column.DisplayIndex == 17)
                     {
                         ship.Horizontal = Calculate(operation, ship.Horizontal);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 17)
+                    if (dataGridCell.Column.DisplayIndex == 18)
                     {
                         ship.Vertical = Calculate(operation, ship.Vertical);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 18)
+                    if (dataGridCell.Column.DisplayIndex == 19)
                     {
                         ship.Pitch = Calculate(operation, ship.Pitch);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 19)
+                    if (dataGridCell.Column.DisplayIndex == 20)
                     {
                         ship.Yaw = Calculate(operation, ship.Yaw);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 20)
+                    if (dataGridCell.Column.DisplayIndex == 21)
                     {
                         ship.Roll = Calculate(operation, ship.Roll);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 21)
+                    if (dataGridCell.Column.DisplayIndex == 22)
                     {
                         ship.InertiaPitch = Calculate(operation, ship.InertiaPitch);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 22)
+                    if (dataGridCell.Column.DisplayIndex == 23)
                     {
                         ship.InertiaYaw = Calculate(operation, ship.InertiaYaw);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 23)
+                    if (dataGridCell.Column.DisplayIndex == 24)
                     {
                         ship.InertiaRoll = Calculate(operation, ship.InertiaRoll);
                         counter.successcounter++;
@@ -1831,7 +1831,7 @@ namespace X4_Editor
                 foreach (var item in xmlShipsList)
                 {
                     UIModelShip ship = m_XmlExtractor.ReadSingleShipFile(item);
-                    if (ship.Name.Length > 1 && ship.Class != "storage")
+                    if (ship != null && ship.Name.Length > 1 && ship.Class != "storage" && ship.Class != "cockpit")
                         this.UIModel.UIModelShips.Add(ship);
                 }
 
@@ -1865,6 +1865,7 @@ namespace X4_Editor
             else
             {
                 List<string> ModDirectories = Directory.GetDirectories(modPath, "*", SearchOption.AllDirectories).ToList();
+                //this.TextDictionary = m_XmlExtractor.ReadTextXml(modPath + this.PathToTexts + @"\0001.xml");
                 foreach (string dir in ModDirectories)
                 {
                     //shields
@@ -2596,7 +2597,7 @@ namespace X4_Editor
                                 else
                                 {
                                     UIModelShip extractedShip = m_XmlExtractor.ReadSingleShipFile(new FileInfo(file));
-                                    if (extractedShip.Name.Length > 1 && extractedShip.Class != "storage")
+                                    if (extractedShip != null && extractedShip.Name.Length > 1 && extractedShip.Class != "storage")
                                         this.UIModel.UIModelShips.Add(extractedShip);
                                     //this.UIModel.UIModelShips.Add(m_XmlExtractor.ReadSingleShipFile(new FileInfo(file)));
                                 }
