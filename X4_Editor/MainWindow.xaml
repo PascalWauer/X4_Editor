@@ -140,7 +140,7 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Ship Name" Binding="{Binding Name}" Width="230" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="IG Name" Binding="{Binding IGName}" Width="80" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
+                        <DataGridTextColumn Header="IG Name" Binding="{Binding IGName}" Width="150" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Size" Binding="{Binding Size, UpdateSourceTrigger=LostFocus}" IsReadOnly="True" Width="30">
                         </DataGridTextColumn>
@@ -191,6 +191,15 @@
                         <DataGridTextColumn Header="Ship Name" Binding="{Binding Name}" Width="210" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
                         </DataGridTextColumn>
                     </DataGrid.Columns>
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="ToolTip">
+                                <Setter.Value>
+                                    <TextBlock Text="{Binding IGName}" />
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGrid.RowStyle>
                 </DataGrid>
                 
                 <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ResizeDirection="Columns" Background="DarkGray" Foreground="Beige"/>
@@ -200,6 +209,8 @@
                           AlternatingRowBackground="Bisque" SelectionUnit="Cell" CellStyle="{StaticResource CustomCellStyle}" MouseRightButtonDown="OnMainWindowCellRightClick">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Engine Name" Binding="{Binding Name}" Width="230" IsReadOnly="True" SortDirection="Descending" FontWeight="Bold">
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="IG Name" Binding="{Binding IGName}" Width="170" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Faction" Binding="{Binding Faction, UpdateSourceTrigger=LostFocus}" IsReadOnly="True" Width="60">
                         </DataGridTextColumn>
@@ -246,6 +257,15 @@
                         <DataGridTextColumn Header="Engine Name" Binding="{Binding Name}" Width="200" IsReadOnly="True" SortDirection="Descending" FontWeight="Bold">
                         </DataGridTextColumn>
                     </DataGrid.Columns>
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="ToolTip">
+                                <Setter.Value>
+                                    <TextBlock Text="{Binding IGName}" />
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGrid.RowStyle>
                 </DataGrid>
             </Grid>
         </Grid>
@@ -267,6 +287,8 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Shield Name" Binding="{Binding Name}" Width="230" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
                         </DataGridTextColumn>
+                        <DataGridTextColumn Header="IG Name" Binding="{Binding IGName}" Width="180" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
+                        </DataGridTextColumn>
                         <DataGridTextColumn Header="Size" Binding="{Binding Size, UpdateSourceTrigger=LostFocus}" IsReadOnly="True" Width="30">
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Faction" Binding="{Binding Faction, UpdateSourceTrigger=LostFocus}" Width="60" IsReadOnly="True">
@@ -284,6 +306,15 @@
                         <DataGridTextColumn Header="Threshold" Binding="{Binding Threshold, UpdateSourceTrigger=LostFocus}" Width="60">
                         </DataGridTextColumn>
                     </DataGrid.Columns>
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="ToolTip">
+                                <Setter.Value>
+                                    <TextBlock Text="{Binding IGName}" />
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGrid.RowStyle>
                 </DataGrid>
                 
                 
@@ -297,6 +328,8 @@
 
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Weapon Name" Binding="{Binding Name}" Width="210" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="IG Name" Binding="{Binding IGName}" Width="150" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Size" Binding="{Binding Size, UpdateSourceTrigger=LostFocus}" IsReadOnly="True" Width="30">
                         </DataGridTextColumn>
@@ -327,6 +360,15 @@
                         <DataGridTextColumn Header="Weapon Name" Binding="{Binding Name}" Width="190" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
                         </DataGridTextColumn>
                     </DataGrid.Columns>
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="ToolTip">
+                                <Setter.Value>
+                                    <TextBlock Text="{Binding IGName}" />
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGrid.RowStyle>
             </DataGrid>
 
             
@@ -405,6 +447,8 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Missile Name" Binding="{Binding Name}" Width="220" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
                     </DataGridTextColumn>
+                    <DataGridTextColumn Header="IG Name" Binding="{Binding IGName}" Width="150" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
+                    </DataGridTextColumn>
                     <DataGridTextColumn Header="Damage" Binding="{Binding Damage, UpdateSourceTrigger=LostFocus}" FontWeight="SemiBold" Width="60">
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="Reload" Binding="{Binding Reload, UpdateSourceTrigger=LostFocus}" FontWeight="SemiBold" Width="50">
@@ -450,6 +494,15 @@
                     <DataGridTextColumn Header="Missile Name" Binding="{Binding Name}" Width="180" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
                     </DataGridTextColumn>
                 </DataGrid.Columns>
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="ToolTip">
+                            <Setter.Value>
+                                <TextBlock Text="{Binding IGName}" />
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </DataGrid.RowStyle>
             </DataGrid>
         </Grid>
     </Grid>

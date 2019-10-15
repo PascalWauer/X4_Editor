@@ -29,6 +29,17 @@ namespace X4_Editor
             }
         }
 
+        private string m_IGName;
+        public string IGName
+        {
+            get { return m_IGName; }
+            set
+            {
+                m_IGName = value;
+                Changed = true;
+                NotifyPropertyChanged();
+            }
+        }
         public string Size
         {
             get

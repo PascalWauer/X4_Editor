@@ -499,27 +499,27 @@ namespace X4_Editor
                 var shield = dataGridCell.Item as UIModelShield;
                 if (shield != null)
                 {
-                    if (dataGridCell.Column.DisplayIndex == 4)
+                    if (dataGridCell.Column.DisplayIndex == 5)
                     {
                         shield.Max = (int)Calculate(operation, shield.Max);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 5)
+                    if (dataGridCell.Column.DisplayIndex == 6)
                     {
                         shield.Rate = Calculate(operation, shield.Rate);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 6)
+                    if (dataGridCell.Column.DisplayIndex == 7)
                     {
                         shield.Delay = Calculate(operation, shield.Delay);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 7)
+                    if (dataGridCell.Column.DisplayIndex == 8)
                     {
                         shield.MaxHull = (int)Calculate(operation, shield.MaxHull);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 8)
+                    if (dataGridCell.Column.DisplayIndex == 9)
                     {
                         shield.Threshold = Calculate(operation, shield.Threshold);
                         counter.successcounter++;
@@ -529,93 +529,93 @@ namespace X4_Editor
                 var engine = dataGridCell.Item as UIModelEngine;
                 if (engine != null)
                 {
-                    if (dataGridCell.Column.DisplayIndex == 4)
+                    if (dataGridCell.Column.DisplayIndex == 5)
                     {
                         engine.Forward = Calculate(operation, engine.Forward);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 5)
+                    if (dataGridCell.Column.DisplayIndex == 6)
                     {
                         engine.Reverse = Calculate(operation, engine.Reverse);
                         counter.successcounter++;
                     }
 
-                    if (dataGridCell.Column.DisplayIndex == 6)
+                    if (dataGridCell.Column.DisplayIndex == 7)
                     {
                         engine.BoostThrust = Calculate(operation, engine.BoostThrust);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 7)
+                    if (dataGridCell.Column.DisplayIndex == 8)
                     {
                         engine.BoostDuration = Calculate(operation, engine.BoostDuration);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 8)
+                    if (dataGridCell.Column.DisplayIndex == 9)
                     {
                         engine.BoostAttack = Calculate(operation, engine.BoostAttack);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 9)
+                    if (dataGridCell.Column.DisplayIndex == 10)
                     {
                         engine.BoostRelease = Calculate(operation, engine.BoostRelease);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 10)
+                    if (dataGridCell.Column.DisplayIndex == 11)
                     {
                         engine.TravelThrust = Calculate(operation, engine.TravelThrust);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 11)
+                    if (dataGridCell.Column.DisplayIndex == 12)
                     {
                         engine.TravelCharge = (int)Calculate(operation, engine.TravelCharge);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 12)
+                    if (dataGridCell.Column.DisplayIndex == 13)
                     {
                         engine.TravelAttack = Calculate(operation, engine.TravelAttack);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 13)
+                    if (dataGridCell.Column.DisplayIndex == 14)
                     {
                         engine.TravelRelease = Calculate(operation, engine.TravelRelease);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 14)
+                    if (dataGridCell.Column.DisplayIndex == 15)
                     {
                         engine.Strafe = Calculate(operation, engine.Strafe);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 15)
+                    if (dataGridCell.Column.DisplayIndex == 16)
                     {
                         engine.Yaw = Calculate(operation, engine.Yaw);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 16)
+                    if (dataGridCell.Column.DisplayIndex == 17)
                     {
                         engine.Pitch = Calculate(operation, engine.Pitch);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 17)
+                    if (dataGridCell.Column.DisplayIndex == 18)
                     {
                         engine.Roll = Calculate(operation, engine.Roll);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 18)
+                    if (dataGridCell.Column.DisplayIndex == 19)
                     {
                         engine.AngularPitch = Calculate(operation, engine.AngularPitch);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 19)
+                    if (dataGridCell.Column.DisplayIndex == 20)
                     {
                         engine.AngularRoll = Calculate(operation, engine.AngularRoll);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 20)
+                    if (dataGridCell.Column.DisplayIndex == 21)
                     {
                         engine.MaxHull = (int)Calculate(operation, engine.MaxHull);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 21)
+                    if (dataGridCell.Column.DisplayIndex == 22)
                     {
                         engine.Threshold = (int)Calculate(operation, engine.Threshold);
                         counter.successcounter++;
@@ -725,52 +725,52 @@ namespace X4_Editor
                 var weapon = dataGridCell.Item as UIModelWeapon;
                 if (weapon != null)
                 {
-                    if (dataGridCell.Column.DisplayIndex == 4)
+                    if (dataGridCell.Column.DisplayIndex == 5)
                     {
                         weapon.RotationSpeed = Calculate(operation, weapon.RotationSpeed);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 5)
+                    if (dataGridCell.Column.DisplayIndex == 6)
                     {
                         weapon.RotationAcceleration = Calculate(operation, weapon.RotationAcceleration);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 6)
+                    if (dataGridCell.Column.DisplayIndex == 7)
                     {
                         weapon.ReloadRate = Calculate(operation, weapon.ReloadRate);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 7)
+                    if (dataGridCell.Column.DisplayIndex == 8)
                     {
                         weapon.ReloadTime = Calculate(operation, weapon.ReloadTime);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 8)
+                    if (dataGridCell.Column.DisplayIndex == 9)
                     {
                         weapon.Overheat = (int)Calculate(operation, weapon.Overheat);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 9)
+                    if (dataGridCell.Column.DisplayIndex == 10)
                     {
                         weapon.CoolDelay = Calculate(operation, weapon.CoolDelay);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 10)
+                    if (dataGridCell.Column.DisplayIndex == 11)
                     {
                         weapon.CoolRate = (int)Calculate(operation, weapon.CoolRate);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 11)
+                    if (dataGridCell.Column.DisplayIndex == 12)
                     {
                         weapon.Reenable = (int)Calculate(operation, weapon.Reenable);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 12)
+                    if (dataGridCell.Column.DisplayIndex == 13)
                     {
                         weapon.HullMax = (int)Calculate(operation, weapon.HullMax);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 13)
+                    if (dataGridCell.Column.DisplayIndex == 14)
                     {
                         weapon.HullThreshold = Calculate(operation, weapon.HullThreshold);
                         counter.successcounter++;
@@ -781,107 +781,107 @@ namespace X4_Editor
                 var missile = dataGridCell.Item as UIModelMissile;
                 if (missile != null)
                 {
-                    if (dataGridCell.Column.DisplayIndex == 1)
+                    if (dataGridCell.Column.DisplayIndex == 2)
                     {
                         missile.Damage = (int)Calculate(operation, missile.Damage);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 2)
+                    if (dataGridCell.Column.DisplayIndex == 3)
                     {
                         missile.Reload = Calculate(operation, missile.Reload);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 3)
+                    if (dataGridCell.Column.DisplayIndex == 4)
                     {
                         missile.Range = (int)Calculate(operation, missile.Range);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 4)
+                    if (dataGridCell.Column.DisplayIndex == 5)
                     {
                         missile.Lifetime = Calculate(operation, missile.Lifetime);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 5)
+                    if (dataGridCell.Column.DisplayIndex == 6)
                     {
                         missile.Forward = Calculate(operation, missile.Forward);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 6)
+                    if (dataGridCell.Column.DisplayIndex == 7)
                     {
                         missile.Reverse = Calculate(operation, missile.Reverse);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 7)
+                    if (dataGridCell.Column.DisplayIndex == 8)
                     {
                         missile.Guided = (int)Calculate(operation, missile.Guided);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 8)
+                    if (dataGridCell.Column.DisplayIndex == 9)
                     {
                         missile.Swarm = (int)Calculate(operation, missile.Swarm);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 9)
+                    if (dataGridCell.Column.DisplayIndex == 10)
                     {
                         missile.Retarget = (int)Calculate(operation, missile.Retarget);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 10)
+                    if (dataGridCell.Column.DisplayIndex == 12)
                     {
                         missile.Hull = (int)Calculate(operation, missile.Hull);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 11)
+                    if (dataGridCell.Column.DisplayIndex == 12)
                     {
                         missile.Ammunition = (int)Calculate(operation, missile.Ammunition);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 12)
+                    if (dataGridCell.Column.DisplayIndex == 13)
                     {
                         missile.MissileAmount = (int)Calculate(operation, missile.MissileAmount);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 13)
+                    if (dataGridCell.Column.DisplayIndex == 14)
                     {
                         missile.Mass = Calculate(operation, missile.Mass);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 14)
+                    if (dataGridCell.Column.DisplayIndex == 15)
                     {
                         missile.Horizontal = Calculate(operation, missile.Horizontal);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 15)
+                    if (dataGridCell.Column.DisplayIndex == 16)
                     {
                         missile.Vertical = Calculate(operation, missile.Vertical);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 16)
+                    if (dataGridCell.Column.DisplayIndex == 17)
                     {
                         missile.Pitch = Calculate(operation, missile.Pitch);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 17)
+                    if (dataGridCell.Column.DisplayIndex == 18)
                     {
                         missile.Yaw = Calculate(operation, missile.Yaw);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 18)
+                    if (dataGridCell.Column.DisplayIndex == 19)
                     {
                         missile.Roll = Calculate(operation, missile.Roll);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 19)
+                    if (dataGridCell.Column.DisplayIndex == 20)
                     {
                         missile.InertiaPitch = Calculate(operation, missile.InertiaPitch);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 20)
+                    if (dataGridCell.Column.DisplayIndex == 21)
                     {
                         missile.InertiaYaw = Calculate(operation, missile.InertiaYaw);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 21)
+                    if (dataGridCell.Column.DisplayIndex == 22)
                     {
                         missile.InertiaRoll = Calculate(operation, missile.InertiaRoll);
                         counter.successcounter++;
@@ -1332,12 +1332,12 @@ namespace X4_Editor
 
                     string shipClasssFolder = item.File.Split(new[] { "units" }, StringSplitOptions.None)[1].Split(new[] { "macros" }, StringSplitOptions.None)[0];
 
-                    if (!Directory.Exists(this.UIModel.ExportPath + PathToShips + shipClasssFolder))
+                    if (!Directory.Exists(this.UIModel.ExportPath + PathToShips + shipClasssFolder + @"\macros"))
                     {
-                        Directory.CreateDirectory(this.UIModel.ExportPath + PathToShips + shipClasssFolder);
+                        Directory.CreateDirectory(this.UIModel.ExportPath + PathToShips + shipClasssFolder + @"\macros");
                     }
 
-                    string outputPath = this.UIModel.ExportPath + PathToShips + shipClasssFolder + item.File.Split(new[] { "macros" }, StringSplitOptions.None)[1];
+                    string outputPath = this.UIModel.ExportPath + PathToShips + shipClasssFolder + "macros" + item.File.Split(new[] { "macros" }, StringSplitOptions.None)[1];
 
                     if (item.Changed)
                     {
@@ -1682,7 +1682,7 @@ namespace X4_Editor
 
             string turretsPath = folderPath + PathToTurretsStandard;
             List<FileInfo> xmlTurretsList = new List<FileInfo>();
-            xmlTurretsList = this.GetAllXmlInSubFolders(PathToTurretsStandard, xmlTurretsList);
+            xmlTurretsList = this.GetAllXmlInSubFolders(folderPath + PathToTurretsStandard, xmlTurretsList);
             xmlTurretsList = this.GetAllXmlInSubFolders(folderPath + PathToTurretsEnergy, xmlTurretsList);
             xmlTurretsList = this.GetAllXmlInSubFolders(folderPath + PathToTurretsHeavy, xmlTurretsList);
             xmlTurretsList = this.GetAllXmlInSubFolders(folderPath + PathToTurretsCapital, xmlTurretsList);
@@ -1890,7 +1890,7 @@ namespace X4_Editor
                                     {
                                         line = sr.ReadLine();
 
-                                        if (line.Contains(@"<replace") && line.Contains("sel") && line.Contains(@"/macros"))
+                                        if (line.Contains(@"<replace") && line.Contains("sel") && line.Contains(@"/macros") && !line.Contains("@"))
                                         {
                                             this.UIModel.UIModelModulesShields[index] = m_XmlExtractor.ReadSingleShield(new FileInfo(file));
                                             break;
@@ -1954,7 +1954,7 @@ namespace X4_Editor
                                     {
                                         line = sr.ReadLine();
 
-                                        if (line.Contains(@"<replace") && line.Contains("sel") && line.Contains(@"/macros"))
+                                        if (line.Contains(@"<replace") && line.Contains("sel") && line.Contains(@"/macros") && !line.Contains("@"))
                                         {
                                             this.UIModel.UIModelModulesEngines[index] = m_XmlExtractor.ReadSingleEngineFile(new FileInfo(file));
                                             break;
@@ -2062,7 +2062,7 @@ namespace X4_Editor
                         }
                     }
                     //projectiles 
-                    if (dir.Contains("assets\\fx\\weaponfx\\macros"))
+                    if (dir.Contains("assets\\fx\\weaponFx\\macros"))
                     {
                         List<string> files = Directory.GetFiles(dir).ToList();
 
@@ -2086,7 +2086,7 @@ namespace X4_Editor
                                         {
                                             line = sr.ReadLine();
 
-                                            if (line.Contains(@"<replace") && line.Contains("sel") && line.Contains("/macros"))
+                                            if (line.Contains(@"<replace") && line.Contains("sel") && line.Contains("/macros") && !line.Contains("@"))
                                             {
                                                 this.UIModel.UIModelProjectiles[index] = m_XmlExtractor.ReadSingleProjectile(new FileInfo(file));
                                                 break;
@@ -2231,7 +2231,7 @@ namespace X4_Editor
                                         {
                                             line = sr.ReadLine();
                                             
-                                            if (line.Contains(@"<replace") && line.Contains("sel") && line.Contains(@"/macros"))
+                                            if (line.Contains(@"<replace") && line.Contains("sel") && line.Contains(@"/macros") && !line.Contains("@"))
                                             {
                                                 this.UIModel.UIModelWeapons[index] = m_XmlExtractor.ReadSingleWeapon(new FileInfo(file));
                                                 break;
@@ -2323,7 +2323,7 @@ namespace X4_Editor
                                         {
                                             line = sr.ReadLine();
 
-                                            if (line.Contains(@"<replace") && line.Contains("sel") && line.Contains(@"/macros"))
+                                            if (line.Contains(@"<replace") && line.Contains("sel") && line.Contains(@"/macros") && !line.Contains("@"))
                                             {
                                                 this.UIModel.UIModelMissiles[index] = m_XmlExtractor.ReadSingleMissile(new FileInfo(file));
                                                 break;
@@ -2486,7 +2486,7 @@ namespace X4_Editor
                                     {
                                         line = sr.ReadLine();
 
-                                        if (line.Contains(@"<replace") && line.Contains("sel") && line.Contains(@"/macros"))
+                                        if (line.Contains(@"<replace") && line.Contains("sel") && line.Contains(@"/macros") && !line.Contains("@"))
                                         {
                                             this.UIModel.UIModelShips[index] = m_XmlExtractor.ReadSingleShipFile(new FileInfo(file));
                                             break;

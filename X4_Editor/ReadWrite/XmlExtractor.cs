@@ -303,6 +303,7 @@ namespace X4_Editor
                             XmlNode xN = XmlHelper.ToXmlNode(missile);
                             XmlNodeList missileComponentNode = xN.SelectNodes("//component");
                             XmlNodeList missileMacroNode = xN.SelectNodes("//macro");
+                            XmlNodeList missileIdentificationNode = xN.SelectNodes("//properties/identification");
                             XmlNodeList missileAmmunitionNode = xN.SelectNodes("//properties/ammunition");
                             XmlNodeList missilenMissileNode = xN.SelectNodes("//properties/missile");
                             XmlNodeList missileHullNode = xN.SelectNodes("//properties/hull");
@@ -314,6 +315,14 @@ namespace X4_Editor
 
                             uiModelMissile.File = file.FullName;
                             uiModelMissile.Name = missileMacroNode[0].Attributes["name"].Value;
+
+                            if (missileIdentificationNode.Count > 0)
+                            {
+                                if (missileIdentificationNode[0].Attributes["name"] != null)
+                                    uiModelMissile.IGName = this.GetIGName(missileIdentificationNode[0].Attributes["name"].Value);
+                                else
+                                    uiModelMissile.IGName = "'unknown'";
+                            }
 
                             if (missileAmmunitionNode.Count > 0)
                             {
@@ -435,7 +444,13 @@ namespace X4_Editor
                                     uiModelEngine.Faction = engineIdentificationNode[0].Attributes["makerrace"].Value;
                                 if (engineIdentificationNode[0].Attributes["mk"] != null)
                                     uiModelEngine.MK = engineIdentificationNode[0].Attributes["mk"].Value;
+                                if (engineIdentificationNode[0].Attributes["name"] != null)
+                                    uiModelEngine.IGName = this.GetIGName(engineIdentificationNode[0].Attributes["name"].Value);
+                                else
+                                    uiModelEngine.IGName = "'unknown'";
                             }
+
+
                             if (engineBoostNode.Count > 0)
                             {
                                 if (engineBoostNode[0].Attributes["attack"] != null)
@@ -539,6 +554,10 @@ namespace X4_Editor
                             {
                                 uiModelShield.Faction = shielIdentificationNode[0].Attributes["makerrace"].Value;
                                 uiModelShield.MK = shielIdentificationNode[0].Attributes["mk"].Value;
+                                if (shielIdentificationNode[0].Attributes["name"] != null)
+                                    uiModelShield.IGName = this.GetIGName(shielIdentificationNode[0].Attributes["name"].Value);
+                                else
+                                    uiModelShield.IGName = "'unknown'";
                             }
                             if (shieldHullNode.Count > 0)
                             {
@@ -596,6 +615,10 @@ namespace X4_Editor
                             {
                                 if (weaponIdentificationNode[0].Attributes["mk"] != null)
                                     uiModelWeapon.MK = weaponIdentificationNode[0].Attributes["mk"].Value;
+                                if (weaponIdentificationNode[0].Attributes["name"] != null)
+                                    uiModelWeapon.IGName = this.GetIGName(weaponIdentificationNode[0].Attributes["name"].Value);
+                                else
+                                    uiModelWeapon.IGName = "'unknown'";
                             }
                             if (weaponHeatNode.Count > 0)
                             {
@@ -737,8 +760,8 @@ namespace X4_Editor
 
                             if (shipIdentificationNode.Count > 0)
                             {
-                                if (shipIdentificationNode[0].Attributes["basename"] != null)
-                                    uiModelShip.IGName = this.GetIGName(shipIdentificationNode[0].Attributes["basename"].Value);
+                                if (shipIdentificationNode[0].Attributes["name"] != null)
+                                    uiModelShip.IGName = this.GetIGName(shipIdentificationNode[0].Attributes["name"].Value);
                                 else
                                     uiModelShip.IGName = "'unknown'";
                             }
@@ -870,7 +893,7 @@ namespace X4_Editor
                     page = nodepage.Attributes["id"].Value.ToString();
                     textId = nodetext.Attributes["id"].Value.ToString();
                     id = "{" + page + "," + textId + "}";
-                    IGName = nodetext.InnerText;
+                    IGName = nodetext.InnerText.Split('{')[0].Replace("(", "").Replace(")","").Replace(@"\", "");
                     if (!dictionary.ContainsKey(id))
                         dictionary.Add(id, IGName);
                     else
