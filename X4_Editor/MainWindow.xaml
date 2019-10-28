@@ -397,11 +397,11 @@
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="ReloadTime" Binding="{Binding ReloadTime, UpdateSourceTrigger=LostFocus}" Width="75">
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="DPS" Binding="{Binding DPS, UpdateSourceTrigger=LostFocus}" FontWeight="SemiBold" Width="45">
+                    <DataGridTextColumn Header="DPS" Binding="{Binding DPS, Mode=OneWay}" FontWeight="SemiBold" Width="45">
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="Shield" Binding="{Binding Shield, UpdateSourceTrigger=LostFocus}" FontWeight="SemiBold" Width="50">
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="DPS Shield" Binding="{Binding DPS_Shield, UpdateSourceTrigger=LostFocus}" FontWeight="SemiBold" Width="70">
+                    <DataGridTextColumn Header="DPS Shield" Binding="{Binding DPS_Shield, Mode=OneWay}" FontWeight="SemiBold" Width="70">
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="Amount" Binding="{Binding Amount, UpdateSourceTrigger=LostFocus}" Width="60">
                     </DataGridTextColumn>

@@ -87,7 +87,8 @@ namespace X4_Editor
 
             WaresWindow.CommandBindings.Add(new CommandBinding(X4Commands.OnWaresWindowCellRightClick, this.ExecuteOnWaresWindowCellRightClick));
             this.LoadConfig();
-            this.TextDictionary = m_XmlExtractor.ReadTextXml(this.UIModel.Path + this.PathToTexts + @"\0001-l044.xml");
+            this.TextDictionary = new Dictionary<string, string>();
+            this.TextDictionary = m_XmlExtractor.ReadTextXml(this.UIModel.Path + this.PathToTexts + @"\0001-l044.xml", this.TextDictionary);
             MainWindow.Show();
             WaresWindow.Owner = this.MainWindow;
 
@@ -1858,6 +1859,7 @@ namespace X4_Editor
         }
         private void ReadAllModFilesFromFolder(string modPath)
         {
+
             if (!Directory.Exists(modPath))
             {
                 MessageBox.Show("Enter a valid folder path for mod files", "No valid mod folder");
@@ -1865,7 +1867,23 @@ namespace X4_Editor
             else
             {
                 List<string> ModDirectories = Directory.GetDirectories(modPath, "*", SearchOption.AllDirectories).ToList();
-                //this.TextDictionary = m_XmlExtractor.ReadTextXml(modPath + this.PathToTexts + @"\0001.xml");
+
+                Dictionary<string, string> ModTexts = new Dictionary<string, string>();
+                ModTexts = m_XmlExtractor.ReadTextXml(modPath + this.PathToTexts + @"\0001.xml", ModTexts);
+
+                while (ModTexts.Count > 0)
+                {
+                    if (this.TextDictionary.ContainsKey(ModTexts.First().Key))
+                        this.TextDictionary[ModTexts.First().Key] = ModTexts.First().Value;
+                    else
+                        this.TextDictionary.Add(ModTexts.First().Key, ModTexts.First().Value);
+
+                    ModTexts.Remove(ModTexts.First().Key);
+                }
+
+                // read wares of mod
+                m_XmlExtractor.ReadAllWares(modPath + @"\libraries\wares.xml" );
+
                 foreach (string dir in ModDirectories)
                 {
                     //shields

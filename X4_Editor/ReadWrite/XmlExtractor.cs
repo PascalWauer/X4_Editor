@@ -33,11 +33,14 @@ namespace X4_Editor
                 {
                     while (reader.Read())
                     {
-                        if (reader.NodeType == XmlNodeType.Element && reader.Name == "wares")
+                        bool addedWaresByMod = (reader.Name == "add");
+                        if (reader.NodeType == XmlNodeType.Element && (reader.Name == "wares" || addedWaresByMod))
                         {
                             XDocument doc = XDocument.Load(waresPath);
 
                             var wares = doc.Descendants("wares");
+                            if (addedWaresByMod)
+                                wares = doc.Descendants("add");
 
                             foreach (var ware in wares)
                             {
@@ -163,7 +166,9 @@ namespace X4_Editor
                                         }
                                         uiModelWare.Changed = false;
 
-                                        m_UIManager.UIModel.UIModelWares.Add(uiModelWare);
+                                        var wareWithSameId = m_UIManager.UIModel.UIModelWares.Select(x => x.ID.Equals(uiModelWare.ID));
+                                        if (wareWithSameId != null)
+                                            m_UIManager.UIModel.UIModelWares.Add(uiModelWare);
                                     }
                                 }
                             }
@@ -173,6 +178,7 @@ namespace X4_Editor
                 m_UIManager.UIModel.AllWaresLoaded = true;
                 m_UIManager.UIModel.CalculateWarePrices();
 
+                //TODO: this needs to be done only in case of vanilla and not mods
                 m_UIManager.UIModel.UIModelWaresVanilla.Clear();
                 foreach (var item in m_UIManager.UIModel.UIModelWares)
                 {
@@ -852,7 +858,7 @@ namespace X4_Editor
                 return "no name";
         }
 
-        public Dictionary<string, string> ReadTextXml(string path)
+        public Dictionary<string, string> ReadTextXml(string path, Dictionary<string, string> dictionary)
         {
             var dict = new Dictionary<string, string>();
 
@@ -862,7 +868,7 @@ namespace X4_Editor
 
             if (File.Exists(path))
             {
-                dict = ReadTextxml(m_UIManager.TextDictionary, path);
+                dict = ReadTextxml(dictionary, path);
             }
             //if (File.Exists(modPath1))
             //{
