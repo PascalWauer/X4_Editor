@@ -401,7 +401,7 @@ namespace X4_Editor
                                     uiModelMissile.Yaw = Utility.ParseToDouble(missileDragNode[0].Attributes["yaw"].Value);
                             }
                             uiModelMissile.Changed = false;
-                            m_UIManager.UIModel.UIModelMissiles.Add(uiModelMissile);
+                            //m_UIManager.UIModel.UIModelMissiles.Add(uiModelMissile);
                         }
                     }
                 }

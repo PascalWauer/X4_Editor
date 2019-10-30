@@ -792,97 +792,97 @@ namespace X4_Editor
                         missile.Reload = Calculate(operation, missile.Reload);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 4)
+                    if (dataGridCell.Column.DisplayIndex == 5)
                     {
                         missile.Range = (int)Calculate(operation, missile.Range);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 5)
+                    if (dataGridCell.Column.DisplayIndex == 6)
                     {
                         missile.Lifetime = Calculate(operation, missile.Lifetime);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 6)
+                    if (dataGridCell.Column.DisplayIndex == 7)
                     {
                         missile.Forward = Calculate(operation, missile.Forward);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 7)
+                    if (dataGridCell.Column.DisplayIndex == 8)
                     {
                         missile.Reverse = Calculate(operation, missile.Reverse);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 8)
+                    if (dataGridCell.Column.DisplayIndex == 9)
                     {
                         missile.Guided = (int)Calculate(operation, missile.Guided);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 9)
+                    if (dataGridCell.Column.DisplayIndex == 10)
                     {
                         missile.Swarm = (int)Calculate(operation, missile.Swarm);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 10)
+                    if (dataGridCell.Column.DisplayIndex == 11)
                     {
                         missile.Retarget = (int)Calculate(operation, missile.Retarget);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 12)
+                    if (dataGridCell.Column.DisplayIndex == 13)
                     {
                         missile.Hull = (int)Calculate(operation, missile.Hull);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 12)
+                    if (dataGridCell.Column.DisplayIndex == 14)
                     {
                         missile.Ammunition = (int)Calculate(operation, missile.Ammunition);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 13)
+                    if (dataGridCell.Column.DisplayIndex == 15)
                     {
                         missile.MissileAmount = (int)Calculate(operation, missile.MissileAmount);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 14)
+                    if (dataGridCell.Column.DisplayIndex == 16)
                     {
                         missile.Mass = Calculate(operation, missile.Mass);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 15)
+                    if (dataGridCell.Column.DisplayIndex == 17)
                     {
                         missile.Horizontal = Calculate(operation, missile.Horizontal);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 16)
+                    if (dataGridCell.Column.DisplayIndex == 18)
                     {
                         missile.Vertical = Calculate(operation, missile.Vertical);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 17)
+                    if (dataGridCell.Column.DisplayIndex == 19)
                     {
                         missile.Pitch = Calculate(operation, missile.Pitch);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 18)
+                    if (dataGridCell.Column.DisplayIndex == 20)
                     {
                         missile.Yaw = Calculate(operation, missile.Yaw);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 19)
+                    if (dataGridCell.Column.DisplayIndex == 21)
                     {
                         missile.Roll = Calculate(operation, missile.Roll);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 20)
+                    if (dataGridCell.Column.DisplayIndex == 21)
                     {
                         missile.InertiaPitch = Calculate(operation, missile.InertiaPitch);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 21)
+                    if (dataGridCell.Column.DisplayIndex == 22)
                     {
                         missile.InertiaYaw = Calculate(operation, missile.InertiaYaw);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 22)
+                    if (dataGridCell.Column.DisplayIndex == 23)
                     {
                         missile.InertiaRoll = Calculate(operation, missile.InertiaRoll);
                         counter.successcounter++;

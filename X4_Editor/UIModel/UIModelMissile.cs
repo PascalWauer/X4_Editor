@@ -59,6 +59,14 @@ namespace X4_Editor
             }
         }
 
+        public double DPS
+        {
+            get
+            {
+                return m_Damage / m_Reload * m_MissileAmount;
+            }
+        }
+
         private int m_Ammunition;
         public int Ammunition
         {
