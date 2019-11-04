@@ -897,93 +897,94 @@ namespace X4_Editor
                         ship.HullMax = (int)Calculate(operation, ship.HullMax);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 6)
-                    {
-                        ship.Cargo.CargoMax = (int)Calculate(operation, ship.Cargo.CargoMax);
-                        counter.successcounter++;
-                    }
+                    
+                    //if (dataGridCell.Column.DisplayIndex == 9)
+                    //{
+                    //    ship.Cargo.CargoMax = (int)Calculate(operation, ship.Cargo.CargoMax);
+                    //    counter.successcounter++;
+                    //}
 
-                    if (dataGridCell.Column.DisplayIndex == 8)
-                    {
-                        ship.StorageUnits = (int)Calculate(operation, ship.StorageUnits);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 9)
+                    //if (dataGridCell.Column.DisplayIndex == 11)
+                    //{
+                    //    ship.StorageUnits = (int)Calculate(operation, ship.StorageUnits);
+                    //    counter.successcounter++;
+                    //}
+                    if (dataGridCell.Column.DisplayIndex == 12)
                     {
                         ship.StorageMissiles = (int)Calculate(operation, ship.StorageMissiles);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 10)
+                    if (dataGridCell.Column.DisplayIndex == 13)
                     {
                         ship.People = (int)Calculate(operation, ship.People);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 11)
+                    if (dataGridCell.Column.DisplayIndex == 14)
                     {
                         ship.ExplosionDamage = (int)Calculate(operation, ship.ExplosionDamage);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 12)
+                    if (dataGridCell.Column.DisplayIndex == 15)
                     {
                         ship.Secrecy = (int)Calculate(operation, ship.Secrecy);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 13)
+                    if (dataGridCell.Column.DisplayIndex == 16)
                     {
                         ship.GatherRrate = Calculate(operation, ship.GatherRrate);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 14)
+                    if (dataGridCell.Column.DisplayIndex == 17)
                     {
                         ship.Mass = Calculate(operation, ship.Mass);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 15)
+                    if (dataGridCell.Column.DisplayIndex == 18)
                     {
                         ship.Forward = Calculate(operation, ship.Forward);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 16)
+                    if (dataGridCell.Column.DisplayIndex == 19)
                     {
                         ship.Reverse = Calculate(operation, ship.Reverse);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 17)
+                    if (dataGridCell.Column.DisplayIndex == 20)
                     {
                         ship.Horizontal = Calculate(operation, ship.Horizontal);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 18)
+                    if (dataGridCell.Column.DisplayIndex == 21)
                     {
                         ship.Vertical = Calculate(operation, ship.Vertical);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 19)
+                    if (dataGridCell.Column.DisplayIndex == 22)
                     {
                         ship.Pitch = Calculate(operation, ship.Pitch);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 20)
+                    if (dataGridCell.Column.DisplayIndex == 23)
                     {
                         ship.Yaw = Calculate(operation, ship.Yaw);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 21)
+                    if (dataGridCell.Column.DisplayIndex == 24)
                     {
                         ship.Roll = Calculate(operation, ship.Roll);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 22)
+                    if (dataGridCell.Column.DisplayIndex == 25)
                     {
                         ship.InertiaPitch = Calculate(operation, ship.InertiaPitch);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 23)
+                    if (dataGridCell.Column.DisplayIndex == 26)
                     {
                         ship.InertiaYaw = Calculate(operation, ship.InertiaYaw);
                         counter.successcounter++;
                     }
-                    if (dataGridCell.Column.DisplayIndex == 24)
+                    if (dataGridCell.Column.DisplayIndex == 27)
                     {
                         ship.InertiaRoll = Calculate(operation, ship.InertiaRoll);
                         counter.successcounter++;

@@ -580,6 +580,9 @@ namespace X4_Editor
             }
             return uiModelShield;
         }
+
+        
+
         public UIModelWeapon ReadSingleWeapon(FileInfo xmlWeaponFileInfo)
         {
             UIModelWeapon uiModelWeapon = new UIModelWeapon() { Name = "", File = xmlWeaponFileInfo.FullName };
@@ -711,6 +714,12 @@ namespace X4_Editor
                             XmlNodeList shipDragNode = xN.SelectNodes("//properties/physics/drag");
                             XmlNodeList shipShipTypeNode = xN.SelectNodes("//properties/ship");
 
+                            #region MyRegion for components
+
+                            Tuple<string, string, string> components = this.ReadShipComponents(file);
+                            
+                            #endregion
+
                             #region region for cargo 
                             string CargoFile = file.FullName.Replace(m_UIManager.UIModel.ModPath1, m_UIManager.UIModel.Path).Replace(m_UIManager.UIModel.ModPath2, m_UIManager.UIModel.Path).Replace("ship", "storage");
                             string CargoModFile1 = CargoFile.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath1).Replace("ship", "storage");
@@ -719,6 +728,10 @@ namespace X4_Editor
                             uiModelShip.File = file.FullName;
                             uiModelShip.Name = shipMacroNode[0].Attributes["name"].Value;
                             uiModelShip.Class = shipMacroNode[0].Attributes["class"].Value;
+
+                            uiModelShip.Shields = components.Item1;
+                            uiModelShip.Turrets = components.Item2;
+                            uiModelShip.Weapons = components.Item3;
 
                             string priorityCargoFile = "";
                             if (File.Exists(CargoModFile2))
@@ -848,6 +861,91 @@ namespace X4_Editor
                 }
             }
             return uiModelShip;
+        }
+
+        private Tuple<string, string, string> ReadShipComponents(FileInfo file)
+        {
+            string ComponentPath = Directory.GetParent(file.DirectoryName).ToString() + @"\" + file.Name.Replace("_macro", "");
+            string shields = "";
+            string turrets = "";
+            string weapons = "";
+            int shields_S = 0;
+            int shields_M = 0;
+            int shields_L = 0;
+            int shields_XL = 0;
+            int turrets_M = 0;
+            int turrets_L = 0;
+            int weapons_S = 0;
+            int weapons_M = 0;
+            int weapons_L = 0;
+            if (File.Exists(ComponentPath))
+            {
+                using (XmlReader reader = XmlReader.Create(ComponentPath))
+                {
+                    while (reader.Read())
+                    {
+                        if (reader.NodeType == XmlNodeType.Element && reader.Name == "components")
+                        {
+                            XDocument doc = XDocument.Load(ComponentPath);
+
+                            List<XElement> Connections = doc.Descendants().Where(x => x.Name.LocalName == "connection").ToList();
+
+                            foreach (var connection in Connections)
+                            {
+                                if (connection.Attribute("tags") != null)
+                                {
+                                    string tags = connection.Attribute("tags").Value;
+                                    if (tags.Contains("turret") && tags.Contains("medium"))
+                                    {
+                                        turrets_M++;
+                                    }
+                                    if (tags.Contains("turret") && tags.Contains("large"))
+                                    {
+                                        turrets_L++;
+                                    }
+                                    if (tags.Contains("weapon") && tags.Contains("small"))
+                                    {
+                                        weapons_S++;
+                                    }
+                                    if (tags.Contains("weapon") && tags.Contains("medium"))
+                                    {
+                                        weapons_M++;
+                                    }
+                                    if (tags.Contains("weapon") && tags.Contains("large"))
+                                    {
+                                        weapons_L++;
+                                    }
+                                }
+
+                                if (connection.Attribute("tags") != null && connection.Attribute("group") == null)
+                                {
+                                    string tags = connection.Attribute("tags").Value;
+                                    if (tags.Contains("shield") && tags.Contains("small"))
+                                    {
+                                        shields_S++;
+                                    }
+                                    if (tags.Contains("shield") && tags.Contains("medium"))
+                                    {
+                                        shields_M++;
+                                    }
+                                    if (tags.Contains("shield") && tags.Contains("large"))
+                                    {
+                                        shields_L++;
+                                    }
+                                    if (tags.Contains("shield") && tags.Contains("extralarge"))
+                                    {
+                                        shields_XL++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            shields = shields_S + "S " + shields_M + "M " + shields_L + "L " + shields_XL + "XL ";
+            turrets = turrets_M + "M " + turrets_L + "L ";
+            weapons = weapons_S + "S " + weapons_M + "M " + weapons_L + "L ";
+            return new Tuple<string, string, string>(shields, turrets, weapons);
         }
 
         private string GetIGName(string id)

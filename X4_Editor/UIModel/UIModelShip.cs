@@ -110,6 +110,11 @@ namespace X4_Editor
             }
         }
 
+        public string Turrets { get; set; }
+
+        public string Shields { get; set; }
+        public string Weapons { get; set; }
+
         private int m_Secrecy;
         public int Secrecy
         {

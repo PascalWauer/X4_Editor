@@ -144,11 +144,17 @@
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Size" Binding="{Binding Size, UpdateSourceTrigger=LostFocus}" IsReadOnly="True" Width="30">
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Class" Binding="{Binding Class, UpdateSourceTrigger=LostFocus}" IsReadOnly="True" Width="60">
+                        <DataGridTextColumn Header="Class" Binding="{Binding Class, UpdateSourceTrigger=LostFocus}" IsReadOnly="True" Width="50">
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Type" Binding="{Binding Type, UpdateSourceTrigger=LostFocus}" IsReadOnly="True" Width="90">
+                        <DataGridTextColumn Header="Type" Binding="{Binding Type, UpdateSourceTrigger=LostFocus}" IsReadOnly="True" Width="80">
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Hull" Binding="{Binding HullMax, UpdateSourceTrigger=LostFocus}" FontWeight="SemiBold" Width="50">
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Shields" Binding="{Binding Shields, Mode=OneWay}" FontWeight="Normal" Width="85">
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Turrets" Binding="{Binding Turrets, Mode=OneWay}" FontWeight="Normal" Width="55">
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Weapons" Binding="{Binding Weapons, Mode=OneWay}" FontWeight="Normal" Width="65">
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Cargo" Binding="{Binding Cargo.CargoMax, UpdateSourceTrigger=LostFocus}" FontWeight="SemiBold" Width="50">
                         </DataGridTextColumn>
