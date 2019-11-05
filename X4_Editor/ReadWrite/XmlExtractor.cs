@@ -889,9 +889,23 @@ namespace X4_Editor
                             XDocument doc = XDocument.Load(ComponentPath);
 
                             List<XElement> Connections = doc.Descendants().Where(x => x.Name.LocalName == "connection").ToList();
+                            List<string> Names = new List<string>();
+                            string NoUniqueNameIds = "";
+                            string NoUniqueGroupIds = "";
 
                             foreach (var connection in Connections)
                             {
+                                //chack for douplicates
+                                if (!Names.Contains(connection.Attribute("name").Value))
+                                {
+                                    Names.Add(connection.Attribute("name").Value);
+                                }
+                                else
+                                {
+                                    NoUniqueNameIds = NoUniqueNameIds + "File " + file.Name + "has no unique name ID: " + connection.Attribute("name").Value + "\r";
+                                }
+                                // end check
+
                                 if (connection.Attribute("tags") != null)
                                 {
                                     string tags = connection.Attribute("tags").Value;
@@ -938,6 +952,8 @@ namespace X4_Editor
                                     }
                                 }
                             }
+                            if (NoUniqueNameIds.Length > 0)
+                                MessageBox.Show(NoUniqueNameIds);
                         }
                     }
                 }
