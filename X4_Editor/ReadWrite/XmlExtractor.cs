@@ -942,12 +942,18 @@ namespace X4_Editor
                     }
                 }
             }
-            shields = shields_S + "S " + shields_M + "M " + shields_L + "L " + shields_XL + "XL ";
-            turrets = turrets_M + "M " + turrets_L + "L ";
-            weapons = weapons_S + "S " + weapons_M + "M " + weapons_L + "L ";
+            shields = AddIfNotNull(shields_S,"S ") + AddIfNotNull(shields_M, "M ") + AddIfNotNull(shields_L, "L ") + AddIfNotNull(shields_XL, "XL");
+            turrets = AddIfNotNull(turrets_M, "M ") + AddIfNotNull(turrets_L, "L ");
+            weapons = AddIfNotNull(weapons_S, "S ") + AddIfNotNull(weapons_M, "M ") + AddIfNotNull(weapons_L, "L ");
             return new Tuple<string, string, string>(shields, turrets, weapons);
         }
 
+        private string AddIfNotNull(int inputAmount, string inputType)
+        {
+            if (inputAmount == 0)
+                return String.Empty;
+            return inputAmount + inputType;
+        }
         private string GetIGName(string id)
         {
             if (m_UIManager.TextDictionary.ContainsKey(id.Replace(" ", "")))
