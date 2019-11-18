@@ -891,7 +891,6 @@ namespace X4_Editor
                             List<XElement> Connections = doc.Descendants().Where(x => x.Name.LocalName == "connection").ToList();
                             List<string> Names = new List<string>();
                             string NoUniqueNameIds = "";
-                            string NoUniqueGroupIds = "";
 
                             foreach (var connection in Connections)
                             {
