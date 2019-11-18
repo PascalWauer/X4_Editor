@@ -912,7 +912,7 @@ namespace X4_Editor
                                     {
                                         turrets_M++;
                                     }
-                                    if (tags.Contains("turret") && tags.Contains("large"))
+                                    if (tags.Contains("turret") && tags.Contains("large") && !tags.Contains("extralarge"))
                                     {
                                         turrets_L++;
                                     }
@@ -924,7 +924,7 @@ namespace X4_Editor
                                     {
                                         weapons_M++;
                                     }
-                                    if (tags.Contains("weapon") && tags.Contains("large"))
+                                    if (tags.Contains("weapon") && tags.Contains("large") && !tags.Contains("extralarge"))
                                     {
                                         weapons_L++;
                                     }
@@ -941,7 +941,7 @@ namespace X4_Editor
                                     {
                                         shields_M++;
                                     }
-                                    if (tags.Contains("shield") && tags.Contains("large"))
+                                    if (tags.Contains("shield") && tags.Contains("large") && !tags.Contains("extralarge"))
                                     {
                                         shields_L++;
                                     }
