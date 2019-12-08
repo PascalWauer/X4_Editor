@@ -94,6 +94,10 @@ namespace X4_Editor
 
             if (Directory.Exists(this.UIModel.Path))
                 this.ExecuteReadAllVanillaFilesCommand(this, null);
+            if (Directory.Exists(this.UIModel.ModPath1))
+                this.ExecuteReadAllMod1FilesCommand(this, null);
+            if (Directory.Exists(this.UIModel.ModPath2))
+                this.ExecuteReadAllMod2FilesCommand(this, null);
         }
 
         private void ExecuteOnWeaponDoubleClick(object sender, ExecutedRoutedEventArgs e)
@@ -441,7 +445,7 @@ namespace X4_Editor
             }
 
             DataGrid dg_Projectiles = null;
-            dg_Projectiles = this.MainWindow.DG_Weapons;
+            dg_Projectiles = this.MainWindow.DG_Projectiles;
 
             if (dg_Projectiles.SelectedCells.Count > 0)
             {
@@ -663,7 +667,7 @@ namespace X4_Editor
                     }
                     if (dataGridCell.Column.DisplayIndex == 11)
                     {
-                        projectile.ReloadRate = Calculate(operation, projectile.ReloadRate);
+                        projectile.Lifetime = Calculate(operation, projectile.Lifetime);
                         counter.successcounter++;
                     }
                     if (dataGridCell.Column.DisplayIndex == 12)
@@ -1102,7 +1106,7 @@ namespace X4_Editor
             }
 
             DataGrid dg_Projectiles = null;
-            dg_Projectiles = this.MainWindow.DG_Weapons;
+            dg_Projectiles = this.MainWindow.DG_Projectiles;
 
             if (dg_Projectiles.SelectedCells.Count > 0)
             {
@@ -1239,7 +1243,7 @@ namespace X4_Editor
 
                 foreach (var item in this.UIModel.UIModelModulesShields)
                 {
-                    var vanillaItem = this.UIModel.UIModelModuleShieldsVanilla.Where(x => x.Name == item.Name).ToList()[0];
+                    var vanillaItem = this.UIModel.UIModelModuleShieldsVanilla.Where(x => x.Name == item.Name).FirstOrDefault();
 
                     if (item.Changed)
                     {
@@ -1271,7 +1275,7 @@ namespace X4_Editor
 
                 foreach (var item in this.UIModel.UIModelModulesEngines)
                 {
-                    var vanillaItem = this.UIModel.UIModelModuleEnginesVanilla.Where(x => x.Name == item.Name).ToList()[0];
+                    var vanillaItem = this.UIModel.UIModelModuleEnginesVanilla.Where(x => x.Name == item.Name).FirstOrDefault();
 
                     if (item.Changed)
                     {
@@ -1330,7 +1334,7 @@ namespace X4_Editor
 
                 foreach (var item in this.UIModel.UIModelShips)
                 {
-                    var vanillaItem = this.UIModel.UIModelShipsVanilla.Where(x => x.Name == item.Name).ToList()[0];
+                    var vanillaItem = this.UIModel.UIModelShipsVanilla.Where(x => x.Name == item.Name).FirstOrDefault();
 
                     string shipClasssFolder = item.File.Split(new[] { "units" }, StringSplitOptions.None)[1].Split(new[] { "macros" }, StringSplitOptions.None)[0];
 
@@ -1405,7 +1409,7 @@ namespace X4_Editor
 
                 foreach (var item in this.UIModel.UIModelProjectiles)
                 {
-                    var vanillaItem = this.UIModel.UIModelProjectilesVanilla.Where(x => x.Name == item.Name).ToList()[0];
+                    var vanillaItem = this.UIModel.UIModelProjectilesVanilla.Where(x => x.Name == item.Name).FirstOrDefault();
 
                     if (item.Changed)
                     {
@@ -1432,7 +1436,7 @@ namespace X4_Editor
                             if (vanillaItem.TimeDiff != item.TimeDiff)
                                 sw.WriteLine("\t<replace sel=\"//macros/macro/properties/bullet/@timediff\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.TimeDiff) + "</replace>");
                             if (vanillaItem.Angle != item.Angle)
-                                sw.WriteLine("\t<replace sel=\"//macros/macro/properties/bullet/@angle\">" + String.Format(CultureInfo.InvariantCulture, "{0:0}", item.Angle) + "</replace>");
+                                sw.WriteLine("\t<replace sel=\"//macros/macro/properties/bullet/@angle\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.000}", item.Angle) + "</replace>");
                             if (vanillaItem.MaxHits != item.MaxHits)
                                 sw.WriteLine("\t<replace sel=\"//macros/macro/properties/bullet/@maxhits\">" + String.Format(CultureInfo.InvariantCulture, "{0:0}", item.MaxHits) + "</replace>");
                             if (vanillaItem.Ricochet != item.Ricochet)
@@ -1449,6 +1453,8 @@ namespace X4_Editor
                                 sw.WriteLine("\t<replace sel=\"//macros/macro/properties/damage/@repair\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Repair) + "</replace>");
                             if (vanillaItem.Shield != item.Shield)
                                 sw.WriteLine("\t<replace sel=\"//macros/macro/properties/damage/@shield\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Shield) + "</replace>");
+                            if (vanillaItem.ReloadRate != item.ReloadRate)
+                                sw.WriteLine("\t<replace sel=\"//macros/macro/properties/reload/@rate\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.ReloadRate) + "</replace>");
 
                             sw.WriteLine("</diff> ");
 
@@ -1459,7 +1465,7 @@ namespace X4_Editor
 
                 foreach (var item in this.UIModel.UIModelWeapons)
                 {
-                    var vanillaItem = this.UIModel.UIModelWeaponsVanilla.Where(x => x.Name == item.Name).ToList()[0];
+                    var vanillaItem = this.UIModel.UIModelWeaponsVanilla.Where(x => x.Name == item.Name).FirstOrDefault();
 
                     if (item.Changed)
                     {
@@ -1524,7 +1530,7 @@ namespace X4_Editor
 
                 foreach (var item in this.UIModel.UIModelMissiles)
                 {
-                    var vanillaItem = this.UIModel.UIModelMissilesVanilla.Where(x => x.Name == item.Name).ToList()[0];
+                    var vanillaItem = this.UIModel.UIModelMissilesVanilla.Where(x => x.Name == item.Name).FirstOrDefault();
 
                     if (item.Changed)
                     {

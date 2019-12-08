@@ -149,6 +149,8 @@ namespace X4_Editor
                 m_Amount = value;
                 Changed = true;
                 NotifyPropertyChanged();
+                NotifyPropertyChanged("DPS");
+                NotifyPropertyChanged("DPS_Shield");
             }
         }
 
@@ -269,6 +271,8 @@ namespace X4_Editor
                 m_ReloadRate = value;
                 Changed = true;
                 NotifyPropertyChanged();
+                NotifyPropertyChanged("DPS");
+                NotifyPropertyChanged("DPS_Shield");
             }
         }
 
@@ -281,6 +285,8 @@ namespace X4_Editor
                 m_ReloadTime = value;
                 Changed = true;
                 NotifyPropertyChanged();
+                NotifyPropertyChanged("DPS");
+                NotifyPropertyChanged("DPS_Shield");
             }
         }
 
@@ -293,6 +299,8 @@ namespace X4_Editor
                 m_Damage = value;
                 Changed = true;
                 NotifyPropertyChanged();
+                NotifyPropertyChanged("DPS");
+                NotifyPropertyChanged("DPS_Shield");
             }
         }
 
@@ -305,6 +313,8 @@ namespace X4_Editor
                 m_Shield = value;
                 Changed = true;
                 NotifyPropertyChanged();
+                NotifyPropertyChanged("DPS");
+                NotifyPropertyChanged("DPS_Shield");
             }
         }
 
