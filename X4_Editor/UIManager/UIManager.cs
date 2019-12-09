@@ -263,6 +263,49 @@ namespace X4_Editor
                     sw.WriteLine("Mod export Path: " + this.UIModel.ExportPath);
                 else
                     sw.WriteLine("Mod export Path: ");
+
+
+                // filters
+                if (this.UIModel.Ships)
+                    sw.WriteLine("Ships = 1");
+                else
+                    sw.WriteLine("Ships = 0");
+                if (this.UIModel.Shields)
+                    sw.WriteLine("Shields = 1");
+                else
+                    sw.WriteLine("Shields = 0");
+                if (this.UIModel.Engines)
+                    sw.WriteLine("Engines = 1");
+                else
+                    sw.WriteLine("Engines = 0");
+                if (this.UIModel.Weapons)
+                    sw.WriteLine("Weapons = 1");
+                else
+                    sw.WriteLine("Weapons = 0");
+                if (this.UIModel.Wares)
+                    sw.WriteLine("Wares = 1");
+                else
+                    sw.WriteLine("Wares = 0");
+                if (this.UIModel.Size_S)
+                    sw.WriteLine("Size_S = 1");
+                else
+                    sw.WriteLine("Size_S = 0");
+                if (this.UIModel.Size_M)
+                    sw.WriteLine("Size_M = 1");
+                else
+                    sw.WriteLine("Size_M = 0");
+                if (this.UIModel.Size_L)
+                    sw.WriteLine("Size_L = 1");
+                else
+                    sw.WriteLine("Size_L = 0");
+                if (this.UIModel.Size_XL)
+                    sw.WriteLine("Size_XL = 1");
+                else
+                    sw.WriteLine("Size_XL = 0");
+                if (this.UIModel.Size_Other)
+                    sw.WriteLine("Size_Other = 1");
+                else
+                    sw.WriteLine("Size_Other = 0");
             }
         }
 
@@ -302,6 +345,48 @@ namespace X4_Editor
                             if (line.Length > 0)
                                 this.UIModel.ExportPath = line;
                         }
+
+                        // filters
+                        if (line.Contains("Ships = 1"))
+                            this.UIModel.Ships = true;
+                        if (line.Contains("Ships = 0"))
+                            this.UIModel.Ships = false;
+                        if (line.Contains("Shields = 1"))
+                            this.UIModel.Shields = true;
+                        if (line.Contains("Shields = 0"))
+                            this.UIModel.Shields = false;
+                        if (line.Contains("Engines = 1"))
+                            this.UIModel.Engines = true;
+                        if (line.Contains("Engines = 0"))
+                            this.UIModel.Engines = false;
+                        if (line.Contains("Weapons = 1"))
+                            this.UIModel.Weapons = true;
+                        if (line.Contains("Weapons = 0"))
+                            this.UIModel.Weapons = false;
+                        if (line.Contains("Wares = 1"))
+                            this.UIModel.Wares = true;
+                        if (line.Contains("Wares = 0"))
+                            this.UIModel.Wares = false;
+                        if (line.Contains("Size_S = 1"))
+                            this.UIModel.Size_S = true;
+                        if (line.Contains("Size_S = 0"))
+                            this.UIModel.Size_S = false;
+                        if (line.Contains("Size_M = 1"))
+                            this.UIModel.Size_M = true;
+                        if (line.Contains("Size_M = 0"))
+                            this.UIModel.Size_M = false;
+                        if (line.Contains("Size_L = 1"))
+                            this.UIModel.Size_L = true;
+                        if (line.Contains("Size_L = 0"))
+                            this.UIModel.Size_L = false;
+                        if (line.Contains("Size_XL = 1"))
+                            this.UIModel.Size_XL = true;
+                        if (line.Contains("Size_XL = 0"))
+                            this.UIModel.Size_XL = false;
+                        if (line.Contains("Size_Other = 1"))
+                            this.UIModel.Size_Other = true;
+                        if (line.Contains("Size_Other = 0"))
+                            this.UIModel.Size_Other = false;
                     }
                 }
             }
@@ -1351,39 +1436,39 @@ namespace X4_Editor
                         {
                             sw.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
                             sw.WriteLine("<diff> ");
-                            if (vanillaItem.HullMax != item.HullMax)
+                            if (vanillaItem == null || vanillaItem.HullMax != item.HullMax)
                                 sw.WriteLine("\t<replace sel=\"//macros/macro/properties/hull/@max\">" + item.HullMax + "</replace>");
-                            if (vanillaItem.ExplosionDamage != item.ExplosionDamage)
+                            if (vanillaItem == null || vanillaItem.ExplosionDamage != item.ExplosionDamage)
                                 sw.WriteLine("\t<replace sel=\"//macros/macro/properties/boost/@explosiondamage\">" + item.ExplosionDamage + "</replace>");
-                            if (vanillaItem.StorageMissiles != item.StorageMissiles)
+                            if (vanillaItem == null || vanillaItem.StorageMissiles != item.StorageMissiles)
                                 sw.WriteLine("\t<replace sel=\"//macros/macro/properties/storage/@missile\">" + item.StorageMissiles + "</replace>");
-                            if (vanillaItem.StorageUnits != item.StorageUnits)
+                            if (vanillaItem == null || vanillaItem.StorageUnits != item.StorageUnits)
                                 sw.WriteLine("\t<replace sel=\"//macros/macro/properties/storage/@unit\">" + item.StorageUnits + "</replace>");
-                            if (vanillaItem.Secrecy != item.Secrecy)
+                            if (vanillaItem == null || vanillaItem.Secrecy != item.Secrecy)
                                 sw.WriteLine("\t<replace sel=\"//macros/macro/properties/secrecy/@level\">" + item.Secrecy + "</replace>");
-                            if (vanillaItem.People != item.People)
+                            if (vanillaItem == null || vanillaItem.People != item.People)
                                 sw.WriteLine("\t<replace sel=\"//macros/macro/properties/people/@capacity\">" + item.People + "</replace>");
-                            if (vanillaItem.Mass != item.Mass)
+                            if (vanillaItem == null || vanillaItem.Mass != item.Mass)
                                 sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/@mass\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Mass) + "</replace>");
-                            if (vanillaItem.InertiaPitch != item.InertiaPitch)
+                            if (vanillaItem == null || vanillaItem.InertiaPitch != item.InertiaPitch)
                                 sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/inertia/@pitch\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.InertiaPitch) + "</replace>");
-                            if (vanillaItem.InertiaYaw != item.InertiaYaw)
+                            if (vanillaItem == null || vanillaItem.InertiaYaw != item.InertiaYaw)
                                 sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/inertia/@yaw\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.InertiaYaw) + "</replace>");
-                            if (vanillaItem.InertiaRoll != item.InertiaRoll)
+                            if (vanillaItem == null || vanillaItem.InertiaRoll != item.InertiaRoll)
                                 sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/inertia/@roll\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.InertiaRoll) + "</replace>");
-                            if (vanillaItem.Forward != item.Forward)
+                            if (vanillaItem == null || vanillaItem.Forward != item.Forward)
                                 sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/drag/@forward\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Forward) + "</replace>");
-                            if (vanillaItem.Reverse != item.Reverse)
+                            if (vanillaItem == null || vanillaItem.Reverse != item.Reverse)
                                 sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/drag/@reverse\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Reverse) + "</replace>");
-                            if (vanillaItem.Horizontal != item.Horizontal)
+                            if (vanillaItem == null || vanillaItem.Horizontal != item.Horizontal)
                                 sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/drag/@horizontal\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Horizontal) + "</replace>");
-                            if (vanillaItem.Vertical != item.Vertical)
+                            if (vanillaItem == null || vanillaItem.Vertical != item.Vertical)
                                 sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/drag/@vertical\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Vertical) + "</replace>");
-                            if (vanillaItem.Pitch != item.Pitch)
+                            if (vanillaItem == null || vanillaItem.Pitch != item.Pitch)
                                 sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/drag/@pitch\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Pitch) + "</replace>");
-                            if (vanillaItem.Yaw != item.Yaw)
+                            if (vanillaItem == null || vanillaItem.Yaw != item.Yaw)
                                 sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/drag/@yaw\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Yaw) + "</replace>");
-                            if (vanillaItem.Roll != item.Roll)
+                            if (vanillaItem == null || vanillaItem.Roll != item.Roll)
                                 sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/drag/@roll\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Roll) + "</replace>");
                             sw.WriteLine("</diff> ");
                         }
@@ -1396,9 +1481,9 @@ namespace X4_Editor
                         {
                             sw.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
                             sw.WriteLine("<diff> ");
-                            if (vanillaItem.Cargo.CargoMax != item.Cargo.CargoMax)
+                            if (vanillaItem == null || vanillaItem.Cargo.CargoMax != item.Cargo.CargoMax)
                                 sw.WriteLine("\t<replace sel=\"//macros/macro/properties/cargo/@max\">" + item.Cargo.CargoMax + "</replace>");
-                            if (vanillaItem.Cargo.CargoTags != item.Cargo.CargoTags)
+                            if (vanillaItem == null || vanillaItem.Cargo.CargoTags != item.Cargo.CargoTags)
                                 sw.WriteLine("\t<replace sel=\"//macros/macro/properties/cargo/@tags\">" + item.Cargo.CargoTags + "</replace>");
                             sw.WriteLine("</diff> ");
 

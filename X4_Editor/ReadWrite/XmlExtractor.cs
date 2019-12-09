@@ -878,6 +878,23 @@ namespace X4_Editor
             int weapons_S = 0;
             int weapons_M = 0;
             int weapons_L = 0;
+            if (!File.Exists(ComponentPath))
+            {
+                string newComponentPath = "";
+                string[] path = ComponentPath.Split('_');
+                for(int i = 0; i <= path.Length -2; i++)
+                {
+                    newComponentPath = newComponentPath + path[i] + "_";
+                }
+                ComponentPath = newComponentPath.Substring(0, newComponentPath.Length -1) + ".xml";
+            }
+            // if file does not exists it maybe exist in vanilla folder
+            if (!File.Exists(ComponentPath))
+            {
+                //because modpath1+2 are unique this should work
+                ComponentPath = ComponentPath.Replace(this.m_UIManager.UIModel.ModPath1, m_UIManager.UIModel.Path);
+                ComponentPath = ComponentPath.Replace(this.m_UIManager.UIModel.ModPath2, m_UIManager.UIModel.Path);
+            }
             if (File.Exists(ComponentPath))
             {
                 using (XmlReader reader = XmlReader.Create(ComponentPath))
