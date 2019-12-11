@@ -48,14 +48,26 @@ namespace X4_Editor
             }
         }
 
-        public double DPS
+        private double ShotsPerSecond
         {
             get
             {
                 if (ReloadTime == 0)
-                    return Damage * ReloadRate * Amount;
-                else
-                    return Damage / ReloadTime * Amount;
+                    return ReloadRate;
+                return 1 / ReloadTime;
+            }
+        }
+        public double DPS
+        {
+            get
+            {
+                //if (ReloadTime == 0)
+                    //return Damage * ReloadRate * Amount;
+                    if (Ammunition > 0)
+                        return (Ammunition * ( Damage * Amount) / (AmmunitionReload + Ammunition / ShotsPerSecond));
+                    return ((Damage * Amount) / (AmmunitionReload + 1 / ShotsPerSecond));
+                //else
+                //return Damage / ReloadTime * Amount;
             }
         }
 
@@ -63,20 +75,9 @@ namespace X4_Editor
         {
             get
             {
-                if (Shield > 0)
-                {
-                    if (ReloadTime == 0)
-                        return Shield * ReloadRate * Amount;
-                    else
-                        return Shield / ReloadTime * Amount;
-                }
-                else
-                {
-                    if (ReloadTime == 0)
-                        return Damage * ReloadRate * Amount;
-                    else
-                        return Damage / ReloadTime * Amount;
-                }  
+                if (Ammunition > 0)
+                    return (Ammunition * ((Damage + Shield) * Amount) / (AmmunitionReload + Ammunition / ShotsPerSecond));
+                return (((Damage + Shield) * Amount) / (AmmunitionReload + 1 / ShotsPerSecond));
             }
         }
 

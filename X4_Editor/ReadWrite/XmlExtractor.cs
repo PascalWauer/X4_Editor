@@ -558,7 +558,8 @@ namespace X4_Editor
                             // not neccessary
                             if (shielIdentificationNode.Count > 0)
                             {
-                                uiModelShield.Faction = shielIdentificationNode[0].Attributes["makerrace"].Value;
+                                if (shielIdentificationNode[0].Attributes["makerrace"] != null)
+                                    uiModelShield.Faction = shielIdentificationNode[0].Attributes["makerrace"].Value;
                                 uiModelShield.MK = shielIdentificationNode[0].Attributes["mk"].Value;
                                 if (shielIdentificationNode[0].Attributes["name"] != null)
                                     uiModelShield.IGName = this.GetIGName(shielIdentificationNode[0].Attributes["name"].Value);
@@ -918,7 +919,7 @@ namespace X4_Editor
                                 }
                                 else
                                 {
-                                    NoUniqueNameIds = NoUniqueNameIds + "File " + file.Name + "has no unique name ID: " + connection.Attribute("name").Value + "\r";
+                                    NoUniqueNameIds = NoUniqueNameIds + "File " + file.Name + " has no unique name ID: " + connection.Attribute("name").Value + "\r";
                                 }
                                 // end check
 

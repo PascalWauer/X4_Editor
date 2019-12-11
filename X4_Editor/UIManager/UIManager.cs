@@ -2172,7 +2172,7 @@ namespace X4_Editor
                         }
                     }
                     //projectiles 
-                    if (dir.Contains("assets\\fx\\weaponFx\\macros"))
+                    if (dir.ToUpper().Contains("ASSETS\\FX\\WEAPONFX\\MACROS"))
                     {
                         List<string> files = Directory.GetFiles(dir).ToList();
 
