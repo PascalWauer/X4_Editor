@@ -855,15 +855,7 @@ namespace X4_Editor
                     if (missile != null && missile.Name.Contains(ware.Name))
                         return true;
                 }
-                //var ships = this.m_ShipsDataView .Where(s => s.Name.Contains(ware.Name));
-                //var engines = this.m_ModuleEnginesData.Where(e => e.Name.Contains(ware.Name));
-                //var shields = this.m_ModuleShieldsData.Where(s => s.Name.Contains(ware.Name));
-                //var weapons = this.m_ModuleWeaponsData.Where(w => w.Name.Contains(ware.Name));
-
-                //if (ships!= null || engines != null || shields != null || weapons != null)
-                //{
-                //    found = true;
-                //}
+                
                 return found;
             }
         }
@@ -887,7 +879,7 @@ namespace X4_Editor
                     }
                     if (item.Ware3 != null)
                     {
-                        var match = this.UIModelWares.FirstOrDefault(X => X.Name == item.Ware3);
+                        var match = this.UIModelWares.FirstOrDefault(X => X.Name.Equals(item.Ware3));
                         item.CalculatedPrice = item.CalculatedPrice + match.Avg * item.Amount3;
                     }
                     if (item.Ware4 != null)

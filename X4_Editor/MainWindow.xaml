@@ -67,7 +67,7 @@
                             ToolTip="Reads all mod files from the specific mod folder"></Button>
                 </StackPanel>
 
-                <StackPanel Grid.Column="2" Orientation="Vertical" Margin="4,4,0,4" VerticalAlignment="Top" Background="Gray" HorizontalAlignment="Left" Height="85" Visibility="Collapsed">
+                <StackPanel Grid.Column="2" Orientation="Vertical" Margin="4,4,0,4" VerticalAlignment="Top" Background="Gray" HorizontalAlignment="Left" Height="85" Visibility="Visible">
                     <StackPanel Margin="0,4,0,0" Orientation="Horizontal" HorizontalAlignment="Center">
                         <TextBlock Text="Mass editing"></TextBlock>
                     </StackPanel>
@@ -116,7 +116,7 @@
                 <Button Grid.Column="4" Margin="4,0,4,0" Width="80" Height="85" Content="Show Wares" Command="{x:Static local:X4Commands.ShowWaresWindowCommand}" Background="LightBlue"
                             ToolTip="Opens the wares table in a separate window"></Button>
 
-                <StackPanel Grid.Column="5" Orientation="Vertical" Margin="0,4,0,4" Height="84" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Gray" Visibility="Collapsed">
+                <StackPanel Grid.Column="5" Orientation="Vertical" Margin="0,4,0,4" Height="84" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Gray" Visibility="Visible">
                     <StackPanel Orientation="Horizontal">
                         <TextBox Margin="4,6,2,6" Width="240" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="LightGreen" Text="{Binding ExportPath}" ToolTip="The export folder"></TextBox>
                         <Button Width="90" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Export" Background="LightGreen" Command="{x:Static local:X4Commands.SelectExportFolderCommand}"  ToolTip="Select the export folder"></Button>

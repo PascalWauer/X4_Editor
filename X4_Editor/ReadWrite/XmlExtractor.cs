@@ -31,13 +31,14 @@ namespace X4_Editor
             {
                 using (XmlReader reader = XmlReader.Create(waresPath))
                 {
-                    while (reader.Read())
+                    //while (reader.Read())
                     {
-                        bool addedWaresByMod = (reader.Name == "add");
-                        if (reader.NodeType == XmlNodeType.Element && (reader.Name == "wares" || addedWaresByMod))
+                        XDocument doc = XDocument.Load(waresPath);
+                        bool addedWaresByMod = false;
+                        if (doc.Descendants().Where(x => x.Name.LocalName == "add").ToList().Count > 0)
+                            addedWaresByMod = (reader.Name == "add");
+                        if (doc.Descendants().Where(x => x.Name.LocalName == "wares").ToList().Count > 0 || addedWaresByMod)
                         {
-                            XDocument doc = XDocument.Load(waresPath);
-
                             var wares = doc.Descendants("wares");
                             if (addedWaresByMod)
                                 wares = doc.Descendants("add");
@@ -689,175 +690,184 @@ namespace X4_Editor
             {
                 while (reader.Read())
                 {
-                    if (reader.NodeType == XmlNodeType.Element && reader.Name == "macros")
+                    try
                     {
-                        XDocument doc = XDocument.Load(file.FullName);
-
-                        var ships = doc.Descendants("macro").Where(p => p.Attribute("class") != null);
-
-                        foreach (var ship in ships)
+                        if (reader.NodeType == XmlNodeType.Element && reader.Name == "macros")
                         {
-                            XmlDocument xD = new XmlDocument();
-                            xD.LoadXml(ship.ToString());
-                            XmlNode xN = XmlHelper.ToXmlNode(ship);
+                            XDocument doc = XDocument.Load(file.FullName);
 
-                            XmlNodeList shipComponentNode = xN.SelectNodes("//component");
-                            XmlNodeList shipMacroNode = xN.SelectNodes("/macro");
-                            XmlNodeList shipIdentificationNode = xN.SelectNodes("//properties/identification");
-                            XmlNodeList shipExplosionNode = xN.SelectNodes("//properties/explosiondamage");
-                            XmlNodeList shipStorageNode = xN.SelectNodes("//properties/storage");
-                            XmlNodeList shipHullNode = xN.SelectNodes("//properties/hull");
-                            XmlNodeList shipSecrecyNode = xN.SelectNodes("//properties/secrecy");
-                            XmlNodeList shipGatherRateNode = xN.SelectNodes("//properties/gatherrate");
-                            XmlNodeList shipPeopleNode = xN.SelectNodes("//properties/people");
-                            XmlNodeList shipPhysicsNode = xN.SelectNodes("//properties/physics");
-                            XmlNodeList shipInertiaNode = xN.SelectNodes("//properties/physics/inertia");
-                            XmlNodeList shipDragNode = xN.SelectNodes("//properties/physics/drag");
-                            XmlNodeList shipShipTypeNode = xN.SelectNodes("//properties/ship");
+                            var ships = doc.Descendants("macro").Where(p => p.Attribute("class") != null);
 
-                            #region MyRegion for components
-
-                            Tuple<string, string, string> components = this.ReadShipComponents(file);
-                            
-                            #endregion
-
-                            #region region for cargo 
-                            string CargoFile = file.FullName.Replace(m_UIManager.UIModel.ModPath1, m_UIManager.UIModel.Path).Replace(m_UIManager.UIModel.ModPath2, m_UIManager.UIModel.Path).Replace("ship", "storage");
-                            string CargoModFile1 = CargoFile.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath1).Replace("ship", "storage");
-                            string CargoModFile2 = CargoFile.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath2).Replace("ship", "storage");
-
-                            uiModelShip.File = file.FullName;
-                            uiModelShip.Name = shipMacroNode[0].Attributes["name"].Value;
-                            uiModelShip.Class = shipMacroNode[0].Attributes["class"].Value;
-
-                            uiModelShip.Shields = components.Item1;
-                            uiModelShip.Turrets = components.Item2;
-                            uiModelShip.Weapons = components.Item3;
-
-                            string priorityCargoFile = "";
-                            if (File.Exists(CargoModFile2))
+                            foreach (var ship in ships)
                             {
-                                priorityCargoFile = CargoModFile2;
-                            }
-                            else if (File.Exists(CargoModFile1))
-                            {
-                                priorityCargoFile = CargoModFile1;
-                            }
-                            else if (File.Exists(CargoFile))
-                                priorityCargoFile = CargoFile;
+                                XmlDocument xD = new XmlDocument();
+                                xD.LoadXml(ship.ToString());
+                                XmlNode xN = XmlHelper.ToXmlNode(ship);
 
-                            if (!string.IsNullOrWhiteSpace(priorityCargoFile))
-                            {
-                                uiModelShip.Cargo = new UIModelShipCargo();
-                                XmlDocument Cargodoc = new XmlDocument();
-                                Cargodoc.Load(priorityCargoFile);
-                                string xmlcontents = Cargodoc.InnerXml;
-                                Cargodoc.LoadXml(xmlcontents);
+                                XmlNodeList shipComponentNode = xN.SelectNodes("//component");
+                                XmlNodeList shipMacroNode = xN.SelectNodes("/macro");
+                                XmlNodeList shipIdentificationNode = xN.SelectNodes("//properties/identification");
+                                XmlNodeList shipExplosionNode = xN.SelectNodes("//properties/explosiondamage");
+                                XmlNodeList shipStorageNode = xN.SelectNodes("//properties/storage");
+                                XmlNodeList shipHullNode = xN.SelectNodes("//properties/hull");
+                                XmlNodeList shipSecrecyNode = xN.SelectNodes("//properties/secrecy");
+                                XmlNodeList shipGatherRateNode = xN.SelectNodes("//properties/gatherrate");
+                                XmlNodeList shipPeopleNode = xN.SelectNodes("//properties/people");
+                                XmlNodeList shipPhysicsNode = xN.SelectNodes("//properties/physics");
+                                XmlNodeList shipInertiaNode = xN.SelectNodes("//properties/physics/inertia");
+                                XmlNodeList shipDragNode = xN.SelectNodes("//properties/physics/drag");
+                                XmlNodeList shipShipTypeNode = xN.SelectNodes("//properties/ship");
 
-                                XmlNodeList shipCargoNode = Cargodoc.SelectNodes("//properties/cargo");
-
-                                if (shipCargoNode.Count > 0)
+                                #region MyRegion for components
+                                if (shipShipTypeNode.Count > 0)
                                 {
-                                    uiModelShip.Cargo.File = priorityCargoFile;
-                                    uiModelShip.Cargo.CargoMax = Convert.ToInt32(shipCargoNode[0].Attributes["max"].Value);
-                                    uiModelShip.Cargo.CargoTags = shipCargoNode[0].Attributes["tags"].Value;
+                                    Tuple<string, string, string> components = this.ReadShipComponents(file);
+                                    uiModelShip.Shields = components.Item1;
+                                    uiModelShip.Turrets = components.Item2;
+                                    uiModelShip.Weapons = components.Item3;
                                 }
-                                uiModelShip.Cargo.Changed = false;
-                            }
-                            #endregion 
+                                #endregion
 
-                            if (shipShipTypeNode.Count > 0)
-                            {
-                                if (shipShipTypeNode[0].Attributes["type"] != null)
-                                    uiModelShip.Type = shipShipTypeNode[0].Attributes["type"].Value;
-                            }
+                                #region region for cargo 
+                                string CargoFile = file.FullName.Replace(m_UIManager.UIModel.ModPath1, m_UIManager.UIModel.Path).Replace(m_UIManager.UIModel.ModPath2, m_UIManager.UIModel.Path).Replace("ship", "storage");
+                                string CargoModFile1 = CargoFile.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath1).Replace("ship", "storage");
+                                string CargoModFile2 = CargoFile.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath2).Replace("ship", "storage");
 
-                            if (uiModelShip.Type == null || uiModelShip.Type == "cockpit")
-                            {
-                                return null;
-                            }
-                                
+                                uiModelShip.File = file.FullName;
+                                uiModelShip.Name = shipMacroNode[0].Attributes["name"].Value;
+                                uiModelShip.Class = shipMacroNode[0].Attributes["class"].Value;
 
-                            if (shipIdentificationNode.Count > 0)
-                            {
-                                if (shipIdentificationNode[0].Attributes["name"] != null)
-                                    uiModelShip.IGName = this.GetIGName(shipIdentificationNode[0].Attributes["name"].Value);
-                                else
-                                    uiModelShip.IGName = "'unknown'";
-                            }
 
-                            if (shipExplosionNode.Count > 0)
-                            {
-                                if (shipExplosionNode[0].Attributes["value"] != null)
-                                    uiModelShip.ExplosionDamage = Convert.ToInt32(shipExplosionNode[0].Attributes["value"].Value);
-                            }
-                            if (shipStorageNode.Count > 0)
-                            {
-                                if (shipStorageNode[0].Attributes["missile"] != null)
-                                    uiModelShip.StorageMissiles = Convert.ToInt32(shipStorageNode[0].Attributes["missile"].Value);
-                                if (shipStorageNode[0].Attributes["unit"] != null)
-                                    uiModelShip.StorageUnits = Convert.ToInt32(shipStorageNode[0].Attributes["unit"].Value);
-                            }
-                            if (shipHullNode.Count > 0)
-                            {
-                                if (shipHullNode[0].Attributes["max"] != null)
-                                    uiModelShip.HullMax = Convert.ToInt32(shipHullNode[0].Attributes["max"].Value);
-                            }
-                            if (shipGatherRateNode.Count > 0)
-                            {
-                                if (shipGatherRateNode[0].Attributes["gas"] != null)
-                                    uiModelShip.GatherRrate = Utility.ParseToDouble(shipGatherRateNode[0].Attributes["gas"].Value);
-                            }
-                            if (shipSecrecyNode.Count > 0)
-                            {
-                                if (shipSecrecyNode[0].Attributes["level"] != null)
-                                    uiModelShip.Secrecy = Convert.ToInt32(shipSecrecyNode[0].Attributes["level"].Value);
-                            }
-                            if (shipPeopleNode.Count > 0)
-                            {
-                                if (shipPeopleNode[0].Attributes["capacity"] != null)
-                                    uiModelShip.People = Convert.ToInt32(shipPeopleNode[0].Attributes["capacity"].Value);
-                            }
-                            if (shipPhysicsNode.Count > 0)
-                            {
-                                if (shipPhysicsNode[0].Attributes["mass"] != null)
-                                    uiModelShip.Mass = Utility.ParseToDouble(shipPhysicsNode[0].Attributes["mass"].Value);
-                            }
-                            if (shipInertiaNode.Count > 0)
-                            {
-                                if (shipInertiaNode[0].Attributes["roll"] != null)
-                                    uiModelShip.InertiaRoll = Utility.ParseToDouble(shipInertiaNode[0].Attributes["roll"].Value);
-                                if (shipInertiaNode[0].Attributes["yaw"] != null)
-                                    uiModelShip.InertiaYaw = Utility.ParseToDouble(shipInertiaNode[0].Attributes["yaw"].Value);
-                                if (shipInertiaNode[0].Attributes["pitch"] != null)
-                                    uiModelShip.InertiaPitch = Utility.ParseToDouble(shipInertiaNode[0].Attributes["pitch"].Value);
-                            }
-                            if (shipDragNode.Count > 0)
-                            {
-                                if (shipDragNode[0].Attributes["forward"] != null)
-                                    uiModelShip.Forward = Utility.ParseToDouble(shipDragNode[0].Attributes["forward"].Value);
-                                if (shipDragNode[0].Attributes["reverse"] != null)
-                                    uiModelShip.Reverse = Utility.ParseToDouble(shipDragNode[0].Attributes["reverse"].Value);
-                                if (shipDragNode[0].Attributes["horizontal"] != null)
-                                    uiModelShip.Horizontal = Utility.ParseToDouble(shipDragNode[0].Attributes["horizontal"].Value);
-                                if (shipDragNode[0].Attributes["vertical"] != null)
-                                    uiModelShip.Vertical = Utility.ParseToDouble(shipDragNode[0].Attributes["vertical"].Value);
-                                if (shipDragNode[0].Attributes["pitch"] != null)
-                                    uiModelShip.Pitch = Utility.ParseToDouble(shipDragNode[0].Attributes["pitch"].Value);
-                                if (shipDragNode[0].Attributes["yaw"] != null)
-                                    uiModelShip.Yaw = Utility.ParseToDouble(shipDragNode[0].Attributes["yaw"].Value);
-                                if (shipDragNode[0].Attributes["roll"] != null)
-                                    uiModelShip.Roll = Utility.ParseToDouble(shipDragNode[0].Attributes["roll"].Value);
-                            }
-                            uiModelShip.Changed = false;
 
-                            //var ShipExistsAlready = m_UIManager.UIModel.UIModelShips.Where(x => x.File == uiModelShip.File).ToList();
-                            //if (ShipExistsAlready.Count == 0)
-                            //{
-                            //    //m_UIManager.UIModel.UIModelShipsVanilla.Add(uiModelShip.Copy());
-                            //    m_UIManager.UIModel.UIModelShips.Add(uiModelShip);
-                            //}
+                                string priorityCargoFile = "";
+                                if (File.Exists(CargoModFile2))
+                                {
+                                    priorityCargoFile = CargoModFile2;
+                                }
+                                else if (File.Exists(CargoModFile1))
+                                {
+                                    priorityCargoFile = CargoModFile1;
+                                }
+                                else if (File.Exists(CargoFile))
+                                    priorityCargoFile = CargoFile;
+
+                                if (!string.IsNullOrWhiteSpace(priorityCargoFile))
+                                {
+                                    uiModelShip.Cargo = new UIModelShipCargo();
+                                    XmlDocument Cargodoc = new XmlDocument();
+                                    Cargodoc.Load(priorityCargoFile);
+                                    string xmlcontents = Cargodoc.InnerXml;
+                                    Cargodoc.LoadXml(xmlcontents);
+
+                                    XmlNodeList shipCargoNode = Cargodoc.SelectNodes("//properties/cargo");
+
+                                    if (shipCargoNode.Count > 0)
+                                    {
+                                        uiModelShip.Cargo.File = priorityCargoFile;
+                                        uiModelShip.Cargo.CargoMax = Convert.ToInt32(shipCargoNode[0].Attributes["max"].Value);
+                                        uiModelShip.Cargo.CargoTags = shipCargoNode[0].Attributes["tags"].Value;
+                                    }
+                                    uiModelShip.Cargo.Changed = false;
+                                }
+                                #endregion
+
+                                if (shipShipTypeNode.Count > 0)
+                                {
+                                    if (shipShipTypeNode[0].Attributes["type"] != null)
+                                        uiModelShip.Type = shipShipTypeNode[0].Attributes["type"].Value;
+                                }
+
+                                if (uiModelShip.Type == null || uiModelShip.Type == "cockpit")
+                                {
+                                    return null;
+                                }
+
+
+                                if (shipIdentificationNode.Count > 0)
+                                {
+                                    if (shipIdentificationNode[0].Attributes["name"] != null)
+                                        uiModelShip.IGName = this.GetIGName(shipIdentificationNode[0].Attributes["name"].Value);
+                                    else
+                                        uiModelShip.IGName = "'unknown'";
+                                }
+
+                                if (shipExplosionNode.Count > 0)
+                                {
+                                    if (shipExplosionNode[0].Attributes["value"] != null)
+                                        uiModelShip.ExplosionDamage = Convert.ToInt32(shipExplosionNode[0].Attributes["value"].Value);
+                                }
+                                if (shipStorageNode.Count > 0)
+                                {
+                                    if (shipStorageNode[0].Attributes["missile"] != null)
+                                        uiModelShip.StorageMissiles = Convert.ToInt32(shipStorageNode[0].Attributes["missile"].Value);
+                                    if (shipStorageNode[0].Attributes["unit"] != null)
+                                        uiModelShip.StorageUnits = Convert.ToInt32(shipStorageNode[0].Attributes["unit"].Value);
+                                }
+                                if (shipHullNode.Count > 0)
+                                {
+                                    if (shipHullNode[0].Attributes["max"] != null)
+                                        uiModelShip.HullMax = Convert.ToInt32(shipHullNode[0].Attributes["max"].Value);
+                                }
+                                if (shipGatherRateNode.Count > 0)
+                                {
+                                    if (shipGatherRateNode[0].Attributes["gas"] != null)
+                                        uiModelShip.GatherRrate = Utility.ParseToDouble(shipGatherRateNode[0].Attributes["gas"].Value);
+                                }
+                                if (shipSecrecyNode.Count > 0)
+                                {
+                                    if (shipSecrecyNode[0].Attributes["level"] != null)
+                                        uiModelShip.Secrecy = Convert.ToInt32(shipSecrecyNode[0].Attributes["level"].Value);
+                                }
+                                if (shipPeopleNode.Count > 0)
+                                {
+                                    if (shipPeopleNode[0].Attributes["capacity"] != null)
+                                        uiModelShip.People = Convert.ToInt32(shipPeopleNode[0].Attributes["capacity"].Value);
+                                }
+                                if (shipPhysicsNode.Count > 0)
+                                {
+                                    if (shipPhysicsNode[0].Attributes["mass"] != null)
+                                        uiModelShip.Mass = Utility.ParseToDouble(shipPhysicsNode[0].Attributes["mass"].Value);
+                                }
+                                if (shipInertiaNode.Count > 0)
+                                {
+                                    if (shipInertiaNode[0].Attributes["roll"] != null)
+                                        uiModelShip.InertiaRoll = Utility.ParseToDouble(shipInertiaNode[0].Attributes["roll"].Value);
+                                    if (shipInertiaNode[0].Attributes["yaw"] != null)
+                                        uiModelShip.InertiaYaw = Utility.ParseToDouble(shipInertiaNode[0].Attributes["yaw"].Value);
+                                    if (shipInertiaNode[0].Attributes["pitch"] != null)
+                                        uiModelShip.InertiaPitch = Utility.ParseToDouble(shipInertiaNode[0].Attributes["pitch"].Value);
+                                }
+                                if (shipDragNode.Count > 0)
+                                {
+                                    if (shipDragNode[0].Attributes["forward"] != null)
+                                        uiModelShip.Forward = Utility.ParseToDouble(shipDragNode[0].Attributes["forward"].Value);
+                                    if (shipDragNode[0].Attributes["reverse"] != null)
+                                        uiModelShip.Reverse = Utility.ParseToDouble(shipDragNode[0].Attributes["reverse"].Value);
+                                    if (shipDragNode[0].Attributes["horizontal"] != null)
+                                        uiModelShip.Horizontal = Utility.ParseToDouble(shipDragNode[0].Attributes["horizontal"].Value);
+                                    if (shipDragNode[0].Attributes["vertical"] != null)
+                                        uiModelShip.Vertical = Utility.ParseToDouble(shipDragNode[0].Attributes["vertical"].Value);
+                                    if (shipDragNode[0].Attributes["pitch"] != null)
+                                        uiModelShip.Pitch = Utility.ParseToDouble(shipDragNode[0].Attributes["pitch"].Value);
+                                    if (shipDragNode[0].Attributes["yaw"] != null)
+                                        uiModelShip.Yaw = Utility.ParseToDouble(shipDragNode[0].Attributes["yaw"].Value);
+                                    if (shipDragNode[0].Attributes["roll"] != null)
+                                        uiModelShip.Roll = Utility.ParseToDouble(shipDragNode[0].Attributes["roll"].Value);
+                                }
+                                uiModelShip.Changed = false;
+
+                                //var ShipExistsAlready = m_UIManager.UIModel.UIModelShips.Where(x => x.File == uiModelShip.File).ToList();
+                                //if (ShipExistsAlready.Count == 0)
+                                //{
+                                //    //m_UIManager.UIModel.UIModelShipsVanilla.Add(uiModelShip.Copy());
+                                //    m_UIManager.UIModel.UIModelShips.Add(uiModelShip);
+                                //}
+                            }
                         }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception(file.FullName + " could not be loaded.");
                     }
                 }
             }
@@ -866,7 +876,12 @@ namespace X4_Editor
 
         private Tuple<string, string, string> ReadShipComponents(FileInfo file)
         {
+            if (!Directory.Exists(file.DirectoryName))
+            {
+                throw new DirectoryNotFoundException(file.DirectoryName + " not found");
+            }
             string ComponentPath = Directory.GetParent(file.DirectoryName).ToString() + @"\" + file.Name.Replace("_macro", "");
+            string VanillaPath = "";
             string shields = "";
             string turrets = "";
             string weapons = "";
@@ -883,102 +898,160 @@ namespace X4_Editor
             {
                 string newComponentPath = "";
                 string[] path = ComponentPath.Split('_');
-                for(int i = 0; i <= path.Length -2; i++)
+                for (int i = 0; i <= path.Length - 2; i++)
                 {
                     newComponentPath = newComponentPath + path[i] + "_";
                 }
-                ComponentPath = newComponentPath.Substring(0, newComponentPath.Length -1) + ".xml";
+                ComponentPath = newComponentPath.Substring(0, newComponentPath.Length - 1) + ".xml";
             }
             // if file does not exists it maybe exist in vanilla folder
-            if (!File.Exists(ComponentPath))
-            {
-                //because modpath1+2 are unique this should work
-                ComponentPath = ComponentPath.Replace(this.m_UIManager.UIModel.ModPath1, m_UIManager.UIModel.Path);
-                ComponentPath = ComponentPath.Replace(this.m_UIManager.UIModel.ModPath2, m_UIManager.UIModel.Path);
-            }
             if (File.Exists(ComponentPath))
             {
-                using (XmlReader reader = XmlReader.Create(ComponentPath))
+                //because modpath1+2 are unique this should work
+                VanillaPath = ComponentPath.Replace(this.m_UIManager.UIModel.ModPath1, m_UIManager.UIModel.Path);
+                VanillaPath = ComponentPath.Replace(this.m_UIManager.UIModel.ModPath2, m_UIManager.UIModel.Path);
+            }
+            if (File.Exists(VanillaPath))
+            {
+                try
                 {
-                    while (reader.Read())
+                    using (XmlReader reader = XmlReader.Create(VanillaPath))
                     {
-                        if (reader.NodeType == XmlNodeType.Element && reader.Name == "components")
+                        XDocument doc = XDocument.Load(VanillaPath);
+                        if (doc.Descendants().Where(x => x.Name.LocalName == "components").ToList().Count > 0)
                         {
-                            XDocument doc = XDocument.Load(ComponentPath);
-
                             List<XElement> Connections = doc.Descendants().Where(x => x.Name.LocalName == "connection").ToList();
                             List<string> Names = new List<string>();
                             string NoUniqueNameIds = "";
 
-                            foreach (var connection in Connections)
-                            {
-                                //chack for douplicates
-                                if (!Names.Contains(connection.Attribute("name").Value))
-                                {
-                                    Names.Add(connection.Attribute("name").Value);
-                                }
-                                else
-                                {
-                                    NoUniqueNameIds = NoUniqueNameIds + "File " + file.Name + " has no unique name ID: " + connection.Attribute("name").Value + "\r";
-                                }
-                                // end check
+                            this.CalculateModules(file, ref shields_S, ref shields_M, ref shields_L, ref shields_XL, ref turrets_M, ref turrets_L, ref weapons_S, ref weapons_M, ref weapons_L, Connections, Names, ref NoUniqueNameIds);
 
-                                if (connection.Attribute("tags") != null)
-                                {
-                                    string tags = connection.Attribute("tags").Value;
-                                    if (tags.Contains("turret") && tags.Contains("medium"))
-                                    {
-                                        turrets_M++;
-                                    }
-                                    if (tags.Contains("turret") && tags.Contains("large") && !tags.Contains("extralarge"))
-                                    {
-                                        turrets_L++;
-                                    }
-                                    if (tags.Contains("weapon") && tags.Contains("small"))
-                                    {
-                                        weapons_S++;
-                                    }
-                                    if (tags.Contains("weapon") && tags.Contains("medium"))
-                                    {
-                                        weapons_M++;
-                                    }
-                                    if (tags.Contains("weapon") && tags.Contains("large") && !tags.Contains("extralarge"))
-                                    {
-                                        weapons_L++;
-                                    }
-                                }
+                            if (NoUniqueNameIds.Length > 0)
+                                MessageBox.Show(NoUniqueNameIds);
+                        }  
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
 
-                                if (connection.Attribute("tags") != null && connection.Attribute("group") == null)
-                                {
-                                    string tags = connection.Attribute("tags").Value;
-                                    if (tags.Contains("shield") && tags.Contains("small"))
-                                    {
-                                        shields_S++;
-                                    }
-                                    if (tags.Contains("shield") && tags.Contains("medium"))
-                                    {
-                                        shields_M++;
-                                    }
-                                    if (tags.Contains("shield") && tags.Contains("large") && !tags.Contains("extralarge"))
-                                    {
-                                        shields_L++;
-                                    }
-                                    if (tags.Contains("shield") && tags.Contains("extralarge"))
-                                    {
-                                        shields_XL++;
-                                    }
-                                }
-                            }
+            }
+            // excpect only addition of new components - no removal or alteration of components!
+            if (File.Exists(ComponentPath) && !VanillaPath.Equals(ComponentPath))
+            {
+                // if file exists the vanilla components need to be checked first as base
+                try
+                {
+                    //using (XmlReader reader = XmlReader.Create(ComponentPath))
+                    {
+                        XDocument doc = XDocument.Load(ComponentPath);
+                        if (doc.Descendants().Where(x => x.Name.LocalName == "components").ToList().Count > 0)
+                        { 
+                            List<XElement> components = doc.Descendants().Where(x => x.Name.LocalName == "components").ToList();
+                            List<XElement> Connections = components.Descendants().Where(x => x.Name.LocalName == "connection").ToList();
+                            List<string> Names = new List<string>();
+                            string NoUniqueNameIds = "";
+
+                            this.CalculateModules(file, ref shields_S, ref shields_M, ref shields_L, ref shields_XL, ref turrets_M, ref turrets_L, ref weapons_S, ref weapons_M, ref weapons_L, Connections, Names, ref NoUniqueNameIds);
+
                             if (NoUniqueNameIds.Length > 0)
                                 MessageBox.Show(NoUniqueNameIds);
                         }
+                        else if (doc.Descendants().Where(x => x.Name.LocalName == "add").ToList().Count > 0)
+                        {
+                            List<XElement> additions = doc.Descendants().Where(x => x.Name.LocalName == "add").ToList();
+                            foreach (var addition in additions)
+                            {
+                                List<XElement> Connections = addition.Descendants().Where(x => x.Name.LocalName == "connection").ToList();
+                                List<string> Names = new List<string>();
+                                string NoUniqueNameIds = "";
+                                this.CalculateModules(file, ref shields_S, ref shields_M, ref shields_L, ref shields_XL, ref turrets_M, ref turrets_L, ref weapons_S, ref weapons_M, ref weapons_L, Connections, Names, ref NoUniqueNameIds);
+                                if (NoUniqueNameIds.Length > 0)
+                                    MessageBox.Show(NoUniqueNameIds);
+                            }
+                        }
                     }
+                    
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
                 }
             }
-            shields = AddIfNotNull(shields_S,"S ") + AddIfNotNull(shields_M, "M ") + AddIfNotNull(shields_L, "L ") + AddIfNotNull(shields_XL, "XL");
+
+            shields = AddIfNotNull(shields_S, "S ") + AddIfNotNull(shields_M, "M ") + AddIfNotNull(shields_L, "L ") + AddIfNotNull(shields_XL, "XL");
             turrets = AddIfNotNull(turrets_M, "M ") + AddIfNotNull(turrets_L, "L ");
             weapons = AddIfNotNull(weapons_S, "S ") + AddIfNotNull(weapons_M, "M ") + AddIfNotNull(weapons_L, "L ");
             return new Tuple<string, string, string>(shields, turrets, weapons);
+        }
+
+        private void CalculateModules(FileInfo file, ref int shields_S, ref int shields_M, ref int shields_L, ref int shields_XL, ref int turrets_M, ref int turrets_L, ref int weapons_S, ref int weapons_M, ref int weapons_L, List<XElement> Connections, List<string> Names, ref string NoUniqueNameIds)
+        {
+            foreach (var connection in Connections)
+            {
+                //check for douplicates
+                if (!Names.Contains(connection.Attribute("name").Value))
+                {
+                    Names.Add(connection.Attribute("name").Value);
+                }
+                else
+                {
+                    NoUniqueNameIds = NoUniqueNameIds + "File " + file.Name + " has no unique name ID: " + connection.Attribute("name").Value + "\r";
+                }
+                // end check
+
+                if (connection.Attribute("tags") != null)
+                {
+                    string tags = connection.Attribute("tags").Value;
+                    if (tags.Contains("turret") && tags.Contains("medium"))
+                    {
+                        turrets_M++;
+                    }
+                    if (tags.Contains("turret") && tags.Contains("large") && !tags.Contains("extralarge"))
+                    {
+                        turrets_L++;
+                    }
+                    if (tags.Contains("weapon") && tags.Contains("small"))
+                    {
+                        weapons_S++;
+                    }
+                    if (tags.Contains("weapon") && tags.Contains("medium"))
+                    {
+                        weapons_M++;
+                    }
+                    if (tags.Contains("weapon") && tags.Contains("large") && !tags.Contains("extralarge"))
+                    {
+                        weapons_L++;
+                    }
+                }
+
+                if (connection.Attribute("tags") != null && connection.Attribute("group") == null)
+                {
+                    string tags = connection.Attribute("tags").Value;
+                    if (tags.Contains("shield") && tags.Contains("small"))
+                    {
+                        shields_S++;
+                    }
+                    if (tags.Contains("shield") && tags.Contains("medium"))
+                    {
+                        shields_M++;
+                    }
+                    if (tags.Contains("shield") && tags.Contains("large") && !tags.Contains("extralarge"))
+                    {
+                        shields_L++;
+                    }
+                    if (tags.Contains("shield") && tags.Contains("extralarge"))
+                    {
+                        shields_XL++;
+                    }
+                }
+            }
+        }
+
+        private static void NewMethod(FileInfo file, ref int shields_S, ref int shields_M, ref int shields_L, ref int shields_XL, ref int turrets_M, ref int turrets_L, ref int weapons_S, ref int weapons_M, ref int weapons_L, List<XElement> additions)
+        {
+            
         }
 
         private string AddIfNotNull(int inputAmount, string inputType)
