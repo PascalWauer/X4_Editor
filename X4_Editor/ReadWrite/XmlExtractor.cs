@@ -174,6 +174,73 @@ namespace X4_Editor
                                 }
                             }
                         }
+
+                        // this part is for ware properties replaced by a mod
+                        if (doc.Descendants().Where(x => x.Name.LocalName == "diff").ToList().Count > 0)
+                        {
+                            var replacedWares = doc.Descendants().Where(x => x.Name.LocalName == "diff").ToList();
+                            foreach (var ware in replacedWares)
+                            {
+                                XmlDocument xD = new XmlDocument();
+                                xD.LoadXml(ware.ToString());
+                                XmlNode xN = XmlHelper.ToXmlNode(ware);
+                                XmlNodeList wareNodes = xN.SelectNodes("//replace");
+
+                                foreach (XmlNode item in wareNodes)
+                                {
+                                    if( item.Attributes["sel"] != null)
+                                    {
+                                        string wareSel = item.Attributes["sel"].Value;
+                                        string wareID = wareSel.Split('\'')[1];
+                                        var wareToChange = this.m_UIManager.UIModel.UIModelWares.Where(x => x.Name == wareID).ToList();
+
+                                        if (wareToChange != null && item.FirstChild != null)
+                                        {
+                                            wareToChange.FirstOrDefault().Changed = true;
+                                            if (item.FirstChild.LocalName == "price")
+                                            {
+                                                wareToChange.FirstOrDefault().Min = Convert.ToInt32(item.FirstChild.Attributes["min"].Value);
+                                                wareToChange.FirstOrDefault().Max = Convert.ToInt32(item.FirstChild.Attributes["max"].Value);
+                                                wareToChange.FirstOrDefault().Avg = Convert.ToInt32(item.FirstChild.Attributes["average"].Value);
+                                            }
+                                            if (item.FirstChild.LocalName == "primary")
+                                            {
+                                                for (int i = 0; i < item.FirstChild.ChildNodes.Count; i++)
+                                                {
+                                                    if (i == 0)
+                                                    {
+                                                        wareToChange.FirstOrDefault().Ware1 = item.FirstChild.ChildNodes[i].Attributes["ware"].Value;
+                                                        wareToChange.FirstOrDefault().Amount1 = Convert.ToInt32(item.FirstChild.ChildNodes[i].Attributes["amount"].Value);
+                                                    }
+                                                    if (i == 1)
+                                                    {
+                                                        wareToChange.FirstOrDefault().Ware2 = item.FirstChild.ChildNodes[i].Attributes["ware"].Value;
+                                                        wareToChange.FirstOrDefault().Amount2 = Convert.ToInt32(item.FirstChild.ChildNodes[i].Attributes["amount"].Value);
+                                                    }
+                                                    if (i == 2)
+                                                    {
+                                                        wareToChange.FirstOrDefault().Ware3 = item.FirstChild.ChildNodes[i].Attributes["ware"].Value;
+                                                        wareToChange.FirstOrDefault().Amount3 = Convert.ToInt32(item.FirstChild.ChildNodes[i].Attributes["amount"].Value);
+                                                    }
+                                                    if (i == 3)
+                                                    {
+                                                        wareToChange.FirstOrDefault().Ware4 = item.FirstChild.ChildNodes[i].Attributes["ware"].Value;
+                                                        wareToChange.FirstOrDefault().Amount4 = Convert.ToInt32(item.FirstChild.ChildNodes[i].Attributes["amount"].Value);
+                                                    }
+                                                    if (i == 4)
+                                                    {
+                                                        wareToChange.FirstOrDefault().Ware5 = item.FirstChild.ChildNodes[i].Attributes["ware"].Value;
+                                                        wareToChange.FirstOrDefault().Amount5 = Convert.ToInt32(item.FirstChild.ChildNodes[i].Attributes["amount"].Value);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    
+                                }
+                            }
+                        }
                     }
                 }
                 m_UIManager.UIModel.AllWaresLoaded = true;

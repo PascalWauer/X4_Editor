@@ -1715,15 +1715,8 @@ namespace X4_Editor
                             sw.WriteLine("\t<replace sel=\"/wares/ware[@id='" + item.ID + "']/price\">");
                             sw.WriteLine("\t\t<price min=\"" + item.Min + "\" average=\"" + item.Avg  + "\" max=\"" + item.Max + "\" /> ");
                             sw.WriteLine("\t</replace>");
-                            //< price min = "1210" average = "2210" max = "3210" />
                         }
-                        //if (vanillaItem.Max != item.Max)
-                        //    sw.WriteLine("\t<replace sel=\"/wares/ware[@id='" + item.ID + "']/price/@max\">" + String.Format(CultureInfo.InvariantCulture, "{0:0}", item.Max) + "</replace>");
-                        //if (vanillaItem.Min != item.Min)
-                        //    sw.WriteLine("\t<replace sel=\"/wares/ware[@id='" + item.ID + "']/price/@min\">" + String.Format(CultureInfo.InvariantCulture, "{0:0}", item.Min) + "</replace>");
-                        //if (vanillaItem.Avg != item.Avg)
-                        //    sw.WriteLine("\t<replace sel=\"/wares/ware[@id='" + item.ID + "']/price/@average\">" + String.Format(CultureInfo.InvariantCulture, "{0:0}", item.Avg) + "</replace>");
-                        if (vanillaItem.Amount != item.Amount)
+                       if (vanillaItem.Amount != item.Amount)
                             sw.WriteLine("\t<replace sel=\"/wares/ware[@id='" + item.ID + "']/production/@amount\">" + String.Format(CultureInfo.InvariantCulture, "{0:0}", item.Amount) + "</replace>");
                         if (vanillaItem.Time != item.Time)
                             sw.WriteLine("\t<replace sel=\"/wares/ware[@id='" + item.ID + "']/production/@time\">" + String.Format(CultureInfo.InvariantCulture, "{0:0}", item.Time) + "</replace>");
