@@ -1710,19 +1710,44 @@ namespace X4_Editor
 
                     if (item.Changed)
                     {
-                        if (vanillaItem.Max != item.Max)
-                            sw.WriteLine("\t<replace sel=\"//wares/ware[@id='"+ item.ID + "']/price/@max\">" + String.Format(CultureInfo.InvariantCulture, "{0:0}", item.Max) + "</replace>");
-                        if (vanillaItem.Min != item.Min)
-                            sw.WriteLine("\t<replace sel=\"//wares/ware[@id='" + item.ID + "']/price/@min\">" + String.Format(CultureInfo.InvariantCulture, "{0:0}", item.Min) + "</replace>");
-                        if (vanillaItem.Avg != item.Avg)
-                            sw.WriteLine("\t<replace sel=\"//wares/ware[@id='" + item.ID + "']/price/@average\">" + String.Format(CultureInfo.InvariantCulture, "{0:0}", item.Avg) + "</replace>");
+                        if (vanillaItem.Max != item.Max || vanillaItem.Avg != item.Avg || vanillaItem.Min != item.Min)
+                        {
+                            sw.WriteLine("\t<replace sel=\"/wares/ware[@id='" + item.ID + "']/price\">");
+                            sw.WriteLine("\t\t<price min=\"" + item.Min + "\" average=\"" + item.Avg  + "\" max=\"" + item.Max + "\" /> ");
+                            sw.WriteLine("\t</replace>");
+                            //< price min = "1210" average = "2210" max = "3210" />
+                        }
+                        //if (vanillaItem.Max != item.Max)
+                        //    sw.WriteLine("\t<replace sel=\"/wares/ware[@id='" + item.ID + "']/price/@max\">" + String.Format(CultureInfo.InvariantCulture, "{0:0}", item.Max) + "</replace>");
+                        //if (vanillaItem.Min != item.Min)
+                        //    sw.WriteLine("\t<replace sel=\"/wares/ware[@id='" + item.ID + "']/price/@min\">" + String.Format(CultureInfo.InvariantCulture, "{0:0}", item.Min) + "</replace>");
+                        //if (vanillaItem.Avg != item.Avg)
+                        //    sw.WriteLine("\t<replace sel=\"/wares/ware[@id='" + item.ID + "']/price/@average\">" + String.Format(CultureInfo.InvariantCulture, "{0:0}", item.Avg) + "</replace>");
                         if (vanillaItem.Amount != item.Amount)
-                            sw.WriteLine("\t<replace sel=\"//wares/ware[@id='" + item.ID + "']/production/@amount\">" + String.Format(CultureInfo.InvariantCulture, "{0:0}", item.Amount) + "</replace>");
+                            sw.WriteLine("\t<replace sel=\"/wares/ware[@id='" + item.ID + "']/production/@amount\">" + String.Format(CultureInfo.InvariantCulture, "{0:0}", item.Amount) + "</replace>");
                         if (vanillaItem.Time != item.Time)
-                            sw.WriteLine("\t<replace sel=\"//wares/ware[@id='" + item.ID + "']/production/@time\">" + String.Format(CultureInfo.InvariantCulture, "{0:0}", item.Time) + "</replace>");
+                            sw.WriteLine("\t<replace sel=\"/wares/ware[@id='" + item.ID + "']/production/@time\">" + String.Format(CultureInfo.InvariantCulture, "{0:0}", item.Time) + "</replace>");
+
+                        if (vanillaItem.Amount1 != item.Amount1 || vanillaItem.Amount2 != item.Amount2 || vanillaItem.Amount3 != item.Amount3 || vanillaItem.Amount4 != item.Amount4 || vanillaItem.Amount5 != item.Amount5)
+                        {
+                            sw.WriteLine("\t<replace sel=\"/wares/ware[@id='" + item.ID + "']/production/primary\">");
+                            sw.WriteLine("\t\t<primary> ");
+                            if (item.Amount1 > 0)
+                                sw.WriteLine("\t\t\t<ware ware=\"" + item.Ware1 + "\" amount=\"" + item.Amount1 + "\" />");
+                            if (item.Amount2 > 0)
+                                sw.WriteLine("\t\t\t<ware ware=\"" + item.Ware2 + "\" amount=\"" + item.Amount2 + "\" />");
+                            if (item.Amount3 > 0)
+                                sw.WriteLine("\t\t\t<ware ware=\"" + item.Ware3 + "\" amount=\"" + item.Amount3 + "\" />");
+                            if (item.Amount4 > 0)
+                                sw.WriteLine("\t\t\t<ware ware=\"" + item.Ware4 + "\" amount=\"" + item.Amount4 + "\" />");
+                            if (item.Amount5 > 0)
+                                sw.WriteLine("\t\t\t<ware ware=\"" + item.Ware5 + "\" amount=\"" + item.Amount5 + "\" />");
+                            sw.WriteLine("\t\t</primary> ");
+                            sw.WriteLine("\t</replace>");
+                            sw.WriteLine("");
+                        }
                     }
                 }
-
                 sw.WriteLine("</diff> ");
 
             }
