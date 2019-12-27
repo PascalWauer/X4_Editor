@@ -15,15 +15,15 @@ namespace X4_Editor
     {
         private ICollectionView m_ProjectilesDataView { get; set; }
         private ICollectionView m_MissilesDataView { get; set; }
-        private ICollectionView m_ModuleShieldsDataView { get; set; }
-        private ICollectionView m_ModuleEnginesDataView { get; set; }
+        private ICollectionView m_ShieldsDataView { get; set; }
+        private ICollectionView m_EnginesDataView { get; set; }
         private ICollectionView m_WaresDataView { get; set; }
         private ICollectionView m_ShipsDataView { get; set; }
         private ICollectionView m_WeaponsDataView { get; set; }
         private ObservableCollection<UIModelProjectile> m_ProjectilesData { get; set; }
         private ObservableCollection<UIModelMissile> m_MissilesData { get; set; }
-        private ObservableCollection<UIModelShield> m_ModuleShieldsData { get; set; }
-        private ObservableCollection<UIModelEngine> m_ModuleEnginesData { get; set; }
+        private ObservableCollection<UIModelShield> m_ShieldsData { get; set; }
+        private ObservableCollection<UIModelEngine> m_EnginesData { get; set; }
         private ObservableCollection<UIModelWare> m_WaresData { get; set; }
         private ObservableCollection<UIModelShip> m_ShipsData { get; set; }
         private ObservableCollection<UIModelWeapon> m_WeaponsData { get; set; }
@@ -158,29 +158,6 @@ namespace X4_Editor
 
         #region Column filters
 
-        //private bool m_ShowEco;
-        //public bool ShowEco
-        //{
-        //    get { return m_ShowEco; }
-        //    set
-        //    {
-        //        if (m_ShowEco == value) return;
-        //            m_ShowEco = value;
-        //        this.NotifyPropertyChanged();
-        //        this.NotifyPropertyChanged("VisibilityShowEco");
-        //    }
-        //}
-        //public Visibility VisibilityShowEco
-        //{
-        //    get
-        //    {
-        //        if (ShowEco) 
-        //            return Visibility.Visible;
-        //        else
-        //            return Visibility.Collapsed;
-        //    }
-        //}
-
         public ObservableCollection<UIModelProjectile> UIModelProjectilesVanilla
         {
             get; set;
@@ -189,11 +166,11 @@ namespace X4_Editor
         {
             get; set;
         }
-        public ObservableCollection<UIModelShield> UIModelModuleShieldsVanilla
+        public ObservableCollection<UIModelShield> UIModelShieldsVanilla
         {
             get; set;
         }
-        public ObservableCollection<UIModelEngine> UIModelModuleEnginesVanilla
+        public ObservableCollection<UIModelEngine> UIModelEnginesVanilla
         {
             get; set;
         }
@@ -267,41 +244,41 @@ namespace X4_Editor
             }
         }
 
-        public ObservableCollection<UIModelShield> UIModelModulesShields
+        public ObservableCollection<UIModelShield> UIModelShields
         {
             get
             {
-                if (m_ModuleShieldsData == null)
+                if (m_ShieldsData == null)
                 {
-                    m_ModuleShieldsDataView = CollectionViewSource.GetDefaultView(m_ModuleShieldsData);
-                    m_ModuleShieldsDataView.Filter = FilterShieldsData;
+                    m_ShieldsDataView = CollectionViewSource.GetDefaultView(m_ShieldsData);
+                    m_ShieldsDataView.Filter = FilterShieldsData;
                 }
-                return m_ModuleShieldsData;
+                return m_ShieldsData;
             }
             set
             {
-                m_ModuleShieldsData = value;
-                m_ModuleShieldsDataView = CollectionViewSource.GetDefaultView(m_ModuleShieldsData);
-                m_ModuleShieldsDataView.Filter = FilterShieldsData;
+                m_ShieldsData = value;
+                m_ShieldsDataView = CollectionViewSource.GetDefaultView(m_ShieldsData);
+                m_ShieldsDataView.Filter = FilterShieldsData;
             }
         }
 
-        public ObservableCollection<UIModelEngine> UIModelModulesEngines
+        public ObservableCollection<UIModelEngine> UIModelEngines
         {
             get
             {
-                if (m_ModuleEnginesData == null)
+                if (m_EnginesData == null)
                 {
-                    m_ModuleEnginesDataView = CollectionViewSource.GetDefaultView(m_ModuleEnginesData);
-                    m_ModuleEnginesDataView.Filter = FilterEnginesData;
+                    m_EnginesDataView = CollectionViewSource.GetDefaultView(m_EnginesData);
+                    m_EnginesDataView.Filter = FilterEnginesData;
                 }
-                return m_ModuleEnginesData;
+                return m_EnginesData;
             }
             set
             {
-                m_ModuleEnginesData = value;
-                m_ModuleEnginesDataView = CollectionViewSource.GetDefaultView(m_ModuleEnginesData);
-                m_ModuleEnginesDataView.Filter = FilterEnginesData;
+                m_EnginesData = value;
+                m_EnginesDataView = CollectionViewSource.GetDefaultView(m_EnginesData);
+                m_EnginesDataView.Filter = FilterEnginesData;
             }
         }
 
@@ -463,17 +440,17 @@ namespace X4_Editor
             UIModelProjectiles = new ObservableCollection<UIModelProjectile>();
             UIModelWeapons = new ObservableCollection<UIModelWeapon>();
             UIModelMissiles = new ObservableCollection<UIModelMissile>();
-            UIModelModulesShields = new ObservableCollection<UIModelShield>();
-            UIModelModulesEngines = new ObservableCollection<UIModelEngine>();
+            UIModelShields = new ObservableCollection<UIModelShield>();
+            UIModelEngines = new ObservableCollection<UIModelEngine>();
             UIModelWares = new ObservableCollection<UIModelWare>();
             UIModelShips = new ObservableCollection<UIModelShip>();
             this.UIModelMissilesVanilla = new ObservableCollection<UIModelMissile>();
             this.UIModelProjectilesVanilla = new ObservableCollection<UIModelProjectile>();
             this.UIModelWeaponsVanilla = new ObservableCollection<UIModelWeapon>();
-            this.UIModelModuleShieldsVanilla = new ObservableCollection<UIModelShield>();
+            this.UIModelShieldsVanilla = new ObservableCollection<UIModelShield>();
             this.UIModelShipsVanilla = new ObservableCollection<UIModelShip>();
             this.UIModelWaresVanilla = new ObservableCollection<UIModelWare>();
-            this.UIModelModuleEnginesVanilla = new ObservableCollection<UIModelEngine>();
+            this.UIModelEnginesVanilla = new ObservableCollection<UIModelEngine>();
             UseFilters = true;
             Shields = true;
             Engines = true;
@@ -502,9 +479,9 @@ namespace X4_Editor
 
         public void SetFilters()
         {
-                m_ModuleShieldsDataView.Filter = this.FilterShieldsData;
+                m_ShieldsDataView.Filter = this.FilterShieldsData;
 
-                m_ModuleEnginesDataView.Filter = this.FilterEnginesData;
+                m_EnginesDataView.Filter = this.FilterEnginesData;
 
                 m_ProjectilesDataView.Filter = this.FilterProjectilesData;
                 m_MissilesDataView.Filter = this.FilterMissilesData;
@@ -819,13 +796,13 @@ namespace X4_Editor
                     if (ship != null && ship.Name.Contains(ware.Name))
                         return true;
                 }
-                foreach (var e in m_ModuleEnginesDataView)
+                foreach (var e in m_EnginesDataView)
                 {
                     UIModelEngine engine = e as UIModelEngine;
                     if (engine != null && engine.Name.Contains(ware.Name))
                         return true;
                 }
-                foreach (var s in m_ModuleShieldsDataView)
+                foreach (var s in m_ShieldsDataView)
                 {
                     UIModelShield shield = s as UIModelShield;
                     if (shield != null && shield.Name.Contains(ware.Name))

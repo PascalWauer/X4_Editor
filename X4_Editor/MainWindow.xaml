@@ -209,8 +209,8 @@
                 </DataGrid>
                 
                 <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ResizeDirection="Columns" Background="DarkGray" Foreground="Beige"/>
-                
-                <DataGrid  x:Name="DG_Engines" Grid.Column="2" ItemsSource="{Binding UIModelModulesEngines, IsAsync=True}" AutoGenerateColumns="False" AlternationCount="2" 
+
+                <DataGrid  x:Name="DG_Engines" Grid.Column="2" ItemsSource="{Binding UIModelEngines, IsAsync=True}" AutoGenerateColumns="False" AlternationCount="2" 
                           LoadingRow="DataGrid_LoadingRow" EnableColumnVirtualization="True" EnableRowVirtualization="True" SelectedCellsChanged="OnEnginesSelected"
                           AlternatingRowBackground="Bisque" SelectionUnit="Cell" CellStyle="{StaticResource CustomCellStyle}" MouseRightButtonDown="OnMainWindowCellRightClick">
                     <DataGrid.Columns>
@@ -287,7 +287,7 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0">
-                <DataGrid x:Name="DG_Shields" ItemsSource="{Binding UIModelModulesShields, IsAsync=True}" AutoGenerateColumns="False" AlternationCount="2" 
+                <DataGrid x:Name="DG_Shields" ItemsSource="{Binding UIModelShields, IsAsync=True}" AutoGenerateColumns="False" AlternationCount="2" 
                           LoadingRow="DataGrid_LoadingRow" EnableColumnVirtualization="True" EnableRowVirtualization="True" SelectedCellsChanged="OnShieldsSelected"
                           AlternatingRowBackground="Bisque" SelectionUnit="Cell" CellStyle="{StaticResource CustomCellStyle}" MouseRightButtonDown="OnMainWindowCellRightClick">
                     <DataGrid.Columns>

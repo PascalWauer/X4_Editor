@@ -234,10 +234,9 @@ namespace X4_Editor
                                                     }
                                                 }
                                             }
+                                            wareToChange.FirstOrDefault().Changed = false;
                                         }
                                     }
-
-                                    
                                 }
                             }
                         }
@@ -245,7 +244,10 @@ namespace X4_Editor
                 }
                 m_UIManager.UIModel.AllWaresLoaded = true;
                 m_UIManager.UIModel.CalculateWarePrices();
-
+                foreach(var item in m_UIManager.UIModel.UIModelWares)
+                {
+                    item.Changed = false;
+                }
                 //TODO: this needs to be done only in case of vanilla and not mods
                 m_UIManager.UIModel.UIModelWaresVanilla.Clear();
                 foreach (var item in m_UIManager.UIModel.UIModelWares)
