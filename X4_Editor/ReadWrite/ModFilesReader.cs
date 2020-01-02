@@ -809,7 +809,7 @@ namespace X4_Editor
                                             while (!sr.EndOfStream)
                                             {
                                                 line = sr.ReadLine();
-                                                if (line.Contains(@"<replace") && line.Contains("sel") && line.Contains(@"/macros") && line.Contains("macro']\">"))
+                                                if ( (line.Contains(@"<replace") && line.Contains("sel") && line.Contains(@"/macros") && line.Contains("macro']\">")) || line.Contains("<replace sel=\"//macros\">") )
                                                 {
                                                     parent.UIModel.UIModelShips[index] = m_XmlExtractor.ReadSingleShipFile(new FileInfo(file));
                                                     break;

@@ -32,8 +32,6 @@ namespace X4_Editor
     {
         static System.Collections.Specialized.StringCollection log = new System.Collections.Specialized.StringCollection();
 
-        
-
         public string PathToShields = @"\assets\props\SurfaceElements\macros";
         public string PathToShips = @"\assets\units";
         public string PathToProjectiles = @"\assets\fx\weaponFx\macros";
@@ -55,18 +53,21 @@ namespace X4_Editor
         public WaresWindow WaresWindow { get; set; }
         public UIModel UIModel { get; set; }
         public XmlExtractor m_XmlExtractor;
+        public Calculations m_Calculations;
 
         public UIManager()
         {
             MainWindow = new MainWindow();
             WaresWindow = new WaresWindow();
             m_XmlExtractor = new XmlExtractor(this);
+            m_Calculations = new Calculations(this);
             this.UIModel = new UIModel();
             MainWindow.DataContext = this.UIModel;
             WaresWindow.DataContext = this.UIModel;
             m_ModFilesReader = new ModFilesReader(this, m_XmlExtractor);
             MainWindow.Closing += OnClosing;
             
+
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.ReadAllVanillaFilesCommand, this.ExecuteReadAllVanillaFilesCommand));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.ReadAllMod1FilesCommand, this.ExecuteReadAllMod1FilesCommand));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.ReadAllMod2FilesCommand, this.ExecuteReadAllMod2FilesCommand));
@@ -484,12 +485,6 @@ namespace X4_Editor
                 MessageBox.Show("Please enter a value <> '0'", "Invalid operation");
                 return;
             }
-            var check = Utility.ParseToDouble(this.UIModel.MathParameter.ToString());
-            if (check == null)
-            {
-                MessageBox.Show("Please enter numeric values only", "Invalid operation");
-                return;
-            }
             this.AddCalculation(3);
         }
 
@@ -500,27 +495,18 @@ namespace X4_Editor
                 MessageBox.Show("Please enter a value <> '0'", "Invalid operation");
                 return;
             }
-            var check = Utility.ParseToDouble(this.UIModel.MathParameter.ToString());
-            if (check == null)
-            {
-                MessageBox.Show("Please enter numeric values only", "Invalid operation");
-                return;
-            }
             this.AddCalculation(1);
         }
         private void AddCalculation(int operation)
         {
             Counter counter = new Counter();
-            
-            var check = Utility.ParseToDouble(this.UIModel.MathParameter.ToString());
 
             DataGrid dg_Shields = null;
             dg_Shields = this.MainWindow.DG_Shields;
 
             if (dg_Shields.SelectedCells.Count > 0)
             {
-                int selectedCells = dg_Shields.SelectedCells.Count;
-                counter = this.CalculateOverAll(dg_Shields, operation, counter);
+                counter = m_Calculations.CalculateOverAll(dg_Shields, operation, counter);
             }
 
             DataGrid dg_Engines = null;
@@ -528,8 +514,7 @@ namespace X4_Editor
 
             if (dg_Engines.SelectedCells.Count > 0)
             {
-                int selectedCells = dg_Engines.SelectedCells.Count;
-                counter = this.CalculateOverAll(dg_Engines, operation, counter);
+                counter = m_Calculations.CalculateOverAll(dg_Engines, operation, counter);
             }
 
             DataGrid dg_Projectiles = null;
@@ -537,8 +522,7 @@ namespace X4_Editor
 
             if (dg_Projectiles.SelectedCells.Count > 0)
             {
-                int selectedCells = dg_Projectiles.SelectedCells.Count;
-                counter = this.CalculateOverAll(dg_Projectiles, operation, counter);
+                counter = m_Calculations.CalculateOverAll(dg_Projectiles, operation, counter);
             }
 
             DataGrid dg_Missiles = null;
@@ -546,8 +530,7 @@ namespace X4_Editor
 
             if (dg_Missiles.SelectedCells.Count > 0)
             {
-                int selectedCells = dg_Missiles.SelectedCells.Count;
-                counter = this.CalculateOverAll(dg_Missiles, operation, counter);
+                counter = m_Calculations.CalculateOverAll(dg_Missiles, operation, counter);
             }
 
             DataGrid dg_Ships = null;
@@ -555,8 +538,7 @@ namespace X4_Editor
 
             if (dg_Ships.SelectedCells.Count > 0)
             {
-                int selectedCells = dg_Ships.SelectedCells.Count;
-                counter = this.CalculateOverAll(dg_Ships, operation, counter);
+                counter = m_Calculations.CalculateOverAll(dg_Ships, operation, counter);
             }
 
             DataGrid dg_Wares = null;
@@ -564,640 +546,28 @@ namespace X4_Editor
 
             if (dg_Wares.SelectedCells.Count > 0)
             {
-                int selectedCells = dg_Wares.SelectedCells.Count;
-                counter = this.CalculateOverAll(dg_Wares, operation, counter);
+                counter = m_Calculations.CalculateOverAll(dg_Wares, operation, counter);
             }
 
-            //if (counter.outofrangecounter > 0 && (selectedCells != counter.successcounter))
-            //    MessageBox.Show(counter.successcounter + " values have been changed.\r " 
-            //        + (selectedCells - counter.successcounter) + " cells could not be changed\r" 
-            //        + counter.outofrangecounter + " values were out of range and have been set to default.", 
-            //        "Calculation Errors");
-            //else if (counter.outofrangecounter > 0 && selectedCells.Equals(counter.successcounter))
-            //    MessageBox.Show(counter.successcounter + " values have been changed.\r" +
-            //        +counter.outofrangecounter + " values were out of range and have been set to default.",
-            //        "Calculation Errors");
-            //else if (counter.outofrangecounter == 0 && !selectedCells.Equals(counter.successcounter))
-            //    MessageBox.Show(counter.successcounter + " values have been changed.\r" +
-            //        +(selectedCells - counter.successcounter) + " cells could not be changed.\r",
-            //        "Calculation Mixed Success");
-            //else
-            //    MessageBox.Show("All " + counter.successcounter + " values have been changed successfully.", "Calculation Success");
         }
 
-        private Counter CalculateOverAll(DataGrid dg, int operation, Counter counter)
-        {
-            foreach (DataGridCellInfo dataGridCell in dg.SelectedCells)
-            {
-                var shield = dataGridCell.Item as UIModelShield;
-                if (shield != null)
-                {
-                    if (dataGridCell.Column.DisplayIndex == 5)
-                    {
-                        shield.Max = (int)Calculate(operation, shield.Max);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 6)
-                    {
-                        shield.Rate = Calculate(operation, shield.Rate);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 7)
-                    {
-                        shield.Delay = Calculate(operation, shield.Delay);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 8)
-                    {
-                        shield.MaxHull = (int)Calculate(operation, shield.MaxHull);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 9)
-                    {
-                        shield.Threshold = Calculate(operation, shield.Threshold);
-                        counter.successcounter++;
-                    }
-                }
-
-                var engine = dataGridCell.Item as UIModelEngine;
-                if (engine != null)
-                {
-                    if (dataGridCell.Column.DisplayIndex == 5)
-                    {
-                        engine.Forward = Calculate(operation, engine.Forward);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 6)
-                    {
-                        engine.Reverse = Calculate(operation, engine.Reverse);
-                        counter.successcounter++;
-                    }
-
-                    if (dataGridCell.Column.DisplayIndex == 7)
-                    {
-                        engine.BoostThrust = Calculate(operation, engine.BoostThrust);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 8)
-                    {
-                        engine.BoostDuration = Calculate(operation, engine.BoostDuration);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 9)
-                    {
-                        engine.BoostAttack = Calculate(operation, engine.BoostAttack);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 10)
-                    {
-                        engine.BoostRelease = Calculate(operation, engine.BoostRelease);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 11)
-                    {
-                        engine.TravelThrust = Calculate(operation, engine.TravelThrust);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 12)
-                    {
-                        engine.TravelCharge = (int)Calculate(operation, engine.TravelCharge);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 13)
-                    {
-                        engine.TravelAttack = Calculate(operation, engine.TravelAttack);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 14)
-                    {
-                        engine.TravelRelease = Calculate(operation, engine.TravelRelease);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 15)
-                    {
-                        engine.Strafe = Calculate(operation, engine.Strafe);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 16)
-                    {
-                        engine.Yaw = Calculate(operation, engine.Yaw);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 17)
-                    {
-                        engine.Pitch = Calculate(operation, engine.Pitch);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 18)
-                    {
-                        engine.Roll = Calculate(operation, engine.Roll);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 19)
-                    {
-                        engine.AngularPitch = Calculate(operation, engine.AngularPitch);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 20)
-                    {
-                        engine.AngularRoll = Calculate(operation, engine.AngularRoll);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 21)
-                    {
-                        engine.MaxHull = (int)Calculate(operation, engine.MaxHull);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 22)
-                    {
-                        engine.Threshold = (int)Calculate(operation, engine.Threshold);
-                        counter.successcounter++;
-                    }
-                }
-
-                var projectile = dataGridCell.Item as UIModelProjectile;
-                if (projectile != null)
-                {
-                    if (dataGridCell.Column.DisplayIndex == 5)
-                    {
-                        projectile.Damage = Calculate(operation, projectile.Damage);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 6)
-                    {
-                        projectile.Shield = Calculate(operation, projectile.Shield);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 7)
-                    {
-                        projectile.Hull = Calculate(operation, projectile.Hull);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 8)
-                    {
-                        projectile.ReloadRate = Calculate(operation, projectile.ReloadRate);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 9)
-                    {
-                        projectile.ReloadTime = Calculate(operation, projectile.ReloadTime);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 10)
-                    {
-                        projectile.Amount = (int)Calculate(operation, projectile.Amount);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 11)
-                    {
-                        projectile.BarrelAmount = (int)Calculate(operation, projectile.BarrelAmount);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 13)
-                    {
-                        projectile.Range = (int)Calculate(operation, projectile.Range);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 14)
-                    {
-                        projectile.Speed = (int)Calculate(operation, projectile.Speed);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 15)
-                    {
-                        projectile.Lifetime = Calculate(operation, projectile.Lifetime);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 16)
-                    {
-                        projectile.ChargeTime = Calculate(operation, projectile.ChargeTime);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 17)
-                    {
-                        projectile.Ammunition = (int)Calculate(operation, projectile.Ammunition);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 18)
-                    {
-                        projectile.AmmunitionReload = Calculate(operation, projectile.AmmunitionReload);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 19)
-                    {
-                        projectile.Angle = Calculate(operation, projectile.Angle);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 20)
-                    {
-                        projectile.TimeDiff = Calculate(operation, projectile.TimeDiff);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 21)
-                    {
-                        projectile.MaxHits = (int)Calculate(operation, projectile.MaxHits);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 22)
-                    {
-                        projectile.Scale = Calculate(operation, projectile.Scale);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 23)
-                    {
-                        projectile.Ricochet = (int)Calculate(operation, projectile.Ricochet);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 24)
-                    {
-                        projectile.HeatValue = (int)Calculate(operation, projectile.HeatValue);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 25)
-                    {
-                        projectile.HeatInitial = (int)Calculate(operation, projectile.HeatInitial);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 26)
-                    {
-                        projectile.Repair = Calculate(operation, projectile.Repair);
-                        counter.successcounter++;
-                    }
-                }
-
-                var weapon = dataGridCell.Item as UIModelWeapon;
-                if (weapon != null)
-                {
-                    if (dataGridCell.Column.DisplayIndex == 5)
-                    {
-                        weapon.RotationSpeed = Calculate(operation, weapon.RotationSpeed);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 6)
-                    {
-                        weapon.RotationAcceleration = Calculate(operation, weapon.RotationAcceleration);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 7)
-                    {
-                        weapon.ReloadRate = Calculate(operation, weapon.ReloadRate);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 8)
-                    {
-                        weapon.ReloadTime = Calculate(operation, weapon.ReloadTime);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 9)
-                    {
-                        weapon.Overheat = (int)Calculate(operation, weapon.Overheat);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 10)
-                    {
-                        weapon.CoolDelay = Calculate(operation, weapon.CoolDelay);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 11)
-                    {
-                        weapon.CoolRate = (int)Calculate(operation, weapon.CoolRate);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 12)
-                    {
-                        weapon.Reenable = (int)Calculate(operation, weapon.Reenable);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 13)
-                    {
-                        weapon.HullMax = (int)Calculate(operation, weapon.HullMax);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 14)
-                    {
-                        weapon.HullThreshold = Calculate(operation, weapon.HullThreshold);
-                        counter.successcounter++;
-                    }
-   
-                }
-
-                var missile = dataGridCell.Item as UIModelMissile;
-                if (missile != null)
-                {
-                    if (dataGridCell.Column.DisplayIndex == 2)
-                    {
-                        missile.Damage = (int)Calculate(operation, missile.Damage);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 3)
-                    {
-                        missile.Reload = Calculate(operation, missile.Reload);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 5)
-                    {
-                        missile.Range = (int)Calculate(operation, missile.Range);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 6)
-                    {
-                        missile.Lifetime = Calculate(operation, missile.Lifetime);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 7)
-                    {
-                        missile.Forward = Calculate(operation, missile.Forward);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 8)
-                    {
-                        missile.Reverse = Calculate(operation, missile.Reverse);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 9)
-                    {
-                        missile.Guided = (int)Calculate(operation, missile.Guided);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 10)
-                    {
-                        missile.Swarm = (int)Calculate(operation, missile.Swarm);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 11)
-                    {
-                        missile.Retarget = (int)Calculate(operation, missile.Retarget);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 13)
-                    {
-                        missile.Hull = (int)Calculate(operation, missile.Hull);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 14)
-                    {
-                        missile.Ammunition = (int)Calculate(operation, missile.Ammunition);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 15)
-                    {
-                        missile.MissileAmount = (int)Calculate(operation, missile.MissileAmount);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 16)
-                    {
-                        missile.Mass = Calculate(operation, missile.Mass);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 17)
-                    {
-                        missile.Horizontal = Calculate(operation, missile.Horizontal);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 18)
-                    {
-                        missile.Vertical = Calculate(operation, missile.Vertical);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 19)
-                    {
-                        missile.Pitch = Calculate(operation, missile.Pitch);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 20)
-                    {
-                        missile.Yaw = Calculate(operation, missile.Yaw);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 21)
-                    {
-                        missile.Roll = Calculate(operation, missile.Roll);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 21)
-                    {
-                        missile.InertiaPitch = Calculate(operation, missile.InertiaPitch);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 22)
-                    {
-                        missile.InertiaYaw = Calculate(operation, missile.InertiaYaw);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 23)
-                    {
-                        missile.InertiaRoll = Calculate(operation, missile.InertiaRoll);
-                        counter.successcounter++;
-                    }
-                }
-
-                var ship = dataGridCell.Item as UIModelShip;
-                if (ship != null)
-                {
-                    if (dataGridCell.Column.DisplayIndex == 5)
-                    {
-                        ship.HullMax = (int)Calculate(operation, ship.HullMax);
-                        counter.successcounter++;
-                    }
-                    
-                    //if (dataGridCell.Column.DisplayIndex == 9)
-                    //{
-                    //    ship.Cargo.CargoMax = (int)Calculate(operation, ship.Cargo.CargoMax);
-                    //    counter.successcounter++;
-                    //}
-
-                    //if (dataGridCell.Column.DisplayIndex == 11)
-                    //{
-                    //    ship.StorageUnits = (int)Calculate(operation, ship.StorageUnits);
-                    //    counter.successcounter++;
-                    //}
-                    if (dataGridCell.Column.DisplayIndex == 12)
-                    {
-                        ship.StorageMissiles = (int)Calculate(operation, ship.StorageMissiles);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 13)
-                    {
-                        ship.People = (int)Calculate(operation, ship.People);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 14)
-                    {
-                        ship.ExplosionDamage = (int)Calculate(operation, ship.ExplosionDamage);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 15)
-                    {
-                        ship.Secrecy = (int)Calculate(operation, ship.Secrecy);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 16)
-                    {
-                        ship.GatherRrate = Calculate(operation, ship.GatherRrate);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 17)
-                    {
-                        ship.Mass = Calculate(operation, ship.Mass);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 18)
-                    {
-                        ship.Forward = Calculate(operation, ship.Forward);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 19)
-                    {
-                        ship.Reverse = Calculate(operation, ship.Reverse);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 20)
-                    {
-                        ship.Horizontal = Calculate(operation, ship.Horizontal);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 21)
-                    {
-                        ship.Vertical = Calculate(operation, ship.Vertical);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 22)
-                    {
-                        ship.Pitch = Calculate(operation, ship.Pitch);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 23)
-                    {
-                        ship.Yaw = Calculate(operation, ship.Yaw);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 24)
-                    {
-                        ship.Roll = Calculate(operation, ship.Roll);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 25)
-                    {
-                        ship.InertiaPitch = Calculate(operation, ship.InertiaPitch);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 26)
-                    {
-                        ship.InertiaYaw = Calculate(operation, ship.InertiaYaw);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 27)
-                    {
-                        ship.InertiaRoll = Calculate(operation, ship.InertiaRoll);
-                        counter.successcounter++;
-                    }
-                }
-
-                var ware = dataGridCell.Item as UIModelWare;
-                if (ware != null)
-                {
-                    if (dataGridCell.Column.DisplayIndex == 2)
-                    {
-                        ware.Min = (int)Calculate(operation, ware.Min);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 3)
-                    {
-                        ware.Avg = (int)Calculate(operation, ware.Avg);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 4)
-                    {
-                        ware.Max = (int)Calculate(operation, ware.Max);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 7)
-                    {
-                        ware.Amount = (int)Calculate(operation, ware.Amount);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 8)
-                    {
-                        ware.Time = (int)Calculate(operation, ware.Time);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 10)
-                    {
-                        ware.Amount1 = (int)Calculate(operation, ware.Amount1);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 12)
-                    {
-                        ware.Amount2 = (int)Calculate(operation, ware.Amount2);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 14)
-                    {
-                        ware.Amount3 = (int)Calculate(operation, ware.Amount3);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 16)
-                    {
-                        ware.Amount4 = (int)Calculate(operation, ware.Amount4);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 18)
-                    {
-                        ware.Amount5 = (int)Calculate(operation, ware.Amount5);
-                        counter.successcounter++;
-                    }
-                }
-
-            }
-
-            if (counter.successcounter > 0 && dg.SelectedCells.Count == counter.successcounter)
-                MessageBox.Show("All " + counter.successcounter + " values have been changed successfully.", "Calculation Success");
-            else if (counter.successcounter == 0)
-                MessageBox.Show("No cells could be changed. \rBe sure to select only cells you can use calculations on.", "Calculation Failed");
-            else if (counter.successcounter > 0 && dg.SelectedCells.Count != counter.successcounter)
-                MessageBox.Show("Only " + counter.successcounter + " of " + dg.SelectedCells.Count + " cells could be changed succesfully. \rBe sure to select only cells you can use calculations on.", "Calculation partially Success.");
-
-            return counter;
-        }
+        
         /// <summary>
         /// Calculation function
         /// </summary>
         /// <param name="operation">1 = addition, 2 = multiplication, 3 = substraction, 4 = set fixed value</param>
         /// <param name="param1">unit value</param>
-        private double Calculate(int operation, double param1)
-        {
-            switch (operation)
-            {
-                case 1:
-                    return param1 + this.UIModel.MathParameter;
-                case 2:
-                    return param1 * this.UIModel.MathParameter;
-                case 3:
-                    return param1 - this.UIModel.MathParameter;
-                case 4:
-                    return this.UIModel.MathParameter;
-                case 5:
-                    {
-                        if(this.UIModel.MathParameter > 0)
-                            return param1 / this.UIModel.MathParameter;
-                        return param1;
-                    }
-                default:
-                    return param1;
-            }
-        }
+        
         private void ExecuteMultiplyToValueCommand(object sender, ExecutedRoutedEventArgs e)
         {
             Counter counter = new Counter();
-            var check = Utility.ParseToDouble(this.UIModel.MathParameter.ToString());
 
             DataGrid dg_Shields = null;
             dg_Shields = this.MainWindow.DG_Shields;
 
             if (dg_Shields.SelectedCells.Count > 0)
             {
-                int selectedCells = dg_Shields.SelectedCells.Count;
-                counter = this.CalculateOverAll(dg_Shields, 2, counter);
+                counter = m_Calculations.CalculateOverAll(dg_Shields, 2, counter);
             }
 
             DataGrid dg_Engines = null;
@@ -1205,8 +575,7 @@ namespace X4_Editor
 
             if (dg_Engines.SelectedCells.Count > 0)
             {
-                int selectedCells = dg_Engines.SelectedCells.Count;
-                counter = this.CalculateOverAll(dg_Engines, 2, counter);
+                counter = m_Calculations.CalculateOverAll(dg_Engines, 2, counter);
             }
 
             DataGrid dg_Projectiles = null;
@@ -1214,8 +583,7 @@ namespace X4_Editor
 
             if (dg_Projectiles.SelectedCells.Count > 0)
             {
-                int selectedCells = dg_Projectiles.SelectedCells.Count;
-                counter = this.CalculateOverAll(dg_Projectiles, 2, counter);
+                counter = m_Calculations.CalculateOverAll(dg_Projectiles, 2, counter);
             }
 
             DataGrid dg_Missiles = null;
@@ -1223,8 +591,7 @@ namespace X4_Editor
 
             if (dg_Missiles.SelectedCells.Count > 0)
             {
-                int selectedCells = dg_Missiles.SelectedCells.Count;
-                counter = this.CalculateOverAll(dg_Missiles, 2, counter);
+                counter = m_Calculations.CalculateOverAll(dg_Missiles, 2, counter);
             }
 
             DataGrid dg_Ships = null;
@@ -1232,8 +599,7 @@ namespace X4_Editor
 
             if (dg_Ships.SelectedCells.Count > 0)
             {
-                int selectedCells = dg_Ships.SelectedCells.Count;
-                counter = this.CalculateOverAll(dg_Ships, 2, counter);
+                counter = m_Calculations.CalculateOverAll(dg_Ships, 2, counter);
             }
 
             DataGrid dg_Wares = null;
@@ -1241,13 +607,18 @@ namespace X4_Editor
 
             if (dg_Wares.SelectedCells.Count > 0)
             {
-                int selectedCells = dg_Wares.SelectedCells.Count;
-                counter = this.CalculateOverAll(dg_Wares, 2, counter);
+                counter = m_Calculations.CalculateOverAll(dg_Wares, 2, counter);
             }
         }
 
         private void ExecuteDivideFromValueCommand(object sender, ExecutedRoutedEventArgs e)
         {
+            if (this.UIModel.MathParameter == 0 || this.UIModel.MathParameter < 0)
+            {
+                MessageBox.Show("Please enter a value > '0'", "Invalid operation");
+                return;
+            }
+
             Counter counter = new Counter();
 
             DataGrid dg_Shields = null;
@@ -1255,7 +626,7 @@ namespace X4_Editor
 
             if (dg_Shields.SelectedCells.Count > 0)
             {
-                counter = this.CalculateOverAll(dg_Shields, 5, counter);
+                counter = m_Calculations.CalculateOverAll(dg_Shields, 5, counter);
             }
 
             DataGrid dg_Engines = null;
@@ -1263,7 +634,7 @@ namespace X4_Editor
 
             if (dg_Engines.SelectedCells.Count > 0)
             {
-                counter = this.CalculateOverAll(dg_Engines, 5, counter);
+                counter = m_Calculations.CalculateOverAll(dg_Engines, 5, counter);
             }
 
             DataGrid dg_Projectiles = null;
@@ -1271,7 +642,7 @@ namespace X4_Editor
 
             if (dg_Projectiles.SelectedCells.Count > 0)
             {
-                counter = this.CalculateOverAll(dg_Projectiles, 5, counter);
+                counter = m_Calculations.CalculateOverAll(dg_Projectiles, 5, counter);
             }
 
             DataGrid dg_Missiles = null;
@@ -1279,7 +650,7 @@ namespace X4_Editor
 
             if (dg_Missiles.SelectedCells.Count > 0)
             {
-                counter = this.CalculateOverAll(dg_Missiles, 5, counter);
+                counter = m_Calculations.CalculateOverAll(dg_Missiles, 5, counter);
             }
 
             DataGrid dg_Ships = null;
@@ -1287,7 +658,7 @@ namespace X4_Editor
 
             if (dg_Ships.SelectedCells.Count > 0)
             {
-                counter = this.CalculateOverAll(dg_Ships, 5, counter);
+                counter = m_Calculations.CalculateOverAll(dg_Ships, 5, counter);
             }
 
             DataGrid dg_Wares = null;
@@ -1295,22 +666,20 @@ namespace X4_Editor
 
             if (dg_Wares.SelectedCells.Count > 0)
             {
-                counter = this.CalculateOverAll(dg_Wares, 5, counter);
+                counter = m_Calculations.CalculateOverAll(dg_Wares, 5, counter);
             }
         }
 
         private void ExecuteSetFixedValueCommand(object sender, ExecutedRoutedEventArgs e)
         {
             Counter counter = new Counter();
-            var check = Utility.ParseToDouble(this.UIModel.MathParameter.ToString());
 
             DataGrid dg_Shields = null;
             dg_Shields = this.MainWindow.DG_Shields;
 
             if (dg_Shields.SelectedCells.Count > 0)
             {
-                int selectedCells = dg_Shields.SelectedCells.Count;
-                counter = this.CalculateOverAll(dg_Shields, 4, counter);
+                counter = m_Calculations.CalculateOverAll(dg_Shields, 4, counter);
             }
 
             DataGrid dg_Engines = null;
@@ -1318,8 +687,7 @@ namespace X4_Editor
 
             if (dg_Engines.SelectedCells.Count > 0)
             {
-                int selectedCells = dg_Engines.SelectedCells.Count;
-                counter = this.CalculateOverAll(dg_Engines, 4, counter);
+                counter = m_Calculations.CalculateOverAll(dg_Engines, 4, counter);
             }
 
             DataGrid dg_Projectiles = null;
@@ -1327,8 +695,7 @@ namespace X4_Editor
 
             if (dg_Projectiles.SelectedCells.Count > 0)
             {
-                int selectedCells = dg_Projectiles.SelectedCells.Count;
-                counter = this.CalculateOverAll(dg_Projectiles, 4, counter);
+                counter = m_Calculations.CalculateOverAll(dg_Projectiles, 4, counter);
             }
 
             DataGrid dg_Weapons = null;
@@ -1336,8 +703,7 @@ namespace X4_Editor
 
             if (dg_Weapons.SelectedCells.Count > 0)
             {
-                int selectedCells = dg_Weapons.SelectedCells.Count;
-                counter = this.CalculateOverAll(dg_Weapons, 4, counter);
+                counter = m_Calculations.CalculateOverAll(dg_Weapons, 4, counter);
             }
 
             DataGrid dg_Missiles = null;
@@ -1345,8 +711,7 @@ namespace X4_Editor
 
             if (dg_Missiles.SelectedCells.Count > 0)
             {
-                int selectedCells = dg_Missiles.SelectedCells.Count;
-                counter = this.CalculateOverAll(dg_Missiles, 4, counter);
+                counter = m_Calculations.CalculateOverAll(dg_Missiles, 4, counter);
             }
 
             DataGrid dg_Ships = null;
@@ -1354,8 +719,7 @@ namespace X4_Editor
 
             if (dg_Ships.SelectedCells.Count > 0)
             {
-                int selectedCells = dg_Ships.SelectedCells.Count;
-                counter = this.CalculateOverAll(dg_Ships, 4, counter);
+                counter = m_Calculations.CalculateOverAll(dg_Ships, 4, counter);
             }
 
             DataGrid dg_Wares = null;
@@ -1363,8 +727,7 @@ namespace X4_Editor
 
             if (dg_Wares.SelectedCells.Count > 0)
             {
-                int selectedCells = dg_Wares.SelectedCells.Count;
-                counter = this.CalculateOverAll(dg_Wares, 4, counter);
+                counter = m_Calculations.CalculateOverAll(dg_Wares, 4, counter);
             }
         }
 

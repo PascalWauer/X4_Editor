@@ -72,6 +72,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Helper\BindinProxy.cs" />
+    <Compile Include="Helper\Calculations.cs" />
     <Compile Include="Helper\Utility.cs" />
     <Compile Include="Helper\XmlHelper.cs" />
     <Compile Include="ReadWrite\ModFilesReader.cs" />
