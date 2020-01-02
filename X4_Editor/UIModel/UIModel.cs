@@ -330,6 +330,8 @@ namespace X4_Editor
             }
             set
             {
+                if (!Directory.Exists(value) && !string.IsNullOrEmpty(value))
+                    return;
                 m_Path = value;
                 NotifyPropertyChanged();
             }
@@ -346,6 +348,8 @@ namespace X4_Editor
             }
             set
             {
+                if (!Directory.Exists(value) && !string.IsNullOrEmpty(value))
+                    return;
                 m_ModPath1 = value;
                 NotifyPropertyChanged();
             }
@@ -362,6 +366,8 @@ namespace X4_Editor
             }
             set
             {
+                if (!Directory.Exists(value) && !string.IsNullOrEmpty(value))
+                    return;
                 m_ModPath2 = value;
                 NotifyPropertyChanged();
             }
@@ -378,6 +384,8 @@ namespace X4_Editor
             }
             set
             {
+                if (!Directory.Exists(value) && !string.IsNullOrEmpty(value))
+                    return;
                 m_ExportPath = value;
                 NotifyPropertyChanged();
             }

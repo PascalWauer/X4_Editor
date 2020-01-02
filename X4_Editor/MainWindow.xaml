@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:X4_Editor"
         mc:Ignorable="d"
-        Title="X4 Editor Main" Height="900" Width="1516" MinHeight="900" MinWidth="1516" Background="DarkGray">
+        Title="X4 Editor Main" Height="900" Width="1395" MinHeight="900" MinWidth="1395" Background="DarkGray">
     <Window.Resources>
         <Style x:Key="CustomCellStyle" TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
                 <Style.Triggers>
@@ -31,9 +31,10 @@
             <!--<RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>-->
         </Grid.RowDefinitions>
-        <Border BorderThickness="1" Width="1500" Margin="0,4,0,0" Height="94" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <Border BorderThickness="1" Margin="0,4,0,0" Height="94" HorizontalAlignment="Left" VerticalAlignment="Top">
             <Grid>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -45,45 +46,49 @@
                 <StackPanel Orientation="Vertical" Margin="4,4,0,0" VerticalAlignment="Top" Background="Gray" HorizontalAlignment="Left">
                     <StackPanel Orientation="Horizontal">
                         <TextBox Margin="4,6,2,0" Width="240" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="Orange" Text="{Binding Path, UpdateSourceTrigger=LostFocus}" ToolTip="The folder path to your extracted X4 folder"></TextBox>
-                        <Button Width="90" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Vanilla" Background="Orange" Command="{x:Static local:X4Commands.SelectFolderCommand}" ToolTip="Select the extracted X4 folder"></Button>
+                        <Button Width="80" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Vanilla" Background="Orange" Command="{x:Static local:X4Commands.SelectFolderCommand}" ToolTip="Select the extracted X4 folder"></Button>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <TextBox Margin="4,6,2,0" Width="240" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="LightGoldenrodYellow" Text="{Binding ModPath1, UpdateSourceTrigger=LostFocus}" ToolTip="The folder path to the first mod you want to import"></TextBox>
-                        <Button Width="90" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Mod 1" Background="LightGoldenrodYellow" Command="{x:Static local:X4Commands.SelectMod1FolderCommand}" ToolTip="Select mod 1 you want to imoport"></Button>
+                        <Button Width="80" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Mod 1" Background="LightGoldenrodYellow" Command="{x:Static local:X4Commands.SelectMod1FolderCommand}" ToolTip="Select mod 1 you want to imoport"></Button>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <TextBox Margin="4,6,2,6" Width="240" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="LightGoldenrodYellow" Text="{Binding ModPath2, UpdateSourceTrigger=LostFocus}" ToolTip="The folder path to the second mod you want to import"></TextBox>
-                        <Button Width="90" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Mod 2" Background="LightGoldenrodYellow" Command="{x:Static local:X4Commands.SelectMod2FolderCommand}" ToolTip="Select mod 2 you want to imoport"></Button>
+                        <Button Width="80" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Mod 2" Background="LightGoldenrodYellow" Command="{x:Static local:X4Commands.SelectMod2FolderCommand}" ToolTip="Select mod 2 you want to imoport"></Button>
                     </StackPanel>
 
                 </StackPanel>
 
+                <!-- Input files -->
                 <StackPanel Grid.Column="1" Orientation="Vertical" Margin="4,4,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Gray">
-                    <Button  Margin="0,6,0,0" Width="90" Height="20" Content="Read Vanilla" Command="{x:Static local:X4Commands.ReadAllVanillaFilesCommand}" Background="Orange"
+                    <Button  Margin="0,6,0,0" Width="70" Height="20" Content="Read Vanilla" Command="{x:Static local:X4Commands.ReadAllVanillaFilesCommand}" Background="Orange"
                             ToolTip="Reads all vanilla X4 files from the specific folder"></Button>
-                    <Button Margin="4,6" Width="90" Height="20" Content="Read Mod 1" Command="{x:Static local:X4Commands.ReadAllMod1FilesCommand}" Background="LightGoldenrodYellow"
+                    <Button Margin="4,6" Width="70" Height="20" Content="Read Mod 1" Command="{x:Static local:X4Commands.ReadAllMod1FilesCommand}" Background="LightGoldenrodYellow"
                             ToolTip="Reads all mod files from the specific mod folder"></Button>
-                    <Button Margin="4,0,4,6" Width="90" Height="20" Content="Read Mod 2" Command="{x:Static local:X4Commands.ReadAllMod2FilesCommand}" Background="LightGoldenrodYellow"
+                    <Button Margin="4,0,4,6" Width="70" Height="20" Content="Read Mod 2" Command="{x:Static local:X4Commands.ReadAllMod2FilesCommand}" Background="LightGoldenrodYellow"
                             ToolTip="Reads all mod files from the specific mod folder"></Button>
                 </StackPanel>
-
-                <StackPanel Grid.Column="2" Orientation="Vertical" Margin="4,4,0,4" VerticalAlignment="Top" Background="Gray" HorizontalAlignment="Left" Height="85" Visibility="Visible">
-                    <StackPanel Margin="0,4,0,0" Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBlock Text="Mass editing"></TextBlock>
+                
+                <!-- Mass calculations -->    
+                <StackPanel Grid.Column="2" Orientation="Vertical" Margin="4,4,0,0" VerticalAlignment="Top" Background="Gray" HorizontalAlignment="Left" Height="85" Visibility="Visible">
+                    <StackPanel Margin="0,6,0,0" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="Mass editing" Height="20"></TextBlock>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,34,0,0" Background="Transparent" HorizontalAlignment="Right"  VerticalAlignment="Bottom">
-                        <!--<Button Margin="4,0,4,0" HorizontalAlignment="Left" Content="i" Width="20" Height="20" ToolTip="Information" Click="OnInformationClick"></Button>-->
+                    <StackPanel Orientation="Horizontal" Margin="0,6,0,0" Background="Transparent" HorizontalAlignment="Left" VerticalAlignment="Bottom">
                         <TextBox x:Name="tb_MathParameter" Margin="4,0" TextAlignment="Right" Width="60" Height="20" Text="{Binding MathParameter, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" ToolTip="Parameter value for the specific operations multiply, addition substract or set"/>
-                        <Button Margin="2,4" Width="30" Height="20" Content="*" Command="{x:Static local:X4Commands.MultiplyToValueCommand}"
-                            ToolTip="Multiplies the value to all selected cells if possible."></Button>
-                        <Button Margin="2,4" Width="30" Height="20" Content="/" Command="{x:Static local:X4Commands.DivideFromValueCommand}"
-                            ToolTip="Divides the value to all selected cells if possible."></Button>
-                        <Button Margin="2,4" Width="30" Height="20" Content="+" Command="{x:Static local:X4Commands.AddToValueCommand}"
-                            ToolTip="Adds the value to all selected cells if possible."></Button>
-                        <Button Margin="2,4" Width="30" Height="20" Content="-" Command="{x:Static local:X4Commands.SubstractToValueCommand}"
-                            ToolTip="Substracts the value to all selected cells if possible."></Button>
-                        <Button Margin="2,4,4,4" Width="40" Height="20" Content="Set" Command="{x:Static local:X4Commands.SetFixedValueCommand}"
+                        <Button Margin="0,0,4,0" Width="60" Height="20" Content="Set" Command="{x:Static local:X4Commands.SetFixedValueCommand}"
                             ToolTip="Sets the fixed value to all selected cells if possible."></Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,6,0,0" Background="Transparent" HorizontalAlignment="Left"  VerticalAlignment="Bottom">
+                        <!--<Button Margin="4,0,4,0" HorizontalAlignment="Left" Content="i" Width="20" Height="20" ToolTip="Information" Click="OnInformationClick"></Button>-->
+                        <Button Margin="4,0,0,0" Width="28" Height="20" Content="*" Command="{x:Static local:X4Commands.MultiplyToValueCommand}"
+                            ToolTip="Multiplies the value to all selected cells if possible."></Button>
+                        <Button Margin="4,0,0,0" Width="28" Height="20" Content="/" Command="{x:Static local:X4Commands.DivideByValueCommand}"
+                            ToolTip="Divides the value of each selected cell by the parameter if possible."></Button>
+                        <Button Margin="4,0,0,0" Width="28" Height="20" Content="+" Command="{x:Static local:X4Commands.AddToValueCommand}"
+                            ToolTip="Adds the value to all selected cells if possible."></Button>
+                        <Button Margin="4,0,0,0" Width="28" Height="20" Content="-" Command="{x:Static local:X4Commands.SubstractFromValueCommand}"
+                            ToolTip="Substracts the value from all selected cells if possible."></Button>
                     </StackPanel>
                 </StackPanel>
 
@@ -96,8 +101,7 @@
                         <CheckBox Width="70" Margin="4,0,0,0" Height="20" Content="Ships" Background="Orange" IsChecked="{Binding Ships}" IsEnabled="{Binding UseFilters, UpdateSourceTrigger=LostFocus}"></CheckBox>
                         <CheckBox Width="70" Margin="4,0,0,0" Height="20" Content="Shields" Background="Bisque" IsChecked="{Binding Shields}" IsEnabled="{Binding UseFilters, UpdateSourceTrigger=LostFocus}"></CheckBox>
                         <CheckBox Width="70" Margin="4,0,0,0" Height="20" Content="Engines" Background="Bisque" IsChecked="{Binding Engines}" IsEnabled="{Binding UseFilters, UpdateSourceTrigger=LostFocus}"></CheckBox>
-                        <CheckBox Width="70" Margin="4,0,0,0" Height="20" Content="Weapons" Background="LightPink" IsChecked="{Binding Weapons}" IsEnabled="{Binding UseFilters, UpdateSourceTrigger=LostFocus}"></CheckBox>
-                        <CheckBox Width="60" Margin="4,0,0,0" Height="20" Content="Wares"  Background="LightBlue" IsChecked="{Binding Wares}" IsEnabled="{Binding UseFilters, UpdateSourceTrigger=LostFocus}" ToolTip="Disable to show only relevant wares for the filtered products"></CheckBox>
+                        <CheckBox Width="70" Margin="4,0,0,0" Height="20" Content="Weapons" Background="LightPink" IsChecked="{Binding Weapons}" IsEnabled="{Binding UseFilters, UpdateSourceTrigger=LostFocus}" ToolTip="Shows/hides all weapons including weapons, turrets, projectiles and missiles."></CheckBox>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="2,0,0,0" Height="20" Visibility="{Binding FBI}">
                         <CheckBox Width="35" Margin="4,0,0,0" Height="20" Content="S" IsChecked="{Binding Size_S}" IsEnabled="{Binding UseFilters, UpdateSourceTrigger=LostFocus}"></CheckBox>
@@ -105,27 +109,37 @@
                         <CheckBox Width="35" Margin="2,0,0,0" Height="20" Content="L" IsChecked="{Binding Size_L}" IsEnabled="{Binding UseFilters, UpdateSourceTrigger=LostFocus}"></CheckBox>
                         <CheckBox Width="35" Margin="2,0,0,0" Height="20" Content="XL" IsChecked="{Binding Size_XL}" IsEnabled="{Binding UseFilters, UpdateSourceTrigger=LostFocus}"></CheckBox>
                         <CheckBox Width="70" Margin="2,0,0,0" Height="20" Content="other" IsChecked="{Binding Size_Other}" IsEnabled="{Binding UseFilters, UpdateSourceTrigger=LostFocus}"></CheckBox>
-                        <!--<CheckBox Width="70" Margin="4,0,0,0" Height="20" Content="?" IsChecked="{Binding Lvl2}" IsEnabled="{Binding UseFilters, UpdateSourceTrigger=LostFocus}"></CheckBox>
-                        <CheckBox Width="70" Margin="4,0,0,0" Height="20" Content="?" IsChecked="{Binding Lvl2}" IsEnabled="{Binding UseFilters, UpdateSourceTrigger=LostFocus}"></CheckBox>-->
-                    </StackPanel>
+                        <CheckBox Width="70" Margin="4,0,0,0" Height="20" Content="All Wares"  Background="LightBlue" IsChecked="{Binding Wares}" IsEnabled="{Binding UseFilters, UpdateSourceTrigger=LostFocus}" ToolTip="Disable to show only relevant wares for the filtered products"></CheckBox>
+                   </StackPanel>
                     
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="0,-4,0,4" Height="24">
-                        <TextBox Margin="6,0,4,0" Width="290" Height="20" Text="{Binding SearchText}" ToolTip="Search for the specific text in the name. You can use blank as 'or'."/>
+                        <TextBox Margin="6,0,4,0" Width="238" Height="20" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" ToolTip="Search for the specific text in the name. You can use blank as 'or'.">
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Return" 
+                                            Command="{x:Static local:X4Commands.FilterCommand}"
+                                            CommandParameter="{Binding ElementName=MyTextBox, Path=Text}"/>
+                            </TextBox.InputBindings>
+                        </TextBox>
                         <Button x:Name="m_FilterUnits" Margin="0,0,4,0" Width="60" Height="20" Content="Filter" Command="{x:Static local:X4Commands.FilterCommand}" ToolTip="Filters the checked tables for the word inside the name. The MK value will be used for shields and engines only."></Button>
                     </StackPanel>
                 </StackPanel>
-
+                
+                <!-- Wares button -->
                 <Button Grid.Column="4" Margin="4,0,4,0" Width="80" Height="85" Content="Show Wares" Command="{x:Static local:X4Commands.ShowWaresWindowCommand}" Background="LightBlue"
                             ToolTip="Opens the wares table in a separate window"></Button>
-
-                <StackPanel Grid.Column="5" Orientation="Vertical" Margin="0,4,0,4" Height="84" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Gray" Visibility="Visible">
+                
+                <!-- Export -->
+                <StackPanel Grid.Column="5" Orientation="Horizontal" Margin="0,4,0,4" Height="84" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Gray" Visibility="Visible">
                     <StackPanel Orientation="Horizontal">
-                        <TextBox Margin="4,6,2,6" Width="240" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="LightGreen" Text="{Binding ExportPath}" ToolTip="The export folder"></TextBox>
-                        <Button Width="90" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Export" Background="LightGreen" Command="{x:Static local:X4Commands.SelectExportFolderCommand}"  ToolTip="Select the export folder"></Button>
+                        <TextBox Margin="4,6,2,6" Width="240" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="LightGreen" Text="{Binding ExportPath}" ToolTip="The export folder">
+                        </TextBox>
+                        <Button Width="80" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Export" Background="LightGreen" Command="{x:Static local:X4Commands.SelectExportFolderCommand}"  ToolTip="Select the export folder"></Button>
                     </StackPanel>
-                    <Button Margin="4,6,4,0"  Width="100" Height="20" Content="Create diff files" Command="{x:Static local:X4Commands.WriteAllChangedFilesCommand}" HorizontalAlignment="Center"
-                            ToolTip="Writes all changed files back to the original folders. All old data will be overwritten"></Button>
                 </StackPanel>
+                <Button Grid.Column="6" Margin="4,0,4,0" Width="80" Height="85" Command="{x:Static local:X4Commands.WriteAllChangedFilesCommand}" Background="LightGreen"
+                            ToolTip="Writes all changed files back to the original folders. All old data will be overwritten">
+                    <TextBlock TextWrapping="Wrap" TextAlignment="Center">Export Changes</TextBlock>
+                </Button>
             </Grid>
         </Border>
 
@@ -140,7 +154,7 @@
                           LoadingRow="DataGrid_LoadingRow" EnableColumnVirtualization="True" EnableRowVirtualization="True" SelectedCellsChanged="OnShipsSelected"
                           AlternatingRowBackground="Orange" SelectionUnit="Cell" CellStyle="{StaticResource CustomCellStyle}" MouseRightButtonDown="OnMainWindowCellRightClick">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Ship Name" Binding="{Binding Name}" Width="230" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
+                        <DataGridTextColumn Header="Ship ID" Binding="{Binding Name}" Width="230" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="IG Name" Binding="{Binding IGName}" Width="150" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
                         </DataGridTextColumn>
@@ -216,7 +230,7 @@
                           LoadingRow="DataGrid_LoadingRow" EnableColumnVirtualization="True" EnableRowVirtualization="True" SelectedCellsChanged="OnEnginesSelected"
                           AlternatingRowBackground="Bisque" SelectionUnit="Cell" CellStyle="{StaticResource CustomCellStyle}" MouseRightButtonDown="OnMainWindowCellRightClick">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Engine Name" Binding="{Binding Name}" Width="230" IsReadOnly="True" SortDirection="Descending" FontWeight="Bold">
+                        <DataGridTextColumn Header="Engine ID" Binding="{Binding Name}" Width="230" IsReadOnly="True" SortDirection="Descending" FontWeight="Bold">
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="IG Name" Binding="{Binding IGName}" Width="170" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
                         </DataGridTextColumn>
@@ -293,7 +307,7 @@
                           LoadingRow="DataGrid_LoadingRow" EnableColumnVirtualization="True" EnableRowVirtualization="True" SelectedCellsChanged="OnShieldsSelected"
                           AlternatingRowBackground="Bisque" SelectionUnit="Cell" CellStyle="{StaticResource CustomCellStyle}" MouseRightButtonDown="OnMainWindowCellRightClick">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Shield Name" Binding="{Binding Name}" Width="230" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
+                        <DataGridTextColumn Header="Shield ID" Binding="{Binding Name}" Width="230" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="IG Name" Binding="{Binding IGName}" Width="180" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
                         </DataGridTextColumn>
@@ -335,13 +349,13 @@
                         MouseDoubleClick="OnWeaponDoubleClick">
 
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Weapon Name" Binding="{Binding Name}" Width="210" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
+                        <DataGridTextColumn Header="Weapon/Turret ID" Binding="{Binding Name}" Width="210" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="IG Name" Binding="{Binding IGName}" Width="150" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Size" Binding="{Binding Size, UpdateSourceTrigger=LostFocus}" IsReadOnly="True" Width="30">
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Projectile" Binding="{Binding Projectile, UpdateSourceTrigger=LostFocus}" FontWeight="SemiBold" Width="180">
+                        <DataGridTextColumn Header="Projectile" Binding="{Binding Projectile, UpdateSourceTrigger=PropertyChanged}" FontWeight="SemiBold" Width="180" IsReadOnly="True">
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="MK" Binding="{Binding MK, UpdateSourceTrigger=LostFocus}" IsReadOnly="True" Width="30">
                         </DataGridTextColumn>
@@ -395,7 +409,7 @@
                           AlternatingRowBackground="LightPink" SelectionUnit="Cell" CellStyle="{StaticResource CustomCellStyle}" MouseRightButtonDown="OnMainWindowCellRightClick"
                            MouseDoubleClick="OnProjectileDoubleClick">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Projectle Name" Binding="{Binding Name}" Width="220" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
+                    <DataGridTextColumn Header="Projectle ID" Binding="{Binding Name}" Width="220" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="Size" Binding="{Binding Size, UpdateSourceTrigger=LostFocus}" IsReadOnly="True" Width="30">
                     </DataGridTextColumn>
@@ -461,7 +475,7 @@
                           AlternatingRowBackground="LightPink" SelectionUnit="Cell" CellStyle="{StaticResource CustomCellStyle}" MouseRightButtonDown="OnMainWindowCellRightClick">
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Missile Name" Binding="{Binding Name}" Width="220" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
+                    <DataGridTextColumn Header="Missile ID" Binding="{Binding Name}" Width="220" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="IG Name" Binding="{Binding IGName}" Width="150" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
                     </DataGridTextColumn>

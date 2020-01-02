@@ -459,7 +459,7 @@ namespace X4_Editor
                             }
                         }
                         // weapons
-                        if (dir.Contains("assets\\props\\WeaponSystems"))
+                        if (dir.Contains("assets\\props\\WeaponSystems\\") && dir.Contains("macros"))
                         {
                             List<string> files = new List<string>();
 
@@ -504,7 +504,7 @@ namespace X4_Editor
                                                         break;
                                                     }
 
-                                                    if (line.Contains("class") && line.Contains("bullet"))
+                                                    if (line.Contains("bullet") && line.Contains("@class"))
                                                     {
                                                         string value = line.Split('>')[1].Split('<')[0];
                                                         weapon.Projectile = value;
@@ -575,11 +575,20 @@ namespace X4_Editor
                                             }
                                             else
                                             {
-                                                parent.UIModel.UIModelWeapons.Add(m_XmlExtractor.ReadSingleWeapon(new FileInfo(file)));
-                                                parent.UIModel.UIModelWeaponsVanilla.Add(m_XmlExtractor.ReadSingleWeapon(new FileInfo(file)));
+                                                weapon = m_XmlExtractor.ReadSingleWeapon(new FileInfo(file));
+                                                parent.UIModel.UIModelWeapons.Add(weapon);
+                                                parent.UIModel.UIModelWeaponsVanilla.Add(weapon);
                                             }
                                         }
-
+                                        else
+                                        {
+                                            UIModelWeapon extractedWeapon = m_XmlExtractor.ReadSingleWeapon(new FileInfo(file));
+                                            if (extractedWeapon.Name.Length > 1)
+                                            {
+                                                parent.UIModel.UIModelWeapons.Add(extractedWeapon);
+                                                parent.UIModel.UIModelWeaponsVanilla.Add(extractedWeapon);
+                                            }
+                                        }
                                     }
                                 }
                                 catch (Exception ex)

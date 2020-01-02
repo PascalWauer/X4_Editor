@@ -74,7 +74,10 @@ namespace X4_Editor
         private string m_Projectile;
         public string Projectile
         {
-            get { return m_Projectile; }
+            get 
+            { 
+                return m_Projectile; 
+            }
             set
             {
                 m_Projectile = value;

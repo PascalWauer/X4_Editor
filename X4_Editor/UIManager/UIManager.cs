@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -74,9 +75,9 @@ namespace X4_Editor
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.WriteAllChangedFilesCommand, this.ExecuteWriteAllChangedFilesCommand));
             //MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.PackAllFilesCommand, this.ExecutePackAllFilesCommand));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.AddToValueCommand, this.ExecuteAddToValueCommand, CanExecuteCalculate));
-            MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.SubstractToValueCommand, this.ExecuteSubstractToValueCommand, CanExecuteCalculate));
+            MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.SubstractFromValueCommand, this.ExecuteSubstractFromValueCommand, CanExecuteCalculate));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.MultiplyToValueCommand, this.ExecuteMultiplyToValueCommand, CanExecuteCalculate));
-            MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.DivideFromValueCommand, this.ExecuteDivideFromValueCommand, CanExecuteCalculate));
+            MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.DivideByValueCommand, this.ExecuteDivideByValueCommand, CanExecuteCalculate));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.SetFixedValueCommand, this.ExecuteSetFixedValueCommand, CanExecuteCalculate));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.ShowWaresWindowCommand, this.ExecuteShowWaresWindowCommand));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.OnMainWindowCellRightClick, this.ExecuteOnMainWindowCellRightClick));
@@ -295,7 +296,7 @@ namespace X4_Editor
 
         #region calculations
 
-        private void ExecuteSubstractToValueCommand(object sender, ExecutedRoutedEventArgs e)
+        private void ExecuteSubstractFromValueCommand(object sender, ExecutedRoutedEventArgs e)
         {
             if (this.UIModel.MathParameter == 0)
             {
@@ -395,6 +396,14 @@ namespace X4_Editor
                 counter = m_Calculations.CalculateOverAll(dg_Engines, 2, counter);
             }
 
+            DataGrid dg_Weapons = null;
+            dg_Weapons = this.MainWindow.DG_Weapons;
+
+            if (dg_Weapons.SelectedCells.Count > 0)
+            {
+                counter = m_Calculations.CalculateOverAll(dg_Weapons, 2, counter);
+            }
+
             DataGrid dg_Projectiles = null;
             dg_Projectiles = this.MainWindow.DG_Projectiles;
 
@@ -428,7 +437,7 @@ namespace X4_Editor
             }
         }
 
-        private void ExecuteDivideFromValueCommand(object sender, ExecutedRoutedEventArgs e)
+        private void ExecuteDivideByValueCommand(object sender, ExecutedRoutedEventArgs e)
         {
             if (this.UIModel.MathParameter == 0 || this.UIModel.MathParameter < 0)
             {
@@ -452,6 +461,14 @@ namespace X4_Editor
             if (dg_Engines.SelectedCells.Count > 0)
             {
                 counter = m_Calculations.CalculateOverAll(dg_Engines, 5, counter);
+            }
+
+            DataGrid dg_Weapons = null;
+            dg_Weapons = this.MainWindow.DG_Weapons;
+
+            if (dg_Weapons.SelectedCells.Count > 0)
+            {
+                counter = m_Calculations.CalculateOverAll(dg_Weapons, 5, counter);
             }
 
             DataGrid dg_Projectiles = null;
@@ -554,10 +571,10 @@ namespace X4_Editor
         {
             if (!Directory.Exists(this.UIModel.ExportPath))
             {
-                MessageBox.Show("Enter a valid export folder", "No valid export folder");
+                MessageBox.Show("Enter a valid export folder", "No valid export folder", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            DialogResult result = (DialogResult)MessageBox.Show("Directory found. Do you want to write the mod files? Existing files in the export path will be overwritten.", "Write mod files to export path", System.Windows.MessageBoxButton.YesNo);
+            DialogResult result = (DialogResult)MessageBox.Show("Directory found. Do you want to write the mod files? Existing files in the export path will be overwritten.\r\r\rBe sure to have a backup of your mod files.", "Write mod files to export path", System.Windows.MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
             if (result == DialogResult.Yes)
             {
@@ -582,6 +599,13 @@ namespace X4_Editor
         }
         private void ExecuteReadAllVanillaFilesCommand(object sender, ExecutedRoutedEventArgs e)
         {
+            string folderPath = this.UIModel.Path.Replace(@"\\", @"\");
+            if (!Directory.Exists(folderPath))
+            {
+                MessageBox.Show("Enter a valid folder path for extracted vanilla files", "No valid folder", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             this.UIModel.UIModelProjectiles.Clear();
             this.UIModel.UIModelMissiles.Clear();
             this.UIModel.UIModelEngines.Clear();
@@ -592,13 +616,9 @@ namespace X4_Editor
             
             this.UIModel.AllWaresLoaded = false;
 
-            string folderPath = this.UIModel.Path.Replace(@"\\", @"\");
-
-            if (!Directory.Exists(folderPath))
-            {
-                MessageBox.Show("Enter a valid folder path for extracted vanilla files", "No valid folder");
-            }
+            
             string waresPath = folderPath + PathToWares;
+
             m_XmlExtractor.ReadAllWares(waresPath);
 
             string weaponsPath = folderPath + PathToProjectiles;

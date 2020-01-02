@@ -26,7 +26,7 @@
                           LoadingRow="DataGrid_LoadingRow" EnableColumnVirtualization="True" EnableRowVirtualization="True"
                           AlternatingRowBackground="LightBlue" SelectionUnit="Cell" CellStyle="{StaticResource CustomCellStyle}" MouseRightButtonDown="OnWaresWindowCellRightClick">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Ware Name" Binding="{Binding Name}" Width="200" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
+                    <DataGridTextColumn Header="Ware ID" Binding="{Binding Name}" Width="200" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="Size" Binding="{Binding Size, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Width="30">
                     </DataGridTextColumn>

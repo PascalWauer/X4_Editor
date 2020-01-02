@@ -361,47 +361,47 @@ namespace X4_Editor.Helper
                         missile.Retarget = (int)Calculate(operation, missile.Retarget, ref counter);
 
                     }
-                    if (dataGridCell.Column.DisplayIndex == 13)
+                    if (dataGridCell.Column.DisplayIndex == 12)
                     {
                         missile.Hull = (int)Calculate(operation, missile.Hull, ref counter);
 
                     }
-                    if (dataGridCell.Column.DisplayIndex == 14)
+                    if (dataGridCell.Column.DisplayIndex == 13)
                     {
                         missile.Ammunition = (int)Calculate(operation, missile.Ammunition, ref counter);
 
                     }
-                    if (dataGridCell.Column.DisplayIndex == 15)
+                    if (dataGridCell.Column.DisplayIndex == 14)
                     {
                         missile.MissileAmount = (int)Calculate(operation, missile.MissileAmount, ref counter);
 
                     }
-                    if (dataGridCell.Column.DisplayIndex == 16)
+                    if (dataGridCell.Column.DisplayIndex == 15)
                     {
                         missile.Mass = Calculate(operation, missile.Mass, ref counter);
 
                     }
-                    if (dataGridCell.Column.DisplayIndex == 17)
+                    if (dataGridCell.Column.DisplayIndex == 16)
                     {
                         missile.Horizontal = Calculate(operation, missile.Horizontal, ref counter);
 
                     }
-                    if (dataGridCell.Column.DisplayIndex == 18)
+                    if (dataGridCell.Column.DisplayIndex == 17)
                     {
                         missile.Vertical = Calculate(operation, missile.Vertical, ref counter);
 
                     }
-                    if (dataGridCell.Column.DisplayIndex == 19)
+                    if (dataGridCell.Column.DisplayIndex == 18)
                     {
                         missile.Pitch = Calculate(operation, missile.Pitch, ref counter);
 
                     }
-                    if (dataGridCell.Column.DisplayIndex == 20)
+                    if (dataGridCell.Column.DisplayIndex == 19)
                     {
                         missile.Yaw = Calculate(operation, missile.Yaw, ref counter);
 
                     }
-                    if (dataGridCell.Column.DisplayIndex == 21)
+                    if (dataGridCell.Column.DisplayIndex == 20)
                     {
                         missile.Roll = Calculate(operation, missile.Roll, ref counter);
 
@@ -571,11 +571,13 @@ namespace X4_Editor.Helper
             }
 
             if (counter.successcounter > 0 && dg.SelectedCells.Count == counter.successcounter)
-                MessageBox.Show("All " + counter.successcounter + " values have been changed successfully.", "Calculation Success");
+                MessageBox.Show("All " + counter.successcounter + " values have been changed successfully.", "Calculation Success", MessageBoxButton.OK, MessageBoxImage.None);
             else if (counter.successcounter == 0)
-                MessageBox.Show("No cells could be changed. \rBe sure to select only cells you can use calculations on.", "Calculation Failed");
+                MessageBox.Show("No cells could be changed. \rBe sure to select only cells you can use calculations on.", "Calculation Failed", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             else if (counter.successcounter > 0 && dg.SelectedCells.Count != counter.successcounter)
-                MessageBox.Show("Only " + counter.successcounter + " of " + dg.SelectedCells.Count + " cells could be changed succesfully. \rBe sure to select only cells you can use calculations on.", "Calculation partially Success.");
+            {
+                MessageBox.Show("Only " + counter.successcounter + " of " + dg.SelectedCells.Count + " cells could be changed succesfully. \rBe sure to select only cells you can use calculations on.", "Calculation partially Success.", MessageBoxButton.OK ,MessageBoxImage.Warning);
+            }
 
             return counter;
         }

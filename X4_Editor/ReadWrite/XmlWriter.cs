@@ -387,7 +387,7 @@ namespace X4_Editor
             if (fileswritten)
                 MessageBox.Show("Mod files have been created.");
             else
-                MessageBox.Show("No changes detected - no files written.");
+                MessageBox.Show("No changes detected - no files written.", "No Files written" , MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
         private void WriteWaresFile()
