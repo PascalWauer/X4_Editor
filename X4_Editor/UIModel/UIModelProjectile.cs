@@ -122,6 +122,7 @@ namespace X4_Editor
                 m_Speed = value;
                 Changed = true;
                 NotifyPropertyChanged();
+                NotifyPropertyChanged("EffectiveRange");
             }
         }
 
@@ -134,6 +135,7 @@ namespace X4_Editor
                 m_Range = value;
                 Changed = true;
                 NotifyPropertyChanged();
+                NotifyPropertyChanged("EffectiveRange");
             }
         }
 
@@ -142,7 +144,7 @@ namespace X4_Editor
             get 
             {
                 double effectiveRange = Lifetime * Speed;
-                if (Range == 0 || Range < effectiveRange)
+                if (Range == 0 || Range > effectiveRange)
                     return effectiveRange;
                 else
                     return Range;
@@ -158,6 +160,7 @@ namespace X4_Editor
                 m_Lifetime = value;
                 Changed = true;
                 NotifyPropertyChanged();
+                NotifyPropertyChanged("EffectiveRange");
             }
         }
 

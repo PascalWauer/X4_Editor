@@ -399,7 +399,7 @@
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="Size" Binding="{Binding Size, UpdateSourceTrigger=LostFocus}" IsReadOnly="True" Width="30">
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="DPS" Binding="{Binding DPS, Mode=OneWay, StringFormat={}{0:0.##}}" FontWeight="SemiBold" Width="45">
+                    <DataGridTextColumn Header="DPS" Binding="{Binding DPS, Mode=OneWay, StringFormat={}{0:0.##}}" FontWeight="SemiBold" Width="50">
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="DPS Shield" Binding="{Binding DPS_Shield, Mode=OneWay, StringFormat={}{0:0.##}}" FontWeight="SemiBold" Width="67">
                     </DataGridTextColumn>
@@ -419,7 +419,7 @@
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="Barrels" Binding="{Binding BarrelAmount, UpdateSourceTrigger=LostFocus}" Width="45">
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="EffRange" Binding="{Binding EffectiveRange, Mode=OneWay}"  Width="57">
+                    <DataGridTextColumn Header="EffRange" Binding="{Binding EffectiveRange, Mode=OneWay, StringFormat={}{0:#,#}}"  Width="57">
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="Range" Binding="{Binding Range, UpdateSourceTrigger=LostFocus}" FontWeight="SemiBold" Width="45">
                     </DataGridTextColumn>

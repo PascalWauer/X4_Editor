@@ -599,7 +599,7 @@ namespace X4_Editor.Helper
                     {
                         if (parent.UIModel.MathParameter > 0)
                         {
-
+                            counter.successcounter++;
                             return param1 / parent.UIModel.MathParameter;
                         }
                         return param1;

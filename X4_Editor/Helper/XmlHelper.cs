@@ -13,7 +13,7 @@ namespace X4_Editor
         public static XElement ToXElement(this XmlNode node)
         {
             XDocument xDoc = new XDocument();
-            using (XmlWriter xmlWriter = xDoc.CreateWriter())
+            using (System.Xml.XmlWriter xmlWriter = xDoc.CreateWriter())
                 node.WriteTo(xmlWriter);
             return xDoc.Root;
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -188,7 +189,7 @@ namespace X4_Editor
 
                                 foreach (XmlNode item in wareNodes)
                                 {
-                                    if( item.Attributes["sel"] != null)
+                                    if (item.Attributes["sel"] != null)
                                     {
                                         string wareSel = item.Attributes["sel"].Value;
                                         string wareID = wareSel.Split('\'')[1];
@@ -244,7 +245,7 @@ namespace X4_Editor
                 }
                 m_UIManager.UIModel.AllWaresLoaded = true;
                 m_UIManager.UIModel.CalculateWarePrices();
-                foreach(var item in m_UIManager.UIModel.UIModelWares)
+                foreach (var item in m_UIManager.UIModel.UIModelWares)
                 {
                     item.Changed = false;
                 }
@@ -656,7 +657,7 @@ namespace X4_Editor
             return uiModelShield;
         }
 
-        
+
 
         public UIModelWeapon ReadSingleWeapon(FileInfo xmlWeaponFileInfo)
         {
@@ -689,7 +690,7 @@ namespace X4_Editor
 
                             uiModelWeapon.File = xmlWeaponFileInfo.FullName;
                             uiModelWeapon.Name = weaponMacroNode[0].Attributes["name"].Value;
-                            
+
                             if (weaponBulletNode.Count > 0)
                             {
                                 if (weaponBulletNode[0].Attributes["class"] != null)
@@ -741,7 +742,7 @@ namespace X4_Editor
                                     uiModelWeapon.HullThreshold = Utility.ParseToDouble(weaponHullNode[0].Attributes["threshold"].Value);
                             }
                             uiModelWeapon.Changed = false;
-                            
+
                             //m_UIManager.UIModel.UIModelWeapons.Add(uiModelWeapon);
                         }
                     }
@@ -1001,7 +1002,7 @@ namespace X4_Editor
 
                             if (NoUniqueNameIds.Length > 0)
                                 MessageBox.Show(NoUniqueNameIds);
-                        }  
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -1020,7 +1021,7 @@ namespace X4_Editor
                     {
                         XDocument doc = XDocument.Load(ComponentPath);
                         if (doc.Descendants().Where(x => x.Name.LocalName == "components").ToList().Count > 0)
-                        { 
+                        {
                             List<XElement> components = doc.Descendants().Where(x => x.Name.LocalName == "components").ToList();
                             List<XElement> Connections = components.Descendants().Where(x => x.Name.LocalName == "connection").ToList();
                             List<string> Names = new List<string>();
@@ -1045,7 +1046,7 @@ namespace X4_Editor
                             }
                         }
                     }
-                    
+
                 }
                 catch (Exception ex)
                 {
@@ -1124,7 +1125,7 @@ namespace X4_Editor
 
         private static void NewMethod(FileInfo file, ref int shields_S, ref int shields_M, ref int shields_L, ref int shields_XL, ref int turrets_M, ref int turrets_L, ref int weapons_S, ref int weapons_M, ref int weapons_L, List<XElement> additions)
         {
-            
+
         }
 
         private string AddIfNotNull(int inputAmount, string inputType)
@@ -1182,7 +1183,7 @@ namespace X4_Editor
                     page = nodepage.Attributes["id"].Value.ToString();
                     textId = nodetext.Attributes["id"].Value.ToString();
                     id = "{" + page + "," + textId + "}";
-                    IGName = nodetext.InnerText.Split('{')[0].Replace("(", "").Replace(")","").Replace(@"\", "");
+                    IGName = nodetext.InnerText.Split('{')[0].Replace("(", "").Replace(")", "").Replace(@"\", "");
                     if (!dictionary.ContainsKey(id))
                         dictionary.Add(id, IGName);
                     else
@@ -1191,6 +1192,7 @@ namespace X4_Editor
             }
             return dictionary;
         }
+        
     }
 }
 

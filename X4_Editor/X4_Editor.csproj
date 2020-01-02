@@ -76,6 +76,8 @@
     <Compile Include="Helper\Utility.cs" />
     <Compile Include="Helper\XmlHelper.cs" />
     <Compile Include="ReadWrite\ModFilesReader.cs" />
+    <Compile Include="ReadWrite\ReadWriteConfig.cs" />
+    <Compile Include="ReadWrite\XmlWriter.cs" />
     <Compile Include="UIManager\UIManager.cs" />
     <Compile Include="UIModel\UIModelEngine.cs" />
     <Compile Include="UIModel\UIModelShipCargo.cs" />

@@ -483,28 +483,19 @@ namespace X4_Editor
         public void SetFilters()
         {
                 m_ShieldsDataView.Filter = this.FilterShieldsData;
-
                 m_EnginesDataView.Filter = this.FilterEnginesData;
-
                 m_ProjectilesDataView.Filter = this.FilterProjectilesData;
                 m_MissilesDataView.Filter = this.FilterMissilesData;
-
                 m_ShipsDataView.Filter = this.FilterShipsData;
-
                 m_WaresDataView.Filter = this.FilterWaresData;
-
                 m_WeaponsDataView.Filter = this.FilterTurretsData;
-
         }
-
-
         private bool FilterShieldsData(object item)
         {
             if (!Shields)
                 return false;
 
             UIModelShield shield = item as UIModelShield;
-
             List<string> searchArray = new List<string>();
 
             if ((Size_S && shield.Size == "S") || (m_Size_M && shield.Size == "M") || (m_Size_L && shield.Size == "L") || (m_Size_XL && shield.Size == "XL") || (m_Size_Other && (shield.Size != "S" && shield.Size != "M" && shield.Size != "L" && shield.Size != "XL" )))
@@ -530,17 +521,14 @@ namespace X4_Editor
                     }
                     return found;
                 }
-
                 return true;
             }
             return false;
-            
         }
 
         private bool FilterSpecificProjectile(object item)
         {
             UIModelProjectile projectile = item as UIModelProjectile;
-
             List<string> searchArray = new List<string>();
 
             bool found = false;
@@ -562,7 +550,6 @@ namespace X4_Editor
         private bool FilterSpecificWeapon(object item)
         {
             UIModelWeapon weapon = item as UIModelWeapon;
-
             List<string> searchArray = new List<string>();
 
             bool found = false;
@@ -583,7 +570,6 @@ namespace X4_Editor
                 return false;
 
             UIModelWeapon weapon = item as UIModelWeapon;
-
             List<string> searchArray = new List<string>();
 
             if ((Size_S && weapon.Size == "S") || (m_Size_M && weapon.Size == "M") || (m_Size_L && weapon.Size == "L") || (m_Size_XL && weapon.Size == "XL") || (m_Size_Other && (weapon.Size != "S" && weapon.Size != "M" && weapon.Size != "L" && weapon.Size != "XL")))
@@ -608,11 +594,9 @@ namespace X4_Editor
                     }
                     return found;
                 }
-
                 return true;
             }
             return false;
-
         }
 
         private bool FilterEnginesData(object item)
@@ -624,7 +608,6 @@ namespace X4_Editor
 
             if ((Size_S && engine.Size == "S") || (m_Size_M && engine.Size == "M") || (m_Size_L && engine.Size == "L") || (m_Size_XL && engine.Size == "XL") || (m_Size_Other && (engine.Size != "S" && engine.Size != "M" && engine.Size != "L" && engine.Size != "XL")))
             {
-
                 List<string> searchArray = new List<string>();
                 if (this.SearchText != null && this.SearchText.Length > 0)
                 {
@@ -646,7 +629,6 @@ namespace X4_Editor
                     }
                     return found;
                 }
-
                 return true;
             }
             return false;
@@ -693,8 +675,8 @@ namespace X4_Editor
                 return false;
 
             UIModelMissile missile = item as UIModelMissile;
-
             List<string> searchArray = new List<string>();
+
             if (this.SearchText != null && this.SearchText.Length > 0)
             {
                 searchArray = this.SearchText.Split(' ').ToList();
@@ -707,7 +689,6 @@ namespace X4_Editor
                 {
                     if (searchString.Length > 0)
                     {
-
                         if (missile.Name.ToUpper().Contains(searchString.ToUpper()))
                         {
                             found = true;
@@ -741,7 +722,6 @@ namespace X4_Editor
                     {
                         if (searchString.Length > 0)
                         {
-
                             if (ship.Name.ToUpper().Contains(searchString.ToUpper()) || ship.IGName.ToUpper().Contains(searchString.ToUpper()))
                             {
                                 found = true;
@@ -762,7 +742,6 @@ namespace X4_Editor
             {
                 if ((Size_S && ware.Size == "S") || (m_Size_M && ware.Size == "M") || (m_Size_L && ware.Size == "L") || (m_Size_XL && ware.Size == "XL") || (m_Size_Other && (ware.Size != "S" && ware.Size != "M" && ware.Size != "L" && ware.Size != "XL")))
                 {
-
                     List<string> searchArray = new List<string>();
                     if (this.SearchText != null && this.SearchText.Length > 0)
                     {
@@ -776,7 +755,6 @@ namespace X4_Editor
                         {
                             if (searchString.Length > 0)
                             {
-
                                 if (ware.Name.ToUpper().Contains(searchString.ToUpper()))
                                 {
                                     found = true;
@@ -835,7 +813,6 @@ namespace X4_Editor
                     if (missile != null && missile.Name.Contains(ware.Name))
                         return true;
                 }
-                
                 return found;
             }
         }
@@ -874,9 +851,7 @@ namespace X4_Editor
                     }
                     item.Update();
                 }
-               
             }
-
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
