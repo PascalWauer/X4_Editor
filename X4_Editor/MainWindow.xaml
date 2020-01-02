@@ -44,15 +44,15 @@
 
                 <StackPanel Orientation="Vertical" Margin="4,4,0,0" VerticalAlignment="Top" Background="Gray" HorizontalAlignment="Left">
                     <StackPanel Orientation="Horizontal">
-                        <TextBox Margin="4,6,2,0" Width="240" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="Orange" Text="{Binding Path}" ToolTip="The folder path to your extracted X4 folder"></TextBox>
+                        <TextBox Margin="4,6,2,0" Width="240" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="Orange" Text="{Binding Path, UpdateSourceTrigger=LostFocus}" ToolTip="The folder path to your extracted X4 folder"></TextBox>
                         <Button Width="90" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Vanilla" Background="Orange" Command="{x:Static local:X4Commands.SelectFolderCommand}" ToolTip="Select the extracted X4 folder"></Button>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <TextBox Margin="4,6,2,0" Width="240" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="LightGoldenrodYellow" Text="{Binding ModPath1}" ToolTip="The folder path to the first mod you want to import"></TextBox>
+                        <TextBox Margin="4,6,2,0" Width="240" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="LightGoldenrodYellow" Text="{Binding ModPath1, UpdateSourceTrigger=LostFocus}" ToolTip="The folder path to the first mod you want to import"></TextBox>
                         <Button Width="90" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Mod 1" Background="LightGoldenrodYellow" Command="{x:Static local:X4Commands.SelectMod1FolderCommand}" ToolTip="Select mod 1 you want to imoport"></Button>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <TextBox Margin="4,6,2,6" Width="240" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="LightGoldenrodYellow" Text="{Binding ModPath2}" ToolTip="The folder path to the second mod you want to import"></TextBox>
+                        <TextBox Margin="4,6,2,6" Width="240" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="LightGoldenrodYellow" Text="{Binding ModPath2, UpdateSourceTrigger=LostFocus}" ToolTip="The folder path to the second mod you want to import"></TextBox>
                         <Button Width="90" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Mod 2" Background="LightGoldenrodYellow" Command="{x:Static local:X4Commands.SelectMod2FolderCommand}" ToolTip="Select mod 2 you want to imoport"></Button>
                     </StackPanel>
 
@@ -74,11 +74,13 @@
                     <StackPanel Orientation="Horizontal" Margin="0,34,0,0" Background="Transparent" HorizontalAlignment="Right"  VerticalAlignment="Bottom">
                         <!--<Button Margin="4,0,4,0" HorizontalAlignment="Left" Content="i" Width="20" Height="20" ToolTip="Information" Click="OnInformationClick"></Button>-->
                         <TextBox x:Name="tb_MathParameter" Margin="4,0" TextAlignment="Right" Width="60" Height="20" Text="{Binding MathParameter, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" ToolTip="Parameter value for the specific operations multiply, addition substract or set"/>
-                        <Button Margin="2,4" Width="40" Height="20" Content="Mult" Command="{x:Static local:X4Commands.MultiplyToValueCommand}"
+                        <Button Margin="2,4" Width="30" Height="20" Content="*" Command="{x:Static local:X4Commands.MultiplyToValueCommand}"
                             ToolTip="Multiplies the value to all selected cells if possible."></Button>
-                        <Button Margin="2,4" Width="40" Height="20" Content="Add" Command="{x:Static local:X4Commands.AddToValueCommand}"
+                        <Button Margin="2,4" Width="30" Height="20" Content="/" Command="{x:Static local:X4Commands.DivideFromValueCommand}"
+                            ToolTip="Divides the value to all selected cells if possible."></Button>
+                        <Button Margin="2,4" Width="30" Height="20" Content="+" Command="{x:Static local:X4Commands.AddToValueCommand}"
                             ToolTip="Adds the value to all selected cells if possible."></Button>
-                        <Button Margin="2,4" Width="40" Height="20" Content="Sub" Command="{x:Static local:X4Commands.SubstractToValueCommand}"
+                        <Button Margin="2,4" Width="30" Height="20" Content="-" Command="{x:Static local:X4Commands.SubstractToValueCommand}"
                             ToolTip="Substracts the value to all selected cells if possible."></Button>
                         <Button Margin="2,4,4,4" Width="40" Height="20" Content="Set" Command="{x:Static local:X4Commands.SetFixedValueCommand}"
                             ToolTip="Sets the fixed value to all selected cells if possible."></Button>
@@ -148,19 +150,19 @@
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Type" Binding="{Binding Type, UpdateSourceTrigger=LostFocus}" IsReadOnly="True" Width="80">
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Hull" Binding="{Binding HullMax, UpdateSourceTrigger=LostFocus}" FontWeight="SemiBold" Width="50">
+                        <DataGridTextColumn Header="Hull" Binding="{Binding HullMax, UpdateSourceTrigger=LostFocus, StringFormat={}{0:#,0}}" FontWeight="SemiBold" Width="55">
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Shields" Binding="{Binding Shields, Mode=OneWay}" FontWeight="Normal" Width="50">
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Turrets" Binding="{Binding Turrets, Mode=OneWay}" FontWeight="Normal" Width="55">
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Weapons" Binding="{Binding Weapons, Mode=OneWay}" FontWeight="Normal" Width="45">
+                        <DataGridTextColumn Header="Weapons" Binding="{Binding Weapons, Mode=OneWay}" FontWeight="Normal" Width="55">
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Cargo" Binding="{Binding Cargo.CargoMax, UpdateSourceTrigger=LostFocus}" FontWeight="SemiBold" Width="50">
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Type" Binding="{Binding Cargo.CargoTags, UpdateSourceTrigger=LostFocus}" FontWeight="SemiBold" Width="60">
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Storage" Binding="{Binding StorageUnits, UpdateSourceTrigger=LostFocus}" Width="50">
+                        <DataGridTextColumn Header="Units" Binding="{Binding StorageUnits, UpdateSourceTrigger=LostFocus}" Width="40">
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Missiles" Binding="{Binding StorageMissiles, UpdateSourceTrigger=LostFocus}" Width="50">
                         </DataGridTextColumn>
@@ -168,7 +170,7 @@
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Explosion" Binding="{Binding ExplosionDamage, UpdateSourceTrigger=LostFocus}" Width="60">
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Secrecy" Binding="{Binding Secrecy, UpdateSourceTrigger=LostFocus}" Width="60">
+                        <DataGridTextColumn Header="Secrecy" Binding="{Binding Secrecy, UpdateSourceTrigger=LostFocus}" Width="50">
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Gather" Binding="{Binding GatherRrate, UpdateSourceTrigger=LostFocus}" Width="50">
                         </DataGridTextColumn>
@@ -397,47 +399,55 @@
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="Size" Binding="{Binding Size, UpdateSourceTrigger=LostFocus}" IsReadOnly="True" Width="30">
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Damage" Binding="{Binding Damage, UpdateSourceTrigger=LostFocus}" FontWeight="SemiBold" Width="60">
-                    </DataGridTextColumn>
-                    <DataGridTextColumn Header="ReloadRate" Binding="{Binding ReloadRate, UpdateSourceTrigger=LostFocus}" Width="70">
-                    </DataGridTextColumn>
-                    <DataGridTextColumn Header="ReloadTime" Binding="{Binding ReloadTime, UpdateSourceTrigger=LostFocus}" Width="75">
-                    </DataGridTextColumn>
                     <DataGridTextColumn Header="DPS" Binding="{Binding DPS, Mode=OneWay, StringFormat={}{0:0.##}}" FontWeight="SemiBold" Width="45">
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Shield" Binding="{Binding Shield, UpdateSourceTrigger=LostFocus}" FontWeight="SemiBold" Width="50">
+                    <DataGridTextColumn Header="DPS Shield" Binding="{Binding DPS_Shield, Mode=OneWay, StringFormat={}{0:0.##}}" FontWeight="SemiBold" Width="67">
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="DPS Shield" Binding="{Binding DPS_Shield, Mode=OneWay, StringFormat={}{0:0.##}}" FontWeight="SemiBold" Width="70">
+                    <DataGridTextColumn Header="DPS Hull" Binding="{Binding DPS_Hull, Mode=OneWay, StringFormat={}{0:0.##}}" FontWeight="SemiBold" Width="55">
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Amount" Binding="{Binding Amount, UpdateSourceTrigger=LostFocus}" Width="60">
+                    <DataGridTextColumn Header="Damage" Binding="{Binding Damage, UpdateSourceTrigger=LostFocus}" FontWeight="SemiBold" Width="55">
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Speed" Binding="{Binding Speed, UpdateSourceTrigger=LostFocus}" FontWeight="SemiBold" Width="50">
+                    <DataGridTextColumn Header="Shield" Binding="{Binding Shield, UpdateSourceTrigger=LostFocus}" FontWeight="SemiBold" Width="45">
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Range" Binding="{Binding Range, UpdateSourceTrigger=LostFocus}" FontWeight="SemiBold" Width="50">
+                    <DataGridTextColumn Header="Hull" Binding="{Binding Hull, UpdateSourceTrigger=LostFocus}" FontWeight="SemiBold" Width="32">
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Lifetime" Binding="{Binding Lifetime, UpdateSourceTrigger=LostFocus}" Width="60">
+                    <DataGridTextColumn Header="FireRate" Binding="{Binding ReloadRate, UpdateSourceTrigger=LostFocus}" Width="55">
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Charge" Binding="{Binding ChargeTime, UpdateSourceTrigger=LostFocus}" Width="50">
+                    <DataGridTextColumn Header="ReloadTime" Binding="{Binding ReloadTime, UpdateSourceTrigger=LostFocus}" Width="72">
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Ammunition" Binding="{Binding Ammunition, UpdateSourceTrigger=LostFocus}" Width="70">
+                    <DataGridTextColumn Header="Amount" Binding="{Binding Amount, UpdateSourceTrigger=LostFocus}" Width="55">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Barrels" Binding="{Binding BarrelAmount, UpdateSourceTrigger=LostFocus}" Width="45">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="EffRange" Binding="{Binding EffectiveRange, Mode=OneWay}"  Width="57">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Range" Binding="{Binding Range, UpdateSourceTrigger=LostFocus}" FontWeight="SemiBold" Width="45">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Speed" Binding="{Binding Speed, UpdateSourceTrigger=LostFocus}" FontWeight="SemiBold" Width="45">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Lifetime" Binding="{Binding Lifetime, UpdateSourceTrigger=LostFocus}" Width="55">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Charge" Binding="{Binding ChargeTime, UpdateSourceTrigger=LostFocus}" Width="48">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Ammunition" Binding="{Binding Ammunition, UpdateSourceTrigger=LostFocus}" Width="75">
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="AmmunReload" Binding="{Binding AmmunitionReload, UpdateSourceTrigger=LostFocus}" Width="90">
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Angle" Binding="{Binding Angle, UpdateSourceTrigger=LostFocus}" Width="50">
+                    <DataGridTextColumn Header="Angle" Binding="{Binding Angle, UpdateSourceTrigger=LostFocus}" Width="40">
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="TimeDiff" Binding="{Binding TimeDiff, UpdateSourceTrigger=LostFocus}" Width="60">
+                    <DataGridTextColumn Header="TimeDiff" Binding="{Binding TimeDiff, UpdateSourceTrigger=LostFocus}" Width="55">
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="MaxHits" Binding="{Binding MaxHits, UpdateSourceTrigger=LostFocus}" Width="60">
+                    <DataGridTextColumn Header="MaxHits" Binding="{Binding MaxHits, UpdateSourceTrigger=LostFocus}" Width="52">
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Scale" Binding="{Binding Scale, UpdateSourceTrigger=LostFocus}" Width="50">
+                    <DataGridTextColumn Header="Scale" Binding="{Binding Scale, UpdateSourceTrigger=LostFocus}" Width="38">
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Ricochet" Binding="{Binding Ricochet, UpdateSourceTrigger=LostFocus}" Width="60">
+                    <DataGridTextColumn Header="Ricochet" Binding="{Binding Ricochet, UpdateSourceTrigger=LostFocus}" Width="55">
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="HeatValue" Binding="{Binding HeatValue, UpdateSourceTrigger=LostFocus}" Width="70">
+                    <DataGridTextColumn Header="HeatValue" Binding="{Binding HeatValue, UpdateSourceTrigger=LostFocus}" Width="65">
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="HeatInitial" Binding="{Binding HeatInitial, UpdateSourceTrigger=LostFocus}" Width="70">
+                    <DataGridTextColumn Header="HeatInitial" Binding="{Binding HeatInitial, UpdateSourceTrigger=LostFocus}" Width="65">
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Repair" Binding="{Binding Repair, UpdateSourceTrigger=LostFocus}" Width="50">
+                    <DataGridTextColumn Header="Repair" Binding="{Binding Repair, UpdateSourceTrigger=LostFocus}" Width="45">
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="Projectle Name" Binding="{Binding Name}" Width="190" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
                     </DataGridTextColumn>

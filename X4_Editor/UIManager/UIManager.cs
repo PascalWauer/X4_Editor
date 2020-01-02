@@ -76,6 +76,7 @@ namespace X4_Editor
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.AddToValueCommand, this.ExecuteAddToValueCommand, CanExecuteCalculate));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.SubstractToValueCommand, this.ExecuteSubstractToValueCommand, CanExecuteCalculate));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.MultiplyToValueCommand, this.ExecuteMultiplyToValueCommand, CanExecuteCalculate));
+            MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.DivideFromValueCommand, this.ExecuteDivideFromValueCommand, CanExecuteCalculate));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.SetFixedValueCommand, this.ExecuteSetFixedValueCommand, CanExecuteCalculate));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.ShowWaresWindowCommand, this.ExecuteShowWaresWindowCommand));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.OnMainWindowCellRightClick, this.ExecuteOnMainWindowCellRightClick));
@@ -717,19 +718,9 @@ namespace X4_Editor
                 var projectile = dataGridCell.Item as UIModelProjectile;
                 if (projectile != null)
                 {
-                    if (dataGridCell.Column.DisplayIndex == 2)
+                    if (dataGridCell.Column.DisplayIndex == 5)
                     {
                         projectile.Damage = Calculate(operation, projectile.Damage);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 3)
-                    {
-                        projectile.ReloadRate = Calculate(operation, projectile.ReloadRate);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 4)
-                    {
-                        projectile.ReloadTime = Calculate(operation, projectile.ReloadTime);
                         counter.successcounter++;
                     }
                     if (dataGridCell.Column.DisplayIndex == 6)
@@ -737,77 +728,97 @@ namespace X4_Editor
                         projectile.Shield = Calculate(operation, projectile.Shield);
                         counter.successcounter++;
                     }
+                    if (dataGridCell.Column.DisplayIndex == 7)
+                    {
+                        projectile.Hull = Calculate(operation, projectile.Hull);
+                        counter.successcounter++;
+                    }
                     if (dataGridCell.Column.DisplayIndex == 8)
                     {
-                        projectile.Amount = (int)Calculate(operation, projectile.Amount);
+                        projectile.ReloadRate = Calculate(operation, projectile.ReloadRate);
                         counter.successcounter++;
                     }
                     if (dataGridCell.Column.DisplayIndex == 9)
                     {
-                        projectile.Speed = (int)Calculate(operation, projectile.Speed);
+                        projectile.ReloadTime = Calculate(operation, projectile.ReloadTime);
                         counter.successcounter++;
                     }
                     if (dataGridCell.Column.DisplayIndex == 10)
                     {
-                        projectile.Range = (int)Calculate(operation, projectile.Range);
+                        projectile.Amount = (int)Calculate(operation, projectile.Amount);
                         counter.successcounter++;
                     }
                     if (dataGridCell.Column.DisplayIndex == 11)
                     {
-                        projectile.Lifetime = Calculate(operation, projectile.Lifetime);
-                        counter.successcounter++;
-                    }
-                    if (dataGridCell.Column.DisplayIndex == 12)
-                    {
-                        projectile.ChargeTime = Calculate(operation, projectile.ChargeTime);
+                        projectile.BarrelAmount = (int)Calculate(operation, projectile.BarrelAmount);
                         counter.successcounter++;
                     }
                     if (dataGridCell.Column.DisplayIndex == 13)
                     {
-                        projectile.Ammunition = (int)Calculate(operation, projectile.Ammunition);
+                        projectile.Range = (int)Calculate(operation, projectile.Range);
                         counter.successcounter++;
                     }
                     if (dataGridCell.Column.DisplayIndex == 14)
                     {
-                        projectile.AmmunitionReload = Calculate(operation, projectile.AmmunitionReload);
+                        projectile.Speed = (int)Calculate(operation, projectile.Speed);
                         counter.successcounter++;
                     }
                     if (dataGridCell.Column.DisplayIndex == 15)
                     {
-                        projectile.Angle = Calculate(operation, projectile.Angle);
+                        projectile.Lifetime = Calculate(operation, projectile.Lifetime);
                         counter.successcounter++;
                     }
                     if (dataGridCell.Column.DisplayIndex == 16)
                     {
-                        projectile.TimeDiff = Calculate(operation, projectile.TimeDiff);
+                        projectile.ChargeTime = Calculate(operation, projectile.ChargeTime);
                         counter.successcounter++;
                     }
                     if (dataGridCell.Column.DisplayIndex == 17)
                     {
-                        projectile.MaxHits = (int)Calculate(operation, projectile.MaxHits);
+                        projectile.Ammunition = (int)Calculate(operation, projectile.Ammunition);
                         counter.successcounter++;
                     }
                     if (dataGridCell.Column.DisplayIndex == 18)
                     {
-                        projectile.Scale = Calculate(operation, projectile.Scale);
+                        projectile.AmmunitionReload = Calculate(operation, projectile.AmmunitionReload);
                         counter.successcounter++;
                     }
                     if (dataGridCell.Column.DisplayIndex == 19)
                     {
-                        projectile.Ricochet = (int)Calculate(operation, projectile.Ricochet);
+                        projectile.Angle = Calculate(operation, projectile.Angle);
                         counter.successcounter++;
                     }
                     if (dataGridCell.Column.DisplayIndex == 20)
                     {
-                        projectile.HeatValue = (int)Calculate(operation, projectile.HeatValue);
+                        projectile.TimeDiff = Calculate(operation, projectile.TimeDiff);
                         counter.successcounter++;
                     }
                     if (dataGridCell.Column.DisplayIndex == 21)
                     {
-                        projectile.HeatInitial = (int)Calculate(operation, projectile.HeatInitial);
+                        projectile.MaxHits = (int)Calculate(operation, projectile.MaxHits);
                         counter.successcounter++;
                     }
                     if (dataGridCell.Column.DisplayIndex == 22)
+                    {
+                        projectile.Scale = Calculate(operation, projectile.Scale);
+                        counter.successcounter++;
+                    }
+                    if (dataGridCell.Column.DisplayIndex == 23)
+                    {
+                        projectile.Ricochet = (int)Calculate(operation, projectile.Ricochet);
+                        counter.successcounter++;
+                    }
+                    if (dataGridCell.Column.DisplayIndex == 24)
+                    {
+                        projectile.HeatValue = (int)Calculate(operation, projectile.HeatValue);
+                        counter.successcounter++;
+                    }
+                    if (dataGridCell.Column.DisplayIndex == 25)
+                    {
+                        projectile.HeatInitial = (int)Calculate(operation, projectile.HeatInitial);
+                        counter.successcounter++;
+                    }
+                    if (dataGridCell.Column.DisplayIndex == 26)
                     {
                         projectile.Repair = Calculate(operation, projectile.Repair);
                         counter.successcounter++;
@@ -1165,6 +1176,12 @@ namespace X4_Editor
                     return param1 - this.UIModel.MathParameter;
                 case 4:
                     return this.UIModel.MathParameter;
+                case 5:
+                    {
+                        if(this.UIModel.MathParameter > 0)
+                            return param1 / this.UIModel.MathParameter;
+                        return param1;
+                    }
                 default:
                     return param1;
             }
@@ -1227,21 +1244,59 @@ namespace X4_Editor
                 int selectedCells = dg_Wares.SelectedCells.Count;
                 counter = this.CalculateOverAll(dg_Wares, 2, counter);
             }
-            //if (counter.outofrangecounter > 0 && (selectedCells != counter.successcounter))
-            //    MessageBox.Show(counter.successcounter + " values have been changed.\r "
-            //        + (selectedCells - counter.successcounter) + " cells could not be changed\r"
-            //        + counter.outofrangecounter + " values were out of range and have been set to default.",
-            //        "Calculation Errors");
-            //else if (counter.outofrangecounter > 0 && selectedCells.Equals(counter.successcounter))
-            //    MessageBox.Show(counter.successcounter + " values have been changed.\r" +
-            //        +counter.outofrangecounter + " values were out of range and have been set to default.",
-            //        "Calculation Errors");
-            //else if (counter.outofrangecounter == 0 && !selectedCells.Equals(counter.successcounter))
-            //    MessageBox.Show(counter.successcounter + " values have been changed.\r" +
-            //        +(selectedCells - counter.successcounter) + " cells could not be changed.\r",
-            //        "Calculation Mixed Success");
-            //else
-            //    MessageBox.Show("All " + counter.successcounter + " values have been changed successfully.", "Calculation Success");
+        }
+
+        private void ExecuteDivideFromValueCommand(object sender, ExecutedRoutedEventArgs e)
+        {
+            Counter counter = new Counter();
+
+            DataGrid dg_Shields = null;
+            dg_Shields = this.MainWindow.DG_Shields;
+
+            if (dg_Shields.SelectedCells.Count > 0)
+            {
+                counter = this.CalculateOverAll(dg_Shields, 5, counter);
+            }
+
+            DataGrid dg_Engines = null;
+            dg_Engines = this.MainWindow.DG_Engines;
+
+            if (dg_Engines.SelectedCells.Count > 0)
+            {
+                counter = this.CalculateOverAll(dg_Engines, 5, counter);
+            }
+
+            DataGrid dg_Projectiles = null;
+            dg_Projectiles = this.MainWindow.DG_Projectiles;
+
+            if (dg_Projectiles.SelectedCells.Count > 0)
+            {
+                counter = this.CalculateOverAll(dg_Projectiles, 5, counter);
+            }
+
+            DataGrid dg_Missiles = null;
+            dg_Missiles = this.MainWindow.DG_Missiles;
+
+            if (dg_Missiles.SelectedCells.Count > 0)
+            {
+                counter = this.CalculateOverAll(dg_Missiles, 5, counter);
+            }
+
+            DataGrid dg_Ships = null;
+            dg_Ships = this.MainWindow.DG_Ships;
+
+            if (dg_Ships.SelectedCells.Count > 0)
+            {
+                counter = this.CalculateOverAll(dg_Ships, 5, counter);
+            }
+
+            DataGrid dg_Wares = null;
+            dg_Wares = this.WaresWindow.DG_Wares;
+
+            if (dg_Wares.SelectedCells.Count > 0)
+            {
+                counter = this.CalculateOverAll(dg_Wares, 5, counter);
+            }
         }
 
         private void ExecuteSetFixedValueCommand(object sender, ExecutedRoutedEventArgs e)
@@ -1540,6 +1595,8 @@ namespace X4_Editor
                                 sw.WriteLine("\t<replace sel=\"//macros/macro/properties/damage/@repair\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Repair) + "</replace>");
                             if (vanillaItem.Shield != item.Shield)
                                 sw.WriteLine("\t<replace sel=\"//macros/macro/properties/damage/@shield\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Shield) + "</replace>");
+                            if (vanillaItem.Hull != item.Hull)
+                                sw.WriteLine("\t<replace sel=\"//macros/macro/properties/damage/@hull\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Hull) + "</replace>");
                             if (vanillaItem.ReloadRate != item.ReloadRate)
                                 sw.WriteLine("\t<replace sel=\"//macros/macro/properties/reload/@rate\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.ReloadRate) + "</replace>");
 

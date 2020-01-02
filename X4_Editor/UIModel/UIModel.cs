@@ -399,7 +399,10 @@ namespace X4_Editor
         private double m_MathParameter;
         public double MathParameter
         {
-            get { return m_MathParameter; }
+            get 
+            { 
+                return m_MathParameter; 
+            }
             set
             {
                 if (m_MathParameter == value)

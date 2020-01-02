@@ -305,7 +305,9 @@ namespace X4_Editor
                                 if (weaponBulletNode[0].Attributes["lifetime"] != null)
                                     uiModelProjectile.Lifetime = Utility.ParseToDouble(weaponBulletNode[0].Attributes["lifetime"].Value);
                                 if (weaponBulletNode[0].Attributes["amount"] != null)
-                                    uiModelProjectile.Amount = Convert.ToInt32(weaponBulletNode[0].Attributes["amount"].Value);
+                                    uiModelProjectile.Amount = Convert.ToInt16(weaponBulletNode[0].Attributes["amount"].Value);
+                                if (weaponBulletNode[0].Attributes["barrelamount"] != null)
+                                    uiModelProjectile.BarrelAmount = Convert.ToInt16(weaponBulletNode[0].Attributes["barrelamount"].Value);
                                 if (weaponBulletNode[0].Attributes["range"] != null)
                                     uiModelProjectile.Range = Convert.ToInt32(weaponBulletNode[0].Attributes["range"].Value);
                                 if (weaponBulletNode[0].Attributes["maxhits"] != null)
@@ -343,6 +345,8 @@ namespace X4_Editor
                                     uiModelProjectile.Damage = Utility.ParseToDouble(weaponDamageNode[0].Attributes["value"].Value);
                                 if (weaponDamageNode[0].Attributes["shield"] != null)
                                     uiModelProjectile.Shield = Utility.ParseToDouble(weaponDamageNode[0].Attributes["shield"].Value);
+                                if (weaponDamageNode[0].Attributes["hull"] != null)
+                                    uiModelProjectile.Hull = Utility.ParseToDouble(weaponDamageNode[0].Attributes["hull"].Value);
                                 if (weaponDamageNode[0].Attributes["repair"] != null)
                                     uiModelProjectile.Repair = Utility.ParseToDouble(weaponDamageNode[0].Attributes["repair"].Value);
                             }

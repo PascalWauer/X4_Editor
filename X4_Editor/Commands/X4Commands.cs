@@ -10,6 +10,7 @@ namespace X4_Editor
         public static readonly RoutedUICommand WriteAllChangedFilesCommand;
         public static readonly RoutedUICommand AddToValueCommand;
         public static readonly RoutedUICommand MultiplyToValueCommand;
+        public static readonly RoutedUICommand DivideFromValueCommand;
         public static readonly RoutedUICommand SetFixedValueCommand;
         public static readonly RoutedUICommand FilterCommand;
         public static readonly RoutedUICommand ShowWaresWindowCommand;
@@ -32,6 +33,7 @@ namespace X4_Editor
             WriteAllChangedFilesCommand = new RoutedUICommand("Execute WriteAllChangedFilesCommand", "WriteAllChangedFilesCommand", typeof(X4Commands));
             AddToValueCommand = new RoutedUICommand("Execute AddToValueCommand", "AddToValueCommand", typeof(X4Commands));
             MultiplyToValueCommand = new RoutedUICommand("Execute MultiplyToValueCommand", "MultiplyToValueCommand", typeof(X4Commands));
+            DivideFromValueCommand = new RoutedUICommand("Execute DivideFromValueCommand", "DivideFromValueCommand", typeof(X4Commands));
             SetFixedValueCommand = new RoutedUICommand("Execute SetFixedValueCommand", "SetFixedValueCommand", typeof(X4Commands));
             FilterCommand = new RoutedUICommand("Execute FilterCommand", "FilterCommand", typeof(X4Commands));
             ShowWaresWindowCommand = new RoutedUICommand("Execute ShowWaresWindowCommand", "ShowWaresWindowCommand", typeof(X4Commands));
