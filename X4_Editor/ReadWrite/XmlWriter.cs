@@ -143,6 +143,8 @@ namespace X4_Editor
                             sw.WriteLine("\t<replace sel=\"//macros/macro/properties/secrecy/@level\">" + item.Secrecy + "</replace>");
                         if (vanillaItem == null || vanillaItem.People != item.People)
                             sw.WriteLine("\t<replace sel=\"//macros/macro/properties/people/@capacity\">" + item.People + "</replace>");
+                        if (vanillaItem == null || vanillaItem.GatherRrate != item.GatherRrate)
+                            sw.WriteLine("\t<replace sel=\"//macros/macro/properties/gatherrate/@gas\">" + item.GatherRrate + "</replace>");
                         if (vanillaItem == null || vanillaItem.Mass != item.Mass)
                             sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/@mass\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Mass) + "</replace>");
                         if (vanillaItem == null || vanillaItem.InertiaPitch != item.InertiaPitch)
@@ -166,9 +168,9 @@ namespace X4_Editor
                         if (vanillaItem == null || vanillaItem.Roll != item.Roll)
                             sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/drag/@roll\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Roll) + "</replace>");
                         sw.WriteLine("</diff> ");
+
+                        fileswritten = true;
                     }
-
-
                 }
                 if (item.Cargo != null && item.Cargo.Changed)
                 {

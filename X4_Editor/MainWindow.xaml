@@ -158,9 +158,9 @@
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Weapons" Binding="{Binding Weapons, Mode=OneWay}" FontWeight="Normal" Width="55">
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Cargo" Binding="{Binding Cargo.CargoMax, UpdateSourceTrigger=LostFocus}" FontWeight="SemiBold" Width="50">
+                        <DataGridTextColumn Header="Cargo" Binding="{Binding Cargo.CargoMax, UpdateSourceTrigger=LostFocus, StringFormat={}{0:#,0}}" FontWeight="SemiBold" Width="50">
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Type" Binding="{Binding Cargo.CargoTags, UpdateSourceTrigger=LostFocus}" FontWeight="SemiBold" Width="60">
+                        <DataGridTextColumn Header="Type" Binding="{Binding Cargo.CargoTags, UpdateSourceTrigger=LostFocus}" FontWeight="SemiBold" Width="60" IsReadOnly="True">
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Units" Binding="{Binding StorageUnits, UpdateSourceTrigger=LostFocus}" Width="40">
                         </DataGridTextColumn>
