@@ -164,7 +164,7 @@
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Type" Binding="{Binding Type, UpdateSourceTrigger=LostFocus}" IsReadOnly="True" Width="80">
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Hull" Binding="{Binding HullMax, UpdateSourceTrigger=LostFocus, StringFormat={}{0:#,0}}" FontWeight="SemiBold" Width="55">
+                        <DataGridTextColumn Header="Hull" Binding="{Binding HullMax, UpdateSourceTrigger=LostFocus, StringFormat={}{0:#,0}}" FontWeight="SemiBold" Width="58">
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Shields" Binding="{Binding Shields, Mode=OneWay}" FontWeight="Normal" Width="50">
                         </DataGridTextColumn>

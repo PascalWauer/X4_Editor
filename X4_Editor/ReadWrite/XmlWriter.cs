@@ -280,10 +280,21 @@ namespace X4_Editor
                         Directory.CreateDirectory(m_UIManager.UIModel.ExportPath + m_UIManager.PathToTurretsDumbfire);
                     }
 
-                    string outputPath = item.File.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ExportPath);
+                    string[] splittedPath = item.File.Split(Path.DirectorySeparatorChar);
+                    string lastThreeFoldersAndFileToWeaponPath = splittedPath[splittedPath.Length - 3] + Path.DirectorySeparatorChar + splittedPath[splittedPath.Length - 2] + Path.DirectorySeparatorChar +  splittedPath[splittedPath.Length - 1];
+
+
+                    string outputPath = m_UIManager.UIModel.ExportPath + @"\assets\props\WeaponSystems\" + lastThreeFoldersAndFileToWeaponPath;
+                    //string outputPath = "";
+                    //if (m_UIManager.UIModel.ModPath2.Length > 0)
+                    //    outputPath = item.File.Replace(m_UIManager.UIModel.ModPath2, m_UIManager.UIModel.ExportPath);
+                    //if (m_UIManager.UIModel.ModPath1.Length > 0)
+                    //    outputPath = item.File.Replace(m_UIManager.UIModel.ModPath1, m_UIManager.UIModel.ExportPath);
+                    //outputPath = item.File.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ExportPath);
+
                     using (StreamWriter sw = new StreamWriter(outputPath))
                     {
-                        sw.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+                        sw.WriteLine(" <?xml version=\"1.0\" encoding=\"utf-8\"?>");
                         sw.WriteLine("<diff> ");
                         if (vanillaItem.Projectile != item.Projectile)
                             sw.WriteLine("\t<replace sel=\"//macros/macro/properties/bullet/@class\">" + item.Projectile + "</replace>");
