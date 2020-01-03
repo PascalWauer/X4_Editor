@@ -57,13 +57,23 @@ namespace X4_Editor
                 return 1 / ReloadTime;
             }
         }
+        private double BeamDamageMultiplier
+        {
+            get
+            {
+                if (Name.ToUpper().Contains("BEAM"))
+                    return Lifetime;
+                else
+                    return 1;
+            }
+        }
         public double DPS
         {
             get
             {
                     if (Ammunition > 0)
-                        return (Ammunition * ( Damage * Amount * BarrelAmount) / (AmmunitionReload + Ammunition / ShotsPerSecond));
-                    return ((Damage * Amount) / (AmmunitionReload + 1 / ShotsPerSecond));
+                        return (Ammunition * ( (Damage + Hull) * BeamDamageMultiplier * Amount * BarrelAmount) / ((AmmunitionReload + Ammunition) / ShotsPerSecond));
+                    return (((Damage + Hull) * BeamDamageMultiplier * Amount * BarrelAmount) / (AmmunitionReload + 1 / ShotsPerSecond));
             }
         }
 
@@ -72,8 +82,8 @@ namespace X4_Editor
             get
             {
                 if (Ammunition > 0)
-                    return (Ammunition * ((Damage + Shield) * Amount * BarrelAmount) / (AmmunitionReload + Ammunition / ShotsPerSecond));
-                return (((Damage + Shield) * Amount) / (AmmunitionReload + 1 / ShotsPerSecond));
+                    return (Ammunition * ((Damage + Shield) * BeamDamageMultiplier * Amount * BarrelAmount) / (AmmunitionReload + Ammunition / ShotsPerSecond));
+                return (((Damage + Shield) * BeamDamageMultiplier * Amount * BarrelAmount) / (AmmunitionReload + 1 / ShotsPerSecond));
             }
         }
         public double DPS_Hull
@@ -81,8 +91,8 @@ namespace X4_Editor
             get
             {
                 if (Ammunition > 0)
-                    return (Ammunition * ((Damage + Hull) * Amount * BarrelAmount) / (AmmunitionReload + Ammunition / ShotsPerSecond));
-                return (((Damage + Hull) * Amount) / (AmmunitionReload + 1 / ShotsPerSecond));
+                    return (Ammunition * ((Damage + Hull) * BeamDamageMultiplier * Amount * BarrelAmount) / (AmmunitionReload + Ammunition / ShotsPerSecond));
+                return (((Damage + Hull) * BeamDamageMultiplier * Amount * BarrelAmount) / (AmmunitionReload + 1 / ShotsPerSecond));
             }
         }
         private int m_Ammunition;
@@ -95,6 +105,7 @@ namespace X4_Editor
                 Changed = true;
                 NotifyPropertyChanged();
                 NotifyPropertyChanged("DPS");
+                NotifyPropertyChanged("DPS_Hull");
                 NotifyPropertyChanged("DPS_Shield");
             }
         }
@@ -109,6 +120,7 @@ namespace X4_Editor
                 Changed = true;
                 NotifyPropertyChanged();
                 NotifyPropertyChanged("DPS");
+                NotifyPropertyChanged("DPS_Hull");
                 NotifyPropertyChanged("DPS_Shield");
             }
         }
@@ -161,6 +173,10 @@ namespace X4_Editor
                 Changed = true;
                 NotifyPropertyChanged();
                 NotifyPropertyChanged("EffectiveRange");
+                NotifyPropertyChanged("DPSl");
+                NotifyPropertyChanged("DPS_Shield");
+                NotifyPropertyChanged("DPS_Hull");
+                NotifyPropertyChanged("BeamDamageMultiplier");
             }
         }
 
@@ -174,6 +190,7 @@ namespace X4_Editor
                 Changed = true;
                 NotifyPropertyChanged();
                 NotifyPropertyChanged("DPS");
+                NotifyPropertyChanged("DPS_Hull");
                 NotifyPropertyChanged("DPS_Shield");
             }
         }
@@ -188,6 +205,7 @@ namespace X4_Editor
                 Changed = true;
                 NotifyPropertyChanged();
                 NotifyPropertyChanged("DPS");
+                NotifyPropertyChanged("DPS_Hull");
                 NotifyPropertyChanged("DPS_Shield");
             }
         }
@@ -298,6 +316,7 @@ namespace X4_Editor
                 Changed = true;
                 NotifyPropertyChanged();
                 NotifyPropertyChanged("DPS");
+                NotifyPropertyChanged("DPS_Hull");
                 NotifyPropertyChanged("DPS_Shield");
             }
         }
@@ -312,6 +331,7 @@ namespace X4_Editor
                 Changed = true;
                 NotifyPropertyChanged();
                 NotifyPropertyChanged("DPS");
+                NotifyPropertyChanged("DPS_Hull");
                 NotifyPropertyChanged("DPS_Shield");
             }
         }
@@ -370,6 +390,9 @@ namespace X4_Editor
                 m_Repair = value;
                 Changed = true;
                 NotifyPropertyChanged();
+                NotifyPropertyChanged("DPS");
+                NotifyPropertyChanged("DPS_Shield");
+                NotifyPropertyChanged("DPS_Hull");
             }
         }
 
