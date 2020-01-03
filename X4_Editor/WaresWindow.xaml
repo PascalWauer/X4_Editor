@@ -38,9 +38,9 @@
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="Calculated" Binding="{Binding CalculatedPrice, Mode=OneWay, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}" FontWeight="SemiBold" Width="70">
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Margin" Binding="{Binding Margin, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Width="60">
+                    <DataGridTextColumn Header="Margin" Binding="{Binding Margin, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Width="50">
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Amount" Binding="{Binding Amount, UpdateSourceTrigger=PropertyChanged}" Width="60">
+                    <DataGridTextColumn Header="Amount" Binding="{Binding Amount, UpdateSourceTrigger=PropertyChanged}" Width="52">
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="Time" Binding="{Binding Time, UpdateSourceTrigger=PropertyChanged}" Width="40">
                     </DataGridTextColumn>
