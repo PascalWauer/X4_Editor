@@ -296,15 +296,11 @@ namespace X4_Editor
 
         #region calculations
 
-        private void ExecuteSubstractFromValueCommand(object sender, ExecutedRoutedEventArgs e)
-        {
-            if (this.UIModel.MathParameter == 0)
-            {
-                MessageBox.Show("Please enter a value <> '0'", "Invalid operation");
-                return;
-            }
-            this.AddCalculation(3);
-        }
+        /// <summary>
+        /// Calculation function
+        /// </summary>
+        /// <param name="operation">1 = addition, 2 = multiplication, 3 = substraction, 4 = set fixed value</param>
+        /// <param name="param1">unit value</param>
 
         private void ExecuteAddToValueCommand(object sender, ExecutedRoutedEventArgs e)
         {
@@ -315,8 +311,68 @@ namespace X4_Editor
             }
             this.AddCalculation(1);
         }
+        private void ExecuteMultiplyToValueCommand(object sender, ExecutedRoutedEventArgs e)
+        {
+            AddCalculation(2);
+        }
+        private void ExecuteSubstractFromValueCommand(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (this.UIModel.MathParameter == 0)
+            {
+                MessageBox.Show("Please enter a value <> '0'", "Invalid operation");
+                return;
+            }
+            this.AddCalculation(3);
+        }
+        private void ExecuteSetFixedValueCommand(object sender, ExecutedRoutedEventArgs e)
+        {
+            AddCalculation(4);
+        }
+        private void ExecuteDivideByValueCommand(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (this.UIModel.MathParameter == 0 || this.UIModel.MathParameter < 0)
+            {
+                MessageBox.Show("Please enter a value > '0'", "Invalid operation");
+                return;
+            }
+
+            AddCalculation(5);
+        }
+        /// <summary>
+        /// Checks if the user has selected cells in main window and wares window
+        /// </summary>
+        /// <returns></returns>
+        private bool OnlyOneWindowCellsSelected()
+        {
+            DataGrid dg_Shields = null;
+            dg_Shields = this.MainWindow.DG_Shields;
+            DataGrid dg_Engines = null;
+            dg_Engines = this.MainWindow.DG_Engines;
+            DataGrid dg_Projectiles = null;
+            dg_Projectiles = this.MainWindow.DG_Projectiles;
+            DataGrid dg_Missiles = null;
+            dg_Missiles = this.MainWindow.DG_Missiles;
+            DataGrid dg_Ships = null;
+            dg_Ships = this.MainWindow.DG_Ships;
+            DataGrid dg_Wares = null;
+            dg_Wares = this.WaresWindow.DG_Wares;
+            DataGrid dg_Weapons = null;
+            dg_Weapons = this.MainWindow.DG_Weapons;
+
+            if ((dg_Shields.SelectedCells.Count > 0 || dg_Engines.SelectedCells.Count > 0 || dg_Projectiles.SelectedCells.Count > 0 || dg_Missiles.SelectedCells.Count > 0 || dg_Ships.SelectedCells.Count > 0 || dg_Weapons.SelectedCells.Count > 0) && dg_Wares.SelectedCells.Count > 0)
+            {
+                MessageBox.Show("You must not select cells in Main window and Wares window at the same time for mass editing!\r\r" +
+                    "Deselect all cells of one window first (you can use ctr + left click).", "Calculation not possible", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+            return true;
+        }
+
         private void AddCalculation(int operation)
         {
+            if (!OnlyOneWindowCellsSelected())
+                return;
+
             Counter counter = new Counter();
 
             DataGrid dg_Shields = null;
@@ -333,6 +389,14 @@ namespace X4_Editor
             if (dg_Engines.SelectedCells.Count > 0)
             {
                 counter = m_Calculations.CalculateOverAll(dg_Engines, operation, counter);
+            }
+
+            DataGrid dg_Weapons = null;
+            dg_Weapons = this.MainWindow.DG_Weapons;
+
+            if (dg_Weapons.SelectedCells.Count > 0)
+            {
+                counter = m_Calculations.CalculateOverAll(dg_Weapons, operation, counter);
             }
 
             DataGrid dg_Projectiles = null;
@@ -367,202 +431,6 @@ namespace X4_Editor
                 counter = m_Calculations.CalculateOverAll(dg_Wares, operation, counter);
             }
 
-        }
-
-        
-        /// <summary>
-        /// Calculation function
-        /// </summary>
-        /// <param name="operation">1 = addition, 2 = multiplication, 3 = substraction, 4 = set fixed value</param>
-        /// <param name="param1">unit value</param>
-        
-        private void ExecuteMultiplyToValueCommand(object sender, ExecutedRoutedEventArgs e)
-        {
-            Counter counter = new Counter();
-
-            DataGrid dg_Shields = null;
-            dg_Shields = this.MainWindow.DG_Shields;
-
-            if (dg_Shields.SelectedCells.Count > 0)
-            {
-                counter = m_Calculations.CalculateOverAll(dg_Shields, 2, counter);
-            }
-
-            DataGrid dg_Engines = null;
-            dg_Engines = this.MainWindow.DG_Engines;
-
-            if (dg_Engines.SelectedCells.Count > 0)
-            {
-                counter = m_Calculations.CalculateOverAll(dg_Engines, 2, counter);
-            }
-
-            DataGrid dg_Weapons = null;
-            dg_Weapons = this.MainWindow.DG_Weapons;
-
-            if (dg_Weapons.SelectedCells.Count > 0)
-            {
-                counter = m_Calculations.CalculateOverAll(dg_Weapons, 2, counter);
-            }
-
-            DataGrid dg_Projectiles = null;
-            dg_Projectiles = this.MainWindow.DG_Projectiles;
-
-            if (dg_Projectiles.SelectedCells.Count > 0)
-            {
-                counter = m_Calculations.CalculateOverAll(dg_Projectiles, 2, counter);
-            }
-
-            DataGrid dg_Missiles = null;
-            dg_Missiles = this.MainWindow.DG_Missiles;
-
-            if (dg_Missiles.SelectedCells.Count > 0)
-            {
-                counter = m_Calculations.CalculateOverAll(dg_Missiles, 2, counter);
-            }
-
-            DataGrid dg_Ships = null;
-            dg_Ships = this.MainWindow.DG_Ships;
-
-            if (dg_Ships.SelectedCells.Count > 0)
-            {
-                counter = m_Calculations.CalculateOverAll(dg_Ships, 2, counter);
-            }
-
-            DataGrid dg_Wares = null;
-            dg_Wares = this.WaresWindow.DG_Wares;
-
-            if (dg_Wares.SelectedCells.Count > 0)
-            {
-                counter = m_Calculations.CalculateOverAll(dg_Wares, 2, counter);
-            }
-        }
-
-        private void ExecuteDivideByValueCommand(object sender, ExecutedRoutedEventArgs e)
-        {
-            if (this.UIModel.MathParameter == 0 || this.UIModel.MathParameter < 0)
-            {
-                MessageBox.Show("Please enter a value > '0'", "Invalid operation");
-                return;
-            }
-
-            Counter counter = new Counter();
-
-            DataGrid dg_Shields = null;
-            dg_Shields = this.MainWindow.DG_Shields;
-
-            if (dg_Shields.SelectedCells.Count > 0)
-            {
-                counter = m_Calculations.CalculateOverAll(dg_Shields, 5, counter);
-            }
-
-            DataGrid dg_Engines = null;
-            dg_Engines = this.MainWindow.DG_Engines;
-
-            if (dg_Engines.SelectedCells.Count > 0)
-            {
-                counter = m_Calculations.CalculateOverAll(dg_Engines, 5, counter);
-            }
-
-            DataGrid dg_Weapons = null;
-            dg_Weapons = this.MainWindow.DG_Weapons;
-
-            if (dg_Weapons.SelectedCells.Count > 0)
-            {
-                counter = m_Calculations.CalculateOverAll(dg_Weapons, 5, counter);
-            }
-
-            DataGrid dg_Projectiles = null;
-            dg_Projectiles = this.MainWindow.DG_Projectiles;
-
-            if (dg_Projectiles.SelectedCells.Count > 0)
-            {
-                counter = m_Calculations.CalculateOverAll(dg_Projectiles, 5, counter);
-            }
-
-            DataGrid dg_Missiles = null;
-            dg_Missiles = this.MainWindow.DG_Missiles;
-
-            if (dg_Missiles.SelectedCells.Count > 0)
-            {
-                counter = m_Calculations.CalculateOverAll(dg_Missiles, 5, counter);
-            }
-
-            DataGrid dg_Ships = null;
-            dg_Ships = this.MainWindow.DG_Ships;
-
-            if (dg_Ships.SelectedCells.Count > 0)
-            {
-                counter = m_Calculations.CalculateOverAll(dg_Ships, 5, counter);
-            }
-
-            DataGrid dg_Wares = null;
-            dg_Wares = this.WaresWindow.DG_Wares;
-
-            if (dg_Wares.SelectedCells.Count > 0)
-            {
-                counter = m_Calculations.CalculateOverAll(dg_Wares, 5, counter);
-            }
-        }
-
-        private void ExecuteSetFixedValueCommand(object sender, ExecutedRoutedEventArgs e)
-        {
-            Counter counter = new Counter();
-
-            DataGrid dg_Shields = null;
-            dg_Shields = this.MainWindow.DG_Shields;
-
-            if (dg_Shields.SelectedCells.Count > 0)
-            {
-                counter = m_Calculations.CalculateOverAll(dg_Shields, 4, counter);
-            }
-
-            DataGrid dg_Engines = null;
-            dg_Engines = this.MainWindow.DG_Engines;
-
-            if (dg_Engines.SelectedCells.Count > 0)
-            {
-                counter = m_Calculations.CalculateOverAll(dg_Engines, 4, counter);
-            }
-
-            DataGrid dg_Projectiles = null;
-            dg_Projectiles = this.MainWindow.DG_Projectiles;
-
-            if (dg_Projectiles.SelectedCells.Count > 0)
-            {
-                counter = m_Calculations.CalculateOverAll(dg_Projectiles, 4, counter);
-            }
-
-            DataGrid dg_Weapons = null;
-            dg_Weapons = this.MainWindow.DG_Weapons;
-
-            if (dg_Weapons.SelectedCells.Count > 0)
-            {
-                counter = m_Calculations.CalculateOverAll(dg_Weapons, 4, counter);
-            }
-
-            DataGrid dg_Missiles = null;
-            dg_Missiles = this.MainWindow.DG_Missiles;
-
-            if (dg_Missiles.SelectedCells.Count > 0)
-            {
-                counter = m_Calculations.CalculateOverAll(dg_Missiles, 4, counter);
-            }
-
-            DataGrid dg_Ships = null;
-            dg_Ships = this.MainWindow.DG_Ships;
-
-            if (dg_Ships.SelectedCells.Count > 0)
-            {
-                counter = m_Calculations.CalculateOverAll(dg_Ships, 4, counter);
-            }
-
-            DataGrid dg_Wares = null;
-            dg_Wares = this.WaresWindow.DG_Wares;
-
-            if (dg_Wares.SelectedCells.Count > 0)
-            {
-                counter = m_Calculations.CalculateOverAll(dg_Wares, 4, counter);
-            }
         }
 
         #endregion

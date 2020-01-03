@@ -16,7 +16,7 @@ namespace X4_Editor.Helper
             parent = uiManager;
         }
 
-        
+
         public Counter CalculateOverAll(DataGrid dg, int operation, Counter counter)
         {
             foreach (DataGridCellInfo dataGridCell in dg.SelectedCells)

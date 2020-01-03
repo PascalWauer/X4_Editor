@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -393,25 +394,39 @@ namespace X4_Editor
                 }
             }
 
-            this.WriteWaresFile();
+            bool waresWritten = this.WriteWaresFile();
 
-            if (fileswritten)
-                MessageBox.Show("Mod files have been created.");
+            if (fileswritten || waresWritten)
+            {
+                if (!waresWritten)
+                    MessageBox.Show("Mod files have been created.");
+                if (waresWritten)
+                {
+                    MessageBox.Show
+                        (
+                        "Mod files have been created. \r\r" +
+                        "Wares you have changed have been attached to wares.xml library. You need to check the outer xml nodes for correctness!\r" +
+                        "Wares.xml will be opened...", "Mod files written", MessageBoxButton.OK, MessageBoxImage.Warning 
+                        );
+                    string pathToWares = m_UIManager.UIModel.ExportPath + m_UIManager.PathToWares;
+                    Process.Start(pathToWares);
+                }
+            }
             else
-                MessageBox.Show("No changes detected - no files written.", "No Files written" , MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("No changes detected - no files written.", "No Files written", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
-        private void WriteWaresFile()
+        private bool WriteWaresFile()
         {
             string outputPath = m_UIManager.UIModel.ExportPath + m_UIManager.PathToWares;
 
-            if (!Directory.Exists(m_UIManager.UIModel.ExportPath + @"\libraries"))
-            {
-                Directory.CreateDirectory(m_UIManager.UIModel.ExportPath + @"\libraries");
-            }
-
             if (m_UIManager.UIModel.UIModelWares.Any(x => x.Changed))
             {
+                if (!Directory.Exists(m_UIManager.UIModel.ExportPath + @"\libraries"))
+                {
+                    Directory.CreateDirectory(m_UIManager.UIModel.ExportPath + @"\libraries");
+                }
+
                 using (StreamWriter sw = new StreamWriter(outputPath, true))
                 {
                     sw.WriteLine("<!-- Code below has been added at " + DateTime.Now + " -->");
@@ -456,9 +471,10 @@ namespace X4_Editor
                         }
                     }
                     sw.WriteLine("</diff> ");
-
                 }
+                return true;
             }
+            return false;
         }
     }
 }
