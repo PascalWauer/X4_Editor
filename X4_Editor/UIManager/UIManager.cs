@@ -73,7 +73,6 @@ namespace X4_Editor
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.ReadAllMod2FilesCommand, this.ExecuteReadAllMod2FilesCommand));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.FilterCommand, this.ExecuteFilterCommand));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.WriteAllChangedFilesCommand, this.ExecuteWriteAllChangedFilesCommand));
-            //MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.PackAllFilesCommand, this.ExecutePackAllFilesCommand));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.AddToValueCommand, this.ExecuteAddToValueCommand, CanExecuteCalculate));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.SubstractFromValueCommand, this.ExecuteSubstractFromValueCommand, CanExecuteCalculate));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.MultiplyToValueCommand, this.ExecuteMultiplyToValueCommand, CanExecuteCalculate));
@@ -88,6 +87,7 @@ namespace X4_Editor
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.RecalculatePriceCommand, this.ExecuteRecalculatePriceCommand));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.OnWeaponDoubleClick, this.ExecuteOnWeaponDoubleClick));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.OnProjectileDoubleClick, this.ExecuteOnProjectileDoubleClick));
+            MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.ShowHelp, this.ExecuteShowHelp));
 
             WaresWindow.CommandBindings.Add(new CommandBinding(X4Commands.OnWaresWindowCellRightClick, this.ExecuteOnWaresWindowCellRightClick));
             m_ReadWriteConfig.LoadConfig();
@@ -96,6 +96,36 @@ namespace X4_Editor
             MainWindow.Show();
             WaresWindow.Owner = this.MainWindow;
         }
+
+        private void ExecuteShowHelp(object sender, ExecutedRoutedEventArgs e)
+        {
+            MessageBox.Show
+                (
+                "Instructions for Use Version 1.00\r\r"
+                + "Before you start!\r"
+                + "ALWAYS backup your mods you use with this tool!\r"
+                + "Before you can use this tool you must have extracted all X4 data into a separate folder. You can use the 'X Rebirth Catalog Tool 1.10' to do this.\r\r"
+                + "1. Enter the path to the exported X4 data folder into the vanilla folder path (orange) and click on 'Read Vanilla'.\r\r"
+                + "2. You can read another mod by doing the same for 'Mod 1' and 'Mod 2' (yellow)\r\r"
+                + "Mass editing:\r"
+                + "- Mass editing works only on editable cells and only if you have selected only cells in one window.\r\r"
+                + "Filters:\r"
+                + "- You can filter all items by using the checkboxes or entering words into the seach box. Blanks will work as 'logical or' if you want to search for 'laser' and 'plasma' simply type 'laser plasma'.\r"
+                + "- Hit the 'Filter' button or enter 'Return' in the search box to trigger the filter. Wares will automatically be filtered depending on the items you have filtered on the main window, except if you have checked 'All Wares'. Then all wares will be shown.\r"
+                + "Show Wares:\r"
+                + "- All wares are displayed in the seperate Wares window.\r"
+                + "- Show Wares opens a separate window showing all wares you have filtered.\r\r"
+                + "Export:\r"
+                + "- Select an export path for your mod. By clicking on 'Export Changes' all necessary and changed files will be written into that folder. Keep in mind, that if your output path is one of the input paths, you might destroy your mod if you dont know exactly what you are doing!\r\r"
+                + "Features:"
+                + "- DPS values and effective ranges will automatically calculated.\r"
+                + "- If available, the names of all items will be shown additionally to the IDs (file 't/0001.xml' is needed).\r"
+                + "- Right Mouse button on a row will open the associated xml file. Priority is 'Mod 2', 'Mod 1', 'Vanilla'. So if you have changed the file in 'Mod 2', this file will be opened.\r"
+                + "- Double Click on either a Weapon/Turret row or a 'Projectile' row will filter the associated projectile or turret/weapon.\r\r"
+                + "The author of this tool (Pascal Wauer) is not responsible for any damage you do to your files. Use it on your own risk."
+                );
+        }
+
         private void ExecuteOnWeaponDoubleClick(object sender, ExecutedRoutedEventArgs e)
         {
 

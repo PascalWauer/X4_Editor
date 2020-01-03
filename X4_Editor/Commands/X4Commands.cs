@@ -24,6 +24,7 @@ namespace X4_Editor
         public static readonly RoutedUICommand RecalculatePriceCommand;
         public static readonly RoutedUICommand OnWeaponDoubleClick;
         public static readonly RoutedUICommand OnProjectileDoubleClick;
+        public static readonly RoutedUICommand ShowHelp;
 
         static X4Commands()
         {
@@ -48,6 +49,7 @@ namespace X4_Editor
             RecalculatePriceCommand = new RoutedUICommand("Execute RecalculatePriceCommand", "RecalculatePriceCommand", typeof(X4Commands));
             OnWeaponDoubleClick = new RoutedUICommand("Execute OnWeaponDoubleClick", "OnWeaponDoubleClick", typeof(X4Commands));
             OnProjectileDoubleClick = new RoutedUICommand("Execute OnProjectileDoubleClick", "OnProjectileDoubleClick", typeof(X4Commands));
+            ShowHelp = new RoutedUICommand("Execute ShowHelp", "ShowHelp", typeof(X4Commands));
         }
     }
 }
