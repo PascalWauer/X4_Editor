@@ -495,8 +495,8 @@ namespace X4_Editor
                 m_ProjectilesDataView.Filter = this.FilterProjectilesData;
                 m_MissilesDataView.Filter = this.FilterMissilesData;
                 m_ShipsDataView.Filter = this.FilterShipsData;
-                m_WaresDataView.Filter = this.FilterWaresData;
                 m_WeaponsDataView.Filter = this.FilterTurretsData;
+                m_WaresDataView.Filter = this.FilterWaresData;
         }
         private bool FilterShieldsData(object item)
         {
@@ -521,7 +521,7 @@ namespace X4_Editor
                         if (searchString.Length > 0)
                         {
 
-                            if (shield.Name.ToUpper().Contains(searchString.ToUpper()))
+                            if (shield.Name.ToUpper().Contains(searchString.ToUpper()) || shield.IGName.ToUpper().Contains(searchString.ToUpper()))
                             {
                                 found = true;
                             }
@@ -594,7 +594,7 @@ namespace X4_Editor
                     {
                         if (searchString.Length > 0)
                         {
-                            if (weapon.Name.ToUpper().Contains(searchString.ToUpper()) || weapon.Projectile.ToUpper().Contains(searchString.ToUpper()))
+                            if (weapon.Name.ToUpper().Contains(searchString.ToUpper()) || weapon.Projectile.ToUpper().Contains(searchString.ToUpper()) || weapon.IGName.ToUpper().Contains(searchString.ToUpper()) )
                             {
                                 found = true;
                             }
@@ -629,7 +629,7 @@ namespace X4_Editor
                     {
                         if (searchString.Length > 0)
                         {
-                            if (engine.Name.ToUpper().Contains(searchString.ToUpper()))
+                            if (engine.Name.ToUpper().Contains(searchString.ToUpper()) || engine.IGName.ToUpper().Contains(searchString.ToUpper()))
                             {
                                 found = true;
                             }
@@ -697,7 +697,7 @@ namespace X4_Editor
                 {
                     if (searchString.Length > 0)
                     {
-                        if (missile.Name.ToUpper().Contains(searchString.ToUpper()))
+                        if (missile.Name.ToUpper().Contains(searchString.ToUpper()) || missile.IGName.ToUpper().Contains(searchString.ToUpper()))
                         {
                             found = true;
                         }

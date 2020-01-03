@@ -321,7 +321,7 @@ namespace X4_Editor.Helper
                         missile.Damage = (int)Calculate(operation, missile.Damage, ref counter);
 
                     }
-                    if (dataGridCell.Column.DisplayIndex == 3)
+                    if (dataGridCell.Column.DisplayIndex == 4)
                     {
                         missile.Reload = Calculate(operation, missile.Reload, ref counter);
 

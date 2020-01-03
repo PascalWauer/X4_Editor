@@ -481,9 +481,9 @@
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="Damage" Binding="{Binding Damage, UpdateSourceTrigger=LostFocus}" FontWeight="SemiBold" Width="60">
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Reload" Binding="{Binding Reload, UpdateSourceTrigger=LostFocus}" FontWeight="SemiBold" Width="50">
+                    <DataGridTextColumn Header="DPS" Binding="{Binding DPS, Mode=OneWay, StringFormat={}{0:0.#}}" FontWeight="SemiBold" Width="45" IsReadOnly="True">
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="DPS" Binding="{Binding DPS, Mode=OneWay, StringFormat={}{0:0.##}}" FontWeight="SemiBold" Width="50">
+                    <DataGridTextColumn Header="Reload" Binding="{Binding Reload, UpdateSourceTrigger=LostFocus}" FontWeight="SemiBold" Width="50">
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="Range" Binding="{Binding Range, UpdateSourceTrigger=LostFocus}" FontWeight="SemiBold" Width="50">
                     </DataGridTextColumn>

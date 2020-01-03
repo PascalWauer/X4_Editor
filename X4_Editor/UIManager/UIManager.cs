@@ -619,8 +619,6 @@ namespace X4_Editor
             
             string waresPath = folderPath + PathToWares;
 
-            m_XmlExtractor.ReadAllWares(waresPath);
-
             string weaponsPath = folderPath + PathToProjectiles;
             List<FileInfo> xmlWeaponsList = new List<FileInfo>();
             xmlWeaponsList = this.GetAllXmlInSubFolders(weaponsPath, xmlWeaponsList);
@@ -657,6 +655,11 @@ namespace X4_Editor
             List<FileInfo> xmlShipsList = new List<FileInfo>();
             xmlShipsList = this.GetAllXmlInSubFolders(shipsPath, xmlShipsList);
             this.ReadAllShips(xmlShipsList);
+
+            if (File.Exists(waresPath))
+                m_XmlExtractor.ReadAllWares(waresPath);
+            else
+                MessageBox.Show("No valid wares found.", "No data found.");
         }
         public void ReadAllEngines(List<FileInfo> xmlEnginesList)
         {

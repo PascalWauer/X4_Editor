@@ -29,6 +29,7 @@ namespace X4_Editor
                 }
                 else
                 {
+                    this.parent.UIModel.AllWaresLoaded = false;
                     List<string> ModDirectories = Directory.GetDirectories(modPath, "*", SearchOption.AllDirectories).ToList();
 
                     Dictionary<string, string> ModTexts = new Dictionary<string, string>();
@@ -43,9 +44,6 @@ namespace X4_Editor
 
                         ModTexts.Remove(ModTexts.First().Key);
                     }
-
-                    // read wares of mod
-                    m_XmlExtractor.ReadAllWares(modPath + @"\libraries\wares.xml");
 
                     foreach (string dir in ModDirectories)
                     {
@@ -972,11 +970,17 @@ namespace X4_Editor
                             }
                         }
                     }
+
+                    string waresPath = modPath + this.parent.PathToWares;
+                    if (File.Exists(waresPath))
+                        m_XmlExtractor.ReadAllWares(waresPath);
+
+                    
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("Failed to read " + modPath);
+                MessageBox.Show("Failed to read " + modPath + ". Reason: " + ex.Message);
             }
         }
 

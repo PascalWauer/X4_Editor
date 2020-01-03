@@ -63,7 +63,9 @@ namespace X4_Editor
         {
             get
             {
-                return m_Damage / m_Reload * m_MissileAmount;
+                if (BarrelAmount > 0)
+                    return Damage * MissileAmount * BarrelAmount / Reload;
+                return Damage * MissileAmount / Reload;
             }
         }
 
@@ -88,6 +90,7 @@ namespace X4_Editor
                 m_BarrelAmount = value;
                 Changed = true;
                 NotifyPropertyChanged();
+                NotifyPropertyChanged("DPS");
             }
         }
 
@@ -100,6 +103,7 @@ namespace X4_Editor
                 m_MissileAmount = value;
                 Changed = true;
                 NotifyPropertyChanged();
+                NotifyPropertyChanged("DPS");
             }
         }
 
@@ -172,6 +176,7 @@ namespace X4_Editor
                 m_Damage = value;
                 Changed = true;
                 NotifyPropertyChanged();
+                NotifyPropertyChanged("DPS");
             }
         }
 
@@ -184,6 +189,7 @@ namespace X4_Editor
                 m_Reload = value;
                 Changed = true;
                 NotifyPropertyChanged();
+                NotifyPropertyChanged("DPS");
             }
         }
 

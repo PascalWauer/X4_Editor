@@ -24,236 +24,272 @@ namespace X4_Editor
 
         public void ReadAllWares(string waresPath)
         {
-            if (!File.Exists(waresPath))
+            if (File.Exists(waresPath))
             {
-                MessageBox.Show("No valid wares found.", "No data found.");
-            }
-            else
-            {
-                using (XmlReader reader = XmlReader.Create(waresPath))
+                string additionalErrorText = "";
+                try
                 {
-                    //while (reader.Read())
+                    m_UIManager.UIModel.AllWaresLoaded = false;
+                    using (XmlReader reader = XmlReader.Create(waresPath))
                     {
-                        XDocument doc = XDocument.Load(waresPath);
-                        bool addedWaresByMod = false;
-                        if (doc.Descendants().Where(x => x.Name.LocalName == "add").ToList().Count > 0)
-                            addedWaresByMod = (reader.Name == "add");
-                        if (doc.Descendants().Where(x => x.Name.LocalName == "wares").ToList().Count > 0 || addedWaresByMod)
                         {
-                            var wares = doc.Descendants("wares");
-                            if (addedWaresByMod)
-                                wares = doc.Descendants("add");
-
-                            foreach (var ware in wares)
+                            XDocument doc = XDocument.Load(waresPath);
+                            bool addedWaresByMod = false;
+                            if (doc.Descendants().Where(x => x.Name.LocalName == "add").ToList().Count > 0)
+                                addedWaresByMod = true;
+                            if (doc.Descendants().Where(x => x.Name.LocalName == "wares").ToList().Count > 0 || addedWaresByMod)
                             {
-                                XmlDocument xD = new XmlDocument();
-                                xD.LoadXml(ware.ToString());
-                                XmlNode xN = XmlHelper.ToXmlNode(ware);
-                                XmlNodeList wareNodes = xN.SelectNodes("//ware");
-
-                                foreach (XmlNode item in wareNodes)
-                                {
-
-                                    if (item.Attributes["id"] != null)
-                                    {
-
-                                        XmlNode priceNode = null;
-                                        foreach (XmlNode child in item.SelectNodes("price"))
-                                        {
-                                            priceNode = child;
-                                        }
-
-                                        UIModelWare uiModelWare = new UIModelWare()
-                                        {
-                                            File = waresPath,
-                                            Name = item.Attributes["id"].Value,
-                                            ID = item.Attributes["id"].Value,
-                                            Max = Convert.ToInt32(priceNode.Attributes["max"].Value),
-                                            Min = Convert.ToInt32(priceNode.Attributes["min"].Value),
-                                            Avg = Convert.ToInt32(priceNode.Attributes["average"].Value),
-                                        };
-
-                                        if (item.SelectNodes("./production").Count == 1)
-                                        {
-                                            XmlNodeList productionNode = item.SelectNodes("./production");
-                                            if (productionNode.Count > 0)
-                                            {
-                                                uiModelWare.Time = Convert.ToInt32(productionNode[0].Attributes["time"].Value);
-                                                uiModelWare.Amount = Convert.ToInt32(productionNode[0].Attributes["amount"].Value);
-                                            }
-                                            for (int i = 0; i < item.SelectNodes("./production/primary/ware").Count; i++)
-                                            {
-                                                if (i == 0)
-                                                {
-                                                    uiModelWare.Ware1 = item.SelectNodes("./production/primary/ware")[i].Attributes["ware"].Value;
-                                                    uiModelWare.Amount1 = Convert.ToInt32(item.SelectNodes("./production/primary/ware")[i].Attributes["amount"].Value);
-                                                }
-                                                if (i == 1)
-                                                {
-                                                    uiModelWare.Ware2 = item.SelectNodes("./production/primary/ware")[i].Attributes["ware"].Value;
-                                                    uiModelWare.Amount2 = Convert.ToInt32(item.SelectNodes("./production/primary/ware")[i].Attributes["amount"].Value);
-                                                }
-                                                if (i == 2)
-                                                {
-                                                    uiModelWare.Ware3 = item.SelectNodes("./production/primary/ware")[i].Attributes["ware"].Value;
-                                                    uiModelWare.Amount3 = Convert.ToInt32(item.SelectNodes("./production/primary/ware")[i].Attributes["amount"].Value);
-                                                }
-                                                if (i == 3)
-                                                {
-                                                    uiModelWare.Ware4 = item.SelectNodes("./production/primary/ware")[i].Attributes["ware"].Value;
-                                                    uiModelWare.Amount4 = Convert.ToInt32(item.SelectNodes("./production/primary/ware")[i].Attributes["amount"].Value);
-                                                }
-                                                if (i == 4)
-                                                {
-                                                    uiModelWare.Ware5 = item.SelectNodes("./production/primary/ware")[i].Attributes["ware"].Value;
-                                                    uiModelWare.Amount5 = Convert.ToInt32(item.SelectNodes("./production/primary/ware")[i].Attributes["amount"].Value);
-                                                }
-                                            }
-                                        }
-                                        else if (item.SelectNodes("./production").Count == 2)
-                                        {
-                                            int noXenon = 0;
-                                            bool xenon = false;
-
-                                            XmlNodeList productionNodes = item.SelectNodes("./production");
-                                            if (item.SelectNodes("./production")[0].Attributes["method"].Value == "xenon" && item.SelectNodes("./production")[1].Attributes["method"].Value == "default")
-                                            {
-                                                noXenon = 1;
-                                                xenon = true;
-                                            }
-                                            if (item.SelectNodes("./production")[1].Attributes["method"].Value == "xenon" && item.SelectNodes("./production")[0].Attributes["method"].Value == "default")
-                                            {
-                                                noXenon = 0;
-                                                xenon = true;
-                                            }
-                                            // only if one of the two production ways is xenon and the other one is default, show default
-                                            if (xenon)
-                                            {
-                                                productionNodes = item.SelectNodes("./production")[noXenon].ChildNodes[0].ChildNodes;
-
-                                                if (productionNodes.Count > 0)
-                                                {
-                                                    uiModelWare.Time = Utility.ParseToDouble(item.SelectNodes("./production")[noXenon].Attributes["time"].Value);
-                                                    uiModelWare.Amount = Convert.ToInt32(item.SelectNodes("./production")[noXenon].Attributes["amount"].Value);
-                                                }
-                                                for (int i = 0; i < item.SelectNodes("./production/primary/ware").Count; i++)
-                                                {
-                                                    if (i == 0 && productionNodes[i] != null)
-                                                    {
-                                                        uiModelWare.Ware1 = productionNodes[i].Attributes["ware"].Value;
-                                                        uiModelWare.Amount1 = Convert.ToInt32(productionNodes[i].Attributes["amount"].Value);
-                                                    }
-                                                    if (i == 1 && productionNodes[i] != null)
-                                                    {
-                                                        uiModelWare.Ware2 = productionNodes[i].Attributes["ware"].Value;
-                                                        uiModelWare.Amount2 = Convert.ToInt32(productionNodes[i].Attributes["amount"].Value);
-                                                    }
-                                                    if (i == 2 && productionNodes[i] != null)
-                                                    {
-                                                        uiModelWare.Ware3 = productionNodes[i].Attributes["ware"].Value;
-                                                        uiModelWare.Amount3 = Convert.ToInt32(productionNodes[i].Attributes["amount"].Value);
-                                                    }
-                                                    if (i == 3 && productionNodes[i] != null)
-                                                    {
-                                                        uiModelWare.Ware4 = productionNodes[i].Attributes["ware"].Value;
-                                                        uiModelWare.Amount4 = Convert.ToInt32(productionNodes[i].Attributes["amount"].Value);
-                                                    }
-                                                    if (i == 4 && productionNodes[i] != null)
-                                                    {
-                                                        uiModelWare.Ware5 = productionNodes[i].Attributes["ware"].Value;
-                                                        uiModelWare.Amount5 = Convert.ToInt32(productionNodes[i].Attributes["amount"].Value);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        uiModelWare.Changed = false;
-
-                                        var wareWithSameId = m_UIManager.UIModel.UIModelWares.Select(x => x.ID.Equals(uiModelWare.ID));
-                                        if (wareWithSameId != null)
-                                            m_UIManager.UIModel.UIModelWares.Add(uiModelWare);
-                                    }
-                                }
+                                ReadNewWares(waresPath, doc, addedWaresByMod);
                             }
-                        }
 
-                        // this part is for ware properties replaced by a mod
-                        if (doc.Descendants().Where(x => x.Name.LocalName == "diff").ToList().Count > 0)
-                        {
-                            var replacedWares = doc.Descendants().Where(x => x.Name.LocalName == "diff").ToList();
-                            foreach (var ware in replacedWares)
+                            if (doc.Descendants().Where(x => x.Name.LocalName == "diff").ToList().Count > 0)
                             {
-                                XmlDocument xD = new XmlDocument();
-                                xD.LoadXml(ware.ToString());
-                                XmlNode xN = XmlHelper.ToXmlNode(ware);
-                                XmlNodeList wareNodes = xN.SelectNodes("//replace");
+                                // this part is for ware properties replaced by a mod
+                                var diffNodes = doc.Descendants().Where(x => x.Name.LocalName == "diff").ToList();
 
-                                foreach (XmlNode item in wareNodes)
+                                if (diffNodes.Descendants().Where(x => x.Name.LocalName == "add").ToList().Count > 0)
+                                    addedWaresByMod = true;
+
+                                if (doc.Descendants().Where(x => x.Name.LocalName == "wares").ToList().Count > 0 || addedWaresByMod)
                                 {
-                                    if (item.Attributes["sel"] != null)
-                                    {
-                                        string wareSel = item.Attributes["sel"].Value;
-                                        string wareID = wareSel.Split('\'')[1];
-                                        var wareToChange = this.m_UIManager.UIModel.UIModelWares.Where(x => x.Name == wareID).ToList();
+                                    ReadNewWares(waresPath, doc, addedWaresByMod);
+                                }
 
-                                        if (wareToChange != null && item.FirstChild != null)
+                                // if ware values have been altered these have to be applied also
+                                {
+                                    foreach (var diff in diffNodes)
+                                    {
+                                        //if (diff.Descendants().Where(x => x.Name.LocalName == "replace").ToList().Count > 0)
+                                        //{
+                                        //    var replacedWares = diff.Descendants().Where(x => x.Name.LocalName == "replace").ToList();
+
+
+                                        //    foreach (var item in replacedWares)
+                                        //    {
+                                        XmlDocument xD = new XmlDocument();
+                                        xD.LoadXml(diff.ToString());
+                                        XmlNode xN = XmlHelper.ToXmlNode(diff);
+                                        XmlNodeList wareNodes = xN.SelectNodes("//replace");
+
+
+                                        foreach (XmlNode wareNode in wareNodes)
                                         {
-                                            wareToChange.FirstOrDefault().Changed = true;
-                                            if (item.FirstChild.LocalName == "price")
+                                            XmlDocument xDD = new XmlDocument();
+                                            xDD.LoadXml(wareNode.OuterXml);
+                                            XmlNode item = xDD.FirstChild;
+
+                                            //XmlNode item = XmlHelper.ToXmlNode(wareNode.OuterXml.ToXElement());
+
+                                            if (item.Attributes["sel"] != null)
                                             {
-                                                wareToChange.FirstOrDefault().Min = Convert.ToInt32(item.FirstChild.Attributes["min"].Value);
-                                                wareToChange.FirstOrDefault().Max = Convert.ToInt32(item.FirstChild.Attributes["max"].Value);
-                                                wareToChange.FirstOrDefault().Avg = Convert.ToInt32(item.FirstChild.Attributes["average"].Value);
-                                            }
-                                            if (item.FirstChild.LocalName == "primary")
-                                            {
-                                                for (int i = 0; i < item.FirstChild.ChildNodes.Count; i++)
+                                                string wareSel = item.Attributes["sel"].Value;
+                                                string wareID = wareSel.Split('\'')[1];
+                                                additionalErrorText = wareID;
+                                                var wareToChange = this.m_UIManager.UIModel.UIModelWares.Where(x => x.Name == wareID).ToList();
+
+                                                if (wareToChange != null && item.FirstChild != null)
                                                 {
-                                                    if (i == 0)
+                                                    wareToChange.FirstOrDefault().Changed = true;
+                                                    if (item.FirstChild.LocalName == "price")
                                                     {
-                                                        wareToChange.FirstOrDefault().Ware1 = item.FirstChild.ChildNodes[i].Attributes["ware"].Value;
-                                                        wareToChange.FirstOrDefault().Amount1 = Convert.ToInt32(item.FirstChild.ChildNodes[i].Attributes["amount"].Value);
+                                                        wareToChange.FirstOrDefault().Min = Convert.ToInt32(item.FirstChild.Attributes["min"].Value);
+                                                        wareToChange.FirstOrDefault().Max = Convert.ToInt32(item.FirstChild.Attributes["max"].Value);
+                                                        wareToChange.FirstOrDefault().Avg = Convert.ToInt32(item.FirstChild.Attributes["average"].Value);
                                                     }
-                                                    if (i == 1)
+                                                    if (item.FirstChild.LocalName == "primary")
                                                     {
-                                                        wareToChange.FirstOrDefault().Ware2 = item.FirstChild.ChildNodes[i].Attributes["ware"].Value;
-                                                        wareToChange.FirstOrDefault().Amount2 = Convert.ToInt32(item.FirstChild.ChildNodes[i].Attributes["amount"].Value);
+                                                        for (int i = 0; i < item.FirstChild.ChildNodes.Count; i++)
+                                                        {
+                                                            if (i == 0)
+                                                            {
+                                                                wareToChange.FirstOrDefault().Ware1 = item.FirstChild.ChildNodes[i].Attributes["ware"].Value;
+                                                                wareToChange.FirstOrDefault().Amount1 = Convert.ToInt32(item.FirstChild.ChildNodes[i].Attributes["amount"].Value);
+                                                            }
+                                                            if (i == 1)
+                                                            {
+                                                                wareToChange.FirstOrDefault().Ware2 = item.FirstChild.ChildNodes[i].Attributes["ware"].Value;
+                                                                wareToChange.FirstOrDefault().Amount2 = Convert.ToInt32(item.FirstChild.ChildNodes[i].Attributes["amount"].Value);
+                                                            }
+                                                            if (i == 2)
+                                                            {
+                                                                wareToChange.FirstOrDefault().Ware3 = item.FirstChild.ChildNodes[i].Attributes["ware"].Value;
+                                                                wareToChange.FirstOrDefault().Amount3 = Convert.ToInt32(item.FirstChild.ChildNodes[i].Attributes["amount"].Value);
+                                                            }
+                                                            if (i == 3)
+                                                            {
+                                                                wareToChange.FirstOrDefault().Ware4 = item.FirstChild.ChildNodes[i].Attributes["ware"].Value;
+                                                                wareToChange.FirstOrDefault().Amount4 = Convert.ToInt32(item.FirstChild.ChildNodes[i].Attributes["amount"].Value);
+                                                            }
+                                                            if (i == 4)
+                                                            {
+                                                                wareToChange.FirstOrDefault().Ware5 = item.FirstChild.ChildNodes[i].Attributes["ware"].Value;
+                                                                wareToChange.FirstOrDefault().Amount5 = Convert.ToInt32(item.FirstChild.ChildNodes[i].Attributes["amount"].Value);
+                                                            }
+                                                        }
                                                     }
-                                                    if (i == 2)
-                                                    {
-                                                        wareToChange.FirstOrDefault().Ware3 = item.FirstChild.ChildNodes[i].Attributes["ware"].Value;
-                                                        wareToChange.FirstOrDefault().Amount3 = Convert.ToInt32(item.FirstChild.ChildNodes[i].Attributes["amount"].Value);
-                                                    }
-                                                    if (i == 3)
-                                                    {
-                                                        wareToChange.FirstOrDefault().Ware4 = item.FirstChild.ChildNodes[i].Attributes["ware"].Value;
-                                                        wareToChange.FirstOrDefault().Amount4 = Convert.ToInt32(item.FirstChild.ChildNodes[i].Attributes["amount"].Value);
-                                                    }
-                                                    if (i == 4)
-                                                    {
-                                                        wareToChange.FirstOrDefault().Ware5 = item.FirstChild.ChildNodes[i].Attributes["ware"].Value;
-                                                        wareToChange.FirstOrDefault().Amount5 = Convert.ToInt32(item.FirstChild.ChildNodes[i].Attributes["amount"].Value);
-                                                    }
+                                                    wareToChange.FirstOrDefault().Changed = false;
                                                 }
                                             }
-                                            wareToChange.FirstOrDefault().Changed = false;
                                         }
                                     }
                                 }
                             }
                         }
                     }
+                    m_UIManager.UIModel.AllWaresLoaded = true;
+                    m_UIManager.UIModel.CalculateWarePrices();
+                    foreach (var item in m_UIManager.UIModel.UIModelWares)
+                    {
+                        item.Changed = false;
+                    }
+                    //TODO: this needs to be done only in case of vanilla and not mods
+                    m_UIManager.UIModel.UIModelWaresVanilla.Clear();
+                    foreach (var item in m_UIManager.UIModel.UIModelWares)
+                    {
+                        m_UIManager.UIModel.UIModelWaresVanilla.Add(item.Copy());
+                    }
                 }
-                m_UIManager.UIModel.AllWaresLoaded = true;
-                m_UIManager.UIModel.CalculateWarePrices();
-                foreach (var item in m_UIManager.UIModel.UIModelWares)
+                catch (Exception ex)
                 {
-                    item.Changed = false;
+                    throw new Exception("\rErrer reading wares.xml: " + ex.Message + " " + additionalErrorText);
                 }
-                //TODO: this needs to be done only in case of vanilla and not mods
-                m_UIManager.UIModel.UIModelWaresVanilla.Clear();
-                foreach (var item in m_UIManager.UIModel.UIModelWares)
+            }
+        }
+
+        private void ReadNewWares(string waresPath, XDocument doc, bool addedWaresByMod)
+        {
+            var wares = doc.Descendants("wares");
+            if (addedWaresByMod)
+                wares = doc.Descendants("add");
+
+            foreach (var ware in wares)
+            {
+                XmlDocument xD = new XmlDocument();
+                xD.LoadXml(ware.ToString());
+                XmlNode xN = XmlHelper.ToXmlNode(ware);
+                XmlNodeList wareNodes = xN.SelectNodes("//ware");
+
+                foreach (XmlNode item in wareNodes)
                 {
-                    m_UIManager.UIModel.UIModelWaresVanilla.Add(item.Copy());
+
+                    if (item.Attributes["id"] != null)
+                    {
+
+                        XmlNode priceNode = null;
+                        foreach (XmlNode child in item.SelectNodes("price"))
+                        {
+                            priceNode = child;
+                        }
+
+                        UIModelWare uiModelWare = new UIModelWare()
+                        {
+                            File = waresPath,
+                            Name = item.Attributes["id"].Value,
+                            ID = item.Attributes["id"].Value,
+                            Max = Convert.ToInt32(priceNode.Attributes["max"].Value),
+                            Min = Convert.ToInt32(priceNode.Attributes["min"].Value),
+                            Avg = Convert.ToInt32(priceNode.Attributes["average"].Value),
+                        };
+
+                        if (item.SelectNodes("./production").Count == 1)
+                        {
+                            XmlNodeList productionNode = item.SelectNodes("./production");
+                            if (productionNode.Count > 0)
+                            {
+                                uiModelWare.Time = Convert.ToInt32(productionNode[0].Attributes["time"].Value);
+                                uiModelWare.Amount = Convert.ToInt32(productionNode[0].Attributes["amount"].Value);
+                            }
+                            for (int i = 0; i < item.SelectNodes("./production/primary/ware").Count; i++)
+                            {
+                                if (i == 0)
+                                {
+                                    uiModelWare.Ware1 = item.SelectNodes("./production/primary/ware")[i].Attributes["ware"].Value;
+                                    uiModelWare.Amount1 = Convert.ToInt32(item.SelectNodes("./production/primary/ware")[i].Attributes["amount"].Value);
+                                }
+                                if (i == 1)
+                                {
+                                    uiModelWare.Ware2 = item.SelectNodes("./production/primary/ware")[i].Attributes["ware"].Value;
+                                    uiModelWare.Amount2 = Convert.ToInt32(item.SelectNodes("./production/primary/ware")[i].Attributes["amount"].Value);
+                                }
+                                if (i == 2)
+                                {
+                                    uiModelWare.Ware3 = item.SelectNodes("./production/primary/ware")[i].Attributes["ware"].Value;
+                                    uiModelWare.Amount3 = Convert.ToInt32(item.SelectNodes("./production/primary/ware")[i].Attributes["amount"].Value);
+                                }
+                                if (i == 3)
+                                {
+                                    uiModelWare.Ware4 = item.SelectNodes("./production/primary/ware")[i].Attributes["ware"].Value;
+                                    uiModelWare.Amount4 = Convert.ToInt32(item.SelectNodes("./production/primary/ware")[i].Attributes["amount"].Value);
+                                }
+                                if (i == 4)
+                                {
+                                    uiModelWare.Ware5 = item.SelectNodes("./production/primary/ware")[i].Attributes["ware"].Value;
+                                    uiModelWare.Amount5 = Convert.ToInt32(item.SelectNodes("./production/primary/ware")[i].Attributes["amount"].Value);
+                                }
+                            }
+                        }
+                        else if (item.SelectNodes("./production").Count == 2)
+                        {
+                            int noXenon = 0;
+                            bool xenon = false;
+
+                            XmlNodeList productionNodes = item.SelectNodes("./production");
+                            if (item.SelectNodes("./production")[0].Attributes["method"].Value == "xenon" && item.SelectNodes("./production")[1].Attributes["method"].Value == "default")
+                            {
+                                noXenon = 1;
+                                xenon = true;
+                            }
+                            if (item.SelectNodes("./production")[1].Attributes["method"].Value == "xenon" && item.SelectNodes("./production")[0].Attributes["method"].Value == "default")
+                            {
+                                noXenon = 0;
+                                xenon = true;
+                            }
+                            // only if one of the two production ways is xenon and the other one is default, show default
+                            if (xenon)
+                            {
+                                productionNodes = item.SelectNodes("./production")[noXenon].ChildNodes[0].ChildNodes;
+
+                                if (productionNodes.Count > 0)
+                                {
+                                    uiModelWare.Time = Utility.ParseToDouble(item.SelectNodes("./production")[noXenon].Attributes["time"].Value);
+                                    uiModelWare.Amount = Convert.ToInt32(item.SelectNodes("./production")[noXenon].Attributes["amount"].Value);
+                                }
+                                for (int i = 0; i < item.SelectNodes("./production/primary/ware").Count; i++)
+                                {
+                                    if (i == 0 && productionNodes[i] != null)
+                                    {
+                                        uiModelWare.Ware1 = productionNodes[i].Attributes["ware"].Value;
+                                        uiModelWare.Amount1 = Convert.ToInt32(productionNodes[i].Attributes["amount"].Value);
+                                    }
+                                    if (i == 1 && productionNodes[i] != null)
+                                    {
+                                        uiModelWare.Ware2 = productionNodes[i].Attributes["ware"].Value;
+                                        uiModelWare.Amount2 = Convert.ToInt32(productionNodes[i].Attributes["amount"].Value);
+                                    }
+                                    if (i == 2 && productionNodes[i] != null)
+                                    {
+                                        uiModelWare.Ware3 = productionNodes[i].Attributes["ware"].Value;
+                                        uiModelWare.Amount3 = Convert.ToInt32(productionNodes[i].Attributes["amount"].Value);
+                                    }
+                                    if (i == 3 && productionNodes[i] != null)
+                                    {
+                                        uiModelWare.Ware4 = productionNodes[i].Attributes["ware"].Value;
+                                        uiModelWare.Amount4 = Convert.ToInt32(productionNodes[i].Attributes["amount"].Value);
+                                    }
+                                    if (i == 4 && productionNodes[i] != null)
+                                    {
+                                        uiModelWare.Ware5 = productionNodes[i].Attributes["ware"].Value;
+                                        uiModelWare.Amount5 = Convert.ToInt32(productionNodes[i].Attributes["amount"].Value);
+                                    }
+                                }
+                            }
+                        }
+                        uiModelWare.Changed = false;
+
+                        var wareWithSameId = m_UIManager.UIModel.UIModelWares.Where(x => x.ID.Equals(uiModelWare.ID)).ToList();
+                        if (wareWithSameId.Count == 0)
+                            m_UIManager.UIModel.UIModelWares.Add(uiModelWare);
+                    }
                 }
             }
         }
