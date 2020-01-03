@@ -400,13 +400,33 @@ namespace X4_Editor
             {
                 if (!waresWritten)
                     MessageBox.Show("Mod files have been created.");
+                if (!File.Exists(m_UIManager.UIModel.ExportPath + @"\content.xml"))
+                {
+                    MessageBoxResult result = MessageBox.Show(
+                        "No content.xml file detected.\r\r" +
+                        "content.xml file is needed to use the mod. Shall a default content.xml file be written?", "Content.xml missing", MessageBoxButton.YesNo
+                        );
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        using (var sw = new StreamWriter(m_UIManager.UIModel.ExportPath + @"\content.xml"))
+                        {
+                            string dateNow = DateTime.Now.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture).Replace("/", "-");
+                            string[] modPath = m_UIManager.UIModel.ExportPath.Split('\\');
+                            string modName = modPath[modPath.Length - 1];
+                            sw.WriteLine("<?xml version=\"1.0\" encoding=\"utf - 8\"?>");
+                            sw.WriteLine("<!-- This context.xml file has been created by the X4 Editor -->");
+                            sw.WriteLine("<content id=\"" + modName + "\" name=\"" + modName + "\" description=\"This mod was created by the X4 Editor\" author=\"X4 Editor\" version=\"100\" date=\"" + dateNow + "\" save=\"0\" enabled=\"1\" sync=\"false\">");
+                            sw.WriteLine("</content>");
+                        }
+                    }
+                }
                 if (waresWritten)
                 {
                     MessageBox.Show
                         (
                         "Mod files have been created. \r\r" +
                         "Wares you have changed have been attached to wares.xml library. You need to check the outer xml nodes for correctness!\r" +
-                        "Wares.xml will be opened...", "Mod files written", MessageBoxButton.OK, MessageBoxImage.Warning 
+                        "Wares.xml will be opened...", "Mod files written", MessageBoxButton.OK, MessageBoxImage.Warning
                         );
                     string pathToWares = m_UIManager.UIModel.ExportPath + m_UIManager.PathToWares;
                     Process.Start(pathToWares);
