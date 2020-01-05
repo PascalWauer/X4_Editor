@@ -28,15 +28,23 @@ namespace X4_Editor
 
                 if (item.Changed)
                 {
-                    if (!Directory.Exists(m_UIManager.UIModel.ExportPath + m_UIManager.PathToShields))
+                    string extensionModPart = "";
+                    if (item.File.Contains(m_UIManager.UIModel.ModPath1))
                     {
-                        Directory.CreateDirectory(m_UIManager.UIModel.ExportPath + m_UIManager.PathToShields);
+                        string[] folders = m_UIManager.UIModel.ModPath1.Split('\\');
+                        string lastFolderName = folders.Last();
+                        extensionModPart = @"\extensions\" + lastFolderName;
                     }
 
-                    string outputPath = m_UIManager.UIModel.ExportPath + m_UIManager.PathToShields + item.File.Split(new[] { "macros" }, StringSplitOptions.None)[1];
+                    if (!Directory.Exists(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToShields))
+                    {
+                        Directory.CreateDirectory(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToShields);
+                    }
+
+                    string outputPath = m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToShields + item.File.Split(new[] { "macros" }, StringSplitOptions.None)[1];
                     using (StreamWriter sw = new StreamWriter(outputPath))
                     {
-                        sw.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+                        //sw.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
                         sw.WriteLine("<diff> ");
                         if (vanillaItem.Max != item.Max)
                             sw.WriteLine("\t<replace sel=\"//macros/macro/properties/recharge/@max\">" + String.Format(CultureInfo.InvariantCulture, "{0:0}", item.Max) + "</replace>");
@@ -60,15 +68,23 @@ namespace X4_Editor
 
                 if (item.Changed)
                 {
-                    if (!Directory.Exists(m_UIManager.UIModel.ExportPath + m_UIManager.PathToEngines))
+                    string extensionModPart = "";
+                    if (item.File.Contains(m_UIManager.UIModel.ModPath1))
                     {
-                        Directory.CreateDirectory(m_UIManager.UIModel.ExportPath + m_UIManager.PathToEngines);
+                        string[] folders = m_UIManager.UIModel.ModPath1.Split('\\');
+                        string lastFolderName = folders.Last();
+                        extensionModPart = @"\extensions\" + lastFolderName;
                     }
 
-                    string outputPath = m_UIManager.UIModel.ExportPath + m_UIManager.PathToEngines + item.File.Split(new[] { "macros" }, StringSplitOptions.None)[1];
+                    if (!Directory.Exists(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToEngines))
+                    {
+                        Directory.CreateDirectory(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToEngines);
+                    }
+
+                    string outputPath = m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToEngines + item.File.Split(new[] { "macros" }, StringSplitOptions.None)[1];
                     using (StreamWriter sw = new StreamWriter(outputPath))
                     {
-                        sw.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+                        //sw.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
                         sw.WriteLine("<diff> ");
                         if (vanillaItem.BoostDuration != item.BoostDuration)
                             sw.WriteLine("\t<replace sel=\"//macros/macro/properties/boost/@duration\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.BoostDuration) + "</replace>");
@@ -117,20 +133,28 @@ namespace X4_Editor
             {
                 var vanillaItem = m_UIManager.UIModel.UIModelShipsVanilla.Where(x => x.Name == item.Name).FirstOrDefault();
 
-                string shipClasssFolder = item.File.Split(new[] { "units" }, StringSplitOptions.None)[1].Split(new[] { "macros" }, StringSplitOptions.None)[0];
-
-                if (!Directory.Exists(m_UIManager.UIModel.ExportPath + m_UIManager.PathToShips + shipClasssFolder + @"\macros"))
-                {
-                    Directory.CreateDirectory(m_UIManager.UIModel.ExportPath + m_UIManager.PathToShips + shipClasssFolder + @"\macros");
-                }
-
-                string outputPath = m_UIManager.UIModel.ExportPath + m_UIManager.PathToShips + shipClasssFolder + "macros" + item.File.Split(new[] { "macros" }, StringSplitOptions.None)[1];
-
                 if (item.Changed)
                 {
+                    string shipClasssFolder = item.File.Split(new[] { "units" }, StringSplitOptions.None)[1].Split(new[] { "macros" }, StringSplitOptions.None)[0];
+
+                    string extensionModPart = "";
+                    if (item.File.Contains(m_UIManager.UIModel.ModPath1))
+                    {
+                        string[] folders = m_UIManager.UIModel.ModPath1.Split('\\');
+                        string lastFolderName = folders.Last();
+                        extensionModPart = @"\extensions\" + lastFolderName;
+                    }
+
+                    if (!Directory.Exists(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToShips + shipClasssFolder + @"\macros"))
+                    {
+                        Directory.CreateDirectory(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToShips + shipClasssFolder + @"\macros");
+                    }
+
+                    string outputPath = m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToShips + shipClasssFolder + "macros" + item.File.Split(new[] { "macros" }, StringSplitOptions.None)[1];
+
                     using (StreamWriter sw = new StreamWriter(outputPath))
                     {
-                        sw.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+                        //sw.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
                         sw.WriteLine("<diff> ");
                         if (vanillaItem == null || vanillaItem.HullMax != item.HullMax)
                             sw.WriteLine("\t<replace sel=\"//macros/macro/properties/hull/@max\">" + item.HullMax + "</replace>");
@@ -172,20 +196,21 @@ namespace X4_Editor
 
                         fileswritten = true;
                     }
-                }
-                if (item.Cargo != null && item.Cargo.Changed)
-                {
-                    using (StreamWriter sw = new StreamWriter(outputPath.Replace("ship", "storage")))
-                    {
-                        sw.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-                        sw.WriteLine("<diff> ");
-                        if (vanillaItem == null || vanillaItem.Cargo.CargoMax != item.Cargo.CargoMax)
-                            sw.WriteLine("\t<replace sel=\"//macros/macro/properties/cargo/@max\">" + item.Cargo.CargoMax + "</replace>");
-                        if (vanillaItem == null || vanillaItem.Cargo.CargoTags != item.Cargo.CargoTags)
-                            sw.WriteLine("\t<replace sel=\"//macros/macro/properties/cargo/@tags\">" + item.Cargo.CargoTags + "</replace>");
-                        sw.WriteLine("</diff> ");
 
-                        fileswritten = true;
+                    if (item.Cargo != null && item.Cargo.Changed)
+                    {
+                        using (StreamWriter sw = new StreamWriter(outputPath.Replace("ship", "storage")))
+                        {
+                            //sw.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+                            sw.WriteLine("<diff> ");
+                            if (vanillaItem == null || vanillaItem.Cargo.CargoMax != item.Cargo.CargoMax)
+                                sw.WriteLine("\t<replace sel=\"//macros/macro/properties/cargo/@max\">" + item.Cargo.CargoMax + "</replace>");
+                            if (vanillaItem == null || vanillaItem.Cargo.CargoTags != item.Cargo.CargoTags)
+                                sw.WriteLine("\t<replace sel=\"//macros/macro/properties/cargo/@tags\">" + item.Cargo.CargoTags + "</replace>");
+                            sw.WriteLine("</diff> ");
+
+                            fileswritten = true;
+                        }
                     }
                 }
             }
@@ -196,15 +221,23 @@ namespace X4_Editor
 
                 if (item.Changed)
                 {
-                    if (!Directory.Exists(m_UIManager.UIModel.ExportPath + m_UIManager.PathToProjectiles))
+                    string extensionModPart = "";
+                    if (item.File.Contains(m_UIManager.UIModel.ModPath1))
                     {
-                        Directory.CreateDirectory(m_UIManager.UIModel.ExportPath + m_UIManager.PathToProjectiles);
+                        string[] folders = m_UIManager.UIModel.ModPath1.Split('\\');
+                        string lastFolderName = folders.Last();
+                        extensionModPart = @"\extensions\" + lastFolderName;
                     }
 
-                    string outputPath = m_UIManager.UIModel.ExportPath + m_UIManager.PathToProjectiles + item.File.Split(new[] { "macros" }, StringSplitOptions.None)[1];
+                    if (!Directory.Exists(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToProjectiles))
+                    {
+                        Directory.CreateDirectory(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToProjectiles);
+                    }
+
+                    string outputPath = m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToProjectiles + item.File.Split(new[] { "macros" }, StringSplitOptions.None)[1];
                     using (StreamWriter sw = new StreamWriter(outputPath))
                     {
-                        sw.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+                        //sw.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
                         sw.WriteLine("<diff> ");
                         if (vanillaItem.Speed != item.Speed)
                             sw.WriteLine("\t<replace sel=\"//macros/macro/properties/bullet/@speed\">" + String.Format(CultureInfo.InvariantCulture, "{0:0}", item.Speed) + "</replace>");
@@ -256,36 +289,44 @@ namespace X4_Editor
 
                 if (item.Changed)
                 {
-                    if (!Directory.Exists(m_UIManager.UIModel.ExportPath + m_UIManager.PathToTurretsStandard))
+                    string extensionModPart = "";
+                    if (item.File.Contains(m_UIManager.UIModel.ModPath1))
                     {
-                        Directory.CreateDirectory(m_UIManager.UIModel.ExportPath + m_UIManager.PathToTurretsStandard);
+                        string[] folders = m_UIManager.UIModel.ModPath1.Split('\\');
+                        string lastFolderName = folders.Last();
+                        extensionModPart = @"\extensions\" + lastFolderName;
                     }
-                    if (!Directory.Exists(m_UIManager.UIModel.ExportPath + m_UIManager.PathToTurretsHeavy))
+
+                    if (item.File.Contains(m_UIManager.PathToTurretsStandard) && !Directory.Exists(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToTurretsStandard))
                     {
-                        Directory.CreateDirectory(m_UIManager.UIModel.ExportPath + m_UIManager.PathToTurretsHeavy);
+                        Directory.CreateDirectory(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToTurretsStandard);
                     }
-                    if (!Directory.Exists(m_UIManager.UIModel.ExportPath + m_UIManager.PathToTurretsGuided))
+                    if (item.File.Contains(m_UIManager.PathToTurretsHeavy) && !Directory.Exists(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToTurretsHeavy))
                     {
-                        Directory.CreateDirectory(m_UIManager.UIModel.ExportPath + m_UIManager.PathToTurretsGuided);
+                        Directory.CreateDirectory(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToTurretsHeavy);
                     }
-                    if (!Directory.Exists(m_UIManager.UIModel.ExportPath + m_UIManager.PathToTurretsEnergy))
+                    if (item.File.Contains(m_UIManager.PathToTurretsGuided) && !Directory.Exists(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToTurretsGuided))
                     {
-                        Directory.CreateDirectory(m_UIManager.UIModel.ExportPath + m_UIManager.PathToTurretsEnergy);
+                        Directory.CreateDirectory(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToTurretsGuided);
                     }
-                    if (!Directory.Exists(m_UIManager.UIModel.ExportPath + m_UIManager.PathToTurretsCapital))
+                    if (item.File.Contains(m_UIManager.PathToTurretsEnergy) && !Directory.Exists(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToTurretsEnergy))
                     {
-                        Directory.CreateDirectory(m_UIManager.UIModel.ExportPath + m_UIManager.PathToTurretsCapital);
+                        Directory.CreateDirectory(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToTurretsEnergy);
                     }
-                    if (!Directory.Exists(m_UIManager.UIModel.ExportPath + m_UIManager.PathToTurretsDumbfire))
+                    if (item.File.Contains(m_UIManager.PathToTurretsCapital) && !Directory.Exists(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToTurretsCapital))
                     {
-                        Directory.CreateDirectory(m_UIManager.UIModel.ExportPath + m_UIManager.PathToTurretsDumbfire);
+                        Directory.CreateDirectory(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToTurretsCapital);
+                    }
+                    if (item.File.Contains(m_UIManager.PathToTurretsDumbfire) && !Directory.Exists(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToTurretsDumbfire))
+                    {
+                        Directory.CreateDirectory(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToTurretsDumbfire);
                     }
 
                     string[] splittedPath = item.File.Split(Path.DirectorySeparatorChar);
                     string lastThreeFoldersAndFileToWeaponPath = splittedPath[splittedPath.Length - 3] + Path.DirectorySeparatorChar + splittedPath[splittedPath.Length - 2] + Path.DirectorySeparatorChar +  splittedPath[splittedPath.Length - 1];
 
 
-                    string outputPath = m_UIManager.UIModel.ExportPath + @"\assets\props\WeaponSystems\" + lastThreeFoldersAndFileToWeaponPath;
+                    string outputPath = m_UIManager.UIModel.ExportPath + extensionModPart + @"\assets\props\WeaponSystems\" + lastThreeFoldersAndFileToWeaponPath;
                     //string outputPath = "";
                     //if (m_UIManager.UIModel.ModPath2.Length > 0)
                     //    outputPath = item.File.Replace(m_UIManager.UIModel.ModPath2, m_UIManager.UIModel.ExportPath);
@@ -295,7 +336,7 @@ namespace X4_Editor
 
                     using (StreamWriter sw = new StreamWriter(outputPath))
                     {
-                        sw.WriteLine(" <?xml version=\"1.0\" encoding=\"utf-8\"?>");
+                        //sw.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
                         sw.WriteLine("<diff> ");
                         if (vanillaItem.Projectile != item.Projectile)
                             sw.WriteLine("\t<replace sel=\"//macros/macro/properties/bullet/@class\">" + item.Projectile + "</replace>");
@@ -332,15 +373,23 @@ namespace X4_Editor
 
                 if (item.Changed)
                 {
-                    if (!Directory.Exists(m_UIManager.UIModel.ExportPath + m_UIManager.PathToMissiles))
+                    string extensionModPart = "";
+                    if (item.File.Contains(m_UIManager.UIModel.ModPath1))
                     {
-                        Directory.CreateDirectory(m_UIManager.UIModel.ExportPath + m_UIManager.PathToMissiles);
+                        string[] folders = m_UIManager.UIModel.ModPath1.Split('\\');
+                        string lastFolderName = folders.Last();
+                        extensionModPart = @"\extensions\" + lastFolderName;
                     }
 
-                    string outputPath = m_UIManager.UIModel.ExportPath + m_UIManager.PathToMissiles + item.File.Split(new[] { "macros" }, StringSplitOptions.None)[1];
+                    if (!Directory.Exists(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToMissiles))
+                    {
+                        Directory.CreateDirectory(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToMissiles);
+                    }
+
+                    string outputPath = m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToMissiles + item.File.Split(new[] { "macros" }, StringSplitOptions.None)[1];
                     using (StreamWriter sw = new StreamWriter(outputPath))
                     {
-                        sw.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+                        //sw.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
                         sw.WriteLine("<diff> ");
                         if (vanillaItem.Ammunition != item.Ammunition)
                             sw.WriteLine("\t<replace sel=\"//macros/macro/properties/ammunition/@value\">" + String.Format(CultureInfo.InvariantCulture, "{0:0}", item.Ammunition) + "</replace>");
@@ -412,10 +461,10 @@ namespace X4_Editor
                         {
                             string dateNow = DateTime.Now.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture).Replace("/", "-");
                             string[] modPath = m_UIManager.UIModel.ExportPath.Split('\\');
-                            string modName = modPath[modPath.Length - 1];
-                            sw.WriteLine("<?xml version=\"1.0\" encoding=\"utf - 8\"?>");
+                            string modName = "ZZ_" + modPath[modPath.Length - 1];
+                            sw.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
                             sw.WriteLine("<!-- This context.xml file has been created by the X4 Editor -->");
-                            sw.WriteLine("<content id=\"" + modName + "\" name=\"" + modName + "\" description=\"This mod was created by the X4 Editor\" author=\"X4 Editor\" version=\"100\" date=\"" + dateNow + "\" save=\"0\" enabled=\"1\" sync=\"false\">");
+                            sw.WriteLine("<content id=\"" + modName + "\" name=\"" + modName + "\" description=\"This mod was created by the X4 Editor\" author=\"X4 Editor\" version=\"001\" date=\"" + dateNow + "\" save=\"0\" enabled=\"1\" sync=\"false\">");
                             sw.WriteLine("</content>");
                         }
                     }
@@ -449,7 +498,7 @@ namespace X4_Editor
 
                 using (StreamWriter sw = new StreamWriter(outputPath, true))
                 {
-                    sw.WriteLine("<!-- Code below has been added at " + DateTime.Now + " -->");
+                    sw.WriteLine("<!-- DELETE THIS LINE IF IT IS THE FIRST LINE IN THIS FILE Code below has been added at " + DateTime.Now + " -->");
                     sw.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
                     sw.WriteLine("<diff> ");
 

@@ -107,8 +107,9 @@ namespace X4_Editor
                 + "Before you can use this tool you must have extracted all X4 data into a separate folder. You can use the 'X Rebirth Catalog Tool 1.10' to do this.\r"
                 + "The file will create diff files of all the values you have changed regarding to the read vanilla and mod files. As long as you dont click on export, nothing will be changed/written.\r\r"
                 + "1. Enter the path to the exported X4 data folder into the vanilla folder path (orange) and click on 'Read Vanilla'.\r\r"
-                + "2. You can read up to two mods by doing the same for 'Mod 1' and 'Mod 2' (yellow)\r\r"
-                + "3. The order in which you read the mods is important! Always read vanilla first, then the order in which the mods will be loaded in game.\r\r\r"
+                + "2. You can read up to two additional mods. The base mod can be a mod on which the active mod depends. It can only be read from.\r"
+                + "The second mod can be your active mod you are working on. Its path can be the same as the export path.\r\r"
+                + "3. The order in which you read the mods is important! Always read vanilla first, then the order in which the mods will be loaded in game. That means the base mod before the active mod.\r\r\r"
                 + "Mass editing:\r\r"
                 + "- Mass editing works only on editable cells and only if you have selected only cells in one window.\r\r"
                 + "Filters:\r\r"
@@ -123,7 +124,7 @@ namespace X4_Editor
                 + "Features:\r\r"
                 + "- DPS values and effective ranges will automatically calculated.\r"
                 + "- If available, the names of all items will be shown additionally to the IDs (file 't/0001.xml' is needed).\r"
-                + "- Right Mouse button on a row will open the associated xml file. Priority is 'Mod 2', 'Mod 1', 'Vanilla'. So if 'Mod 2' has changed the file last this file will be opened.\r"
+                + "- Right Mouse button on a row will open the associated xml file. Priority is 'Active Mod', 'Base Mod', 'Vanilla'. So if 'Active Mod' has changed the file last this file will be opened.\r"
                 + "- Double Click on either a Weapon/Turret row or a 'Projectile' row will filter the associated projectile or turret/weapon.\r\r"
                 + "The author of this tool (Pascal Wauer) is not responsible for any damage you do to your files. Use it on your own risk."
                 );
@@ -691,11 +692,13 @@ namespace X4_Editor
         /// <param name="e"></param>
         private void ExecuteReadAllMod1FilesCommand(object sender, ExecutedRoutedEventArgs e)
         {
+
+            this.ExecuteReadAllVanillaFilesCommand(null, null);
             m_ModFilesReader.ReadAllModFilesFromFolder(this.UIModel.ModPath1);
         }
         private void ExecuteReadAllMod2FilesCommand(object sender, ExecutedRoutedEventArgs e)
         {
-            m_ModFilesReader.ReadAllModFilesFromFolder(this.UIModel.ModPath2);
+            m_ModFilesReader.ReadAllModFilesFromFolder(this.UIModel.ModPath2, true);
         }
     }
 }

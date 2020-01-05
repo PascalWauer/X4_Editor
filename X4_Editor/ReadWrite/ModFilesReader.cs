@@ -19,7 +19,7 @@ namespace X4_Editor
             parent = Parent;
             m_XmlExtractor = XmlExtractor;
         }
-        public void ReadAllModFilesFromFolder(string modPath)
+        public void ReadAllModFilesFromFolder(string modPath, bool activeMod = false)
         {
             try
             {
@@ -104,13 +104,16 @@ namespace X4_Editor
                                                     shield.Threshold = Utility.ParseToDouble(value);
                                                 }
                                             }
-                                            shieldVanilla.Delay = shield.Delay;
-                                            shieldVanilla.Faction = shield.Faction;
-                                            shieldVanilla.Max = shield.Max;
-                                            shieldVanilla.MaxHull = shield.MaxHull;
-                                            shieldVanilla.Rate = shield.Rate;
-                                            shieldVanilla.Threshold = shield.Threshold;
-                                            shieldVanilla.Changed = false;
+                                            if (!activeMod)
+                                            {
+                                                shieldVanilla.Delay = shield.Delay;
+                                                shieldVanilla.Faction = shield.Faction;
+                                                shieldVanilla.Max = shield.Max;
+                                                shieldVanilla.MaxHull = shield.MaxHull;
+                                                shieldVanilla.Rate = shield.Rate;
+                                                shieldVanilla.Threshold = shield.Threshold;
+                                                shieldVanilla.Changed = false;
+                                            }
                                             shield.Changed = false;
                                         }
                                         else
@@ -119,8 +122,11 @@ namespace X4_Editor
                                             if (extractedShield.Name.Length > 1)
                                             {
                                                 parent.UIModel.UIModelShields.Add(extractedShield);
-                                                foreach (var item in parent.UIModel.UIModelShields)
-                                                    parent.UIModel.UIModelShieldsVanilla.Add(item.Copy());
+                                                if (!activeMod)
+                                                {
+                                                    foreach (var item in parent.UIModel.UIModelShields)
+                                                        parent.UIModel.UIModelShieldsVanilla.Add(item.Copy());
+                                                }
                                             }
                                         }
                                     }
@@ -253,25 +259,28 @@ namespace X4_Editor
                                                     engine.Threshold = Utility.ParseToDouble(value);
                                                 }
                                             }
-                                            engineVanilla.AngularPitch = engine.AngularPitch;
-                                            engineVanilla.AngularRoll = engine.AngularRoll;
-                                            engineVanilla.BoostAttack = engine.BoostAttack;
-                                            engineVanilla.BoostDuration = engine.BoostDuration;
-                                            engineVanilla.BoostRelease = engine.BoostRelease;
-                                            engineVanilla.BoostThrust = engine.BoostThrust;
-                                            engineVanilla.Forward = engine.Forward;
-                                            engineVanilla.MaxHull = engine.MaxHull;
-                                            engineVanilla.Pitch = engine.Pitch;
-                                            engineVanilla.Reverse = engine.Reverse;
-                                            engineVanilla.Roll = engine.Roll;
-                                            engineVanilla.Strafe = engine.Strafe;
-                                            engineVanilla.Threshold = engine.Threshold;
-                                            engineVanilla.TravelAttack = engine.TravelAttack;
-                                            engineVanilla.TravelCharge = engine.TravelCharge;
-                                            engineVanilla.TravelRelease = engine.TravelRelease;
-                                            engineVanilla.TravelThrust = engine.TravelThrust;
-                                            engineVanilla.Yaw = engine.Yaw;
-                                            engineVanilla.Changed = false;
+                                            if (!activeMod)
+                                            {
+                                                engineVanilla.AngularPitch = engine.AngularPitch;
+                                                engineVanilla.AngularRoll = engine.AngularRoll;
+                                                engineVanilla.BoostAttack = engine.BoostAttack;
+                                                engineVanilla.BoostDuration = engine.BoostDuration;
+                                                engineVanilla.BoostRelease = engine.BoostRelease;
+                                                engineVanilla.BoostThrust = engine.BoostThrust;
+                                                engineVanilla.Forward = engine.Forward;
+                                                engineVanilla.MaxHull = engine.MaxHull;
+                                                engineVanilla.Pitch = engine.Pitch;
+                                                engineVanilla.Reverse = engine.Reverse;
+                                                engineVanilla.Roll = engine.Roll;
+                                                engineVanilla.Strafe = engine.Strafe;
+                                                engineVanilla.Threshold = engine.Threshold;
+                                                engineVanilla.TravelAttack = engine.TravelAttack;
+                                                engineVanilla.TravelCharge = engine.TravelCharge;
+                                                engineVanilla.TravelRelease = engine.TravelRelease;
+                                                engineVanilla.TravelThrust = engine.TravelThrust;
+                                                engineVanilla.Yaw = engine.Yaw;
+                                                engineVanilla.Changed = false;
+                                            }
                                             engine.Changed = false;
                                         }
                                         else
@@ -280,8 +289,11 @@ namespace X4_Editor
                                             if (extractedEngine.Name.Length > 1)
                                             {
                                                 parent.UIModel.UIModelEngines.Add(extractedEngine);
-                                                foreach(var item in parent.UIModel.UIModelEngines)
-                                                    parent.UIModel.UIModelEnginesVanilla.Add(item.Copy());
+                                                if (!activeMod)
+                                                {
+                                                    foreach (var item in parent.UIModel.UIModelEngines)
+                                                        parent.UIModel.UIModelEnginesVanilla.Add(item.Copy());
+                                                }
                                             }
                                         }
                                     }
@@ -419,26 +431,29 @@ namespace X4_Editor
                                                     }
                                                 }
                                             }
-                                            weaponProjectileVanilla.Ammunition = weaponProjectile.Ammunition;
-                                            weaponProjectileVanilla.AmmunitionReload = weaponProjectile.AmmunitionReload;
-                                            weaponProjectileVanilla.Amount = weaponProjectile.Amount;
-                                            weaponProjectileVanilla.Angle = weaponProjectile.Angle;
-                                            weaponProjectileVanilla.BarrelAmount = weaponProjectile.BarrelAmount;
-                                            weaponProjectileVanilla.ChargeTime = weaponProjectile.ChargeTime;
-                                            weaponProjectileVanilla.Damage = weaponProjectile.Damage;
-                                            weaponProjectileVanilla.HeatInitial = weaponProjectile.HeatInitial;
-                                            weaponProjectileVanilla.HeatValue = weaponProjectile.HeatValue;
-                                            weaponProjectileVanilla.Lifetime = weaponProjectile.Lifetime;
-                                            weaponProjectileVanilla.MaxHits = weaponProjectile.MaxHits;
-                                            weaponProjectileVanilla.Range = weaponProjectile.Range;
-                                            weaponProjectileVanilla.ReloadRate = weaponProjectile.ReloadRate;
-                                            weaponProjectileVanilla.ReloadTime = weaponProjectile.ReloadTime;
-                                            weaponProjectileVanilla.Repair = weaponProjectile.Repair;
-                                            weaponProjectileVanilla.Ricochet = weaponProjectile.Ricochet;
-                                            weaponProjectileVanilla.Shield = weaponProjectile.Shield;
-                                            weaponProjectileVanilla.Speed = weaponProjectile.Speed;
-                                            weaponProjectileVanilla.TimeDiff = weaponProjectile.TimeDiff;
-                                            weaponProjectileVanilla.Changed = false;
+                                            if (!activeMod)
+                                            {
+                                                weaponProjectileVanilla.Ammunition = weaponProjectile.Ammunition;
+                                                weaponProjectileVanilla.AmmunitionReload = weaponProjectile.AmmunitionReload;
+                                                weaponProjectileVanilla.Amount = weaponProjectile.Amount;
+                                                weaponProjectileVanilla.Angle = weaponProjectile.Angle;
+                                                weaponProjectileVanilla.BarrelAmount = weaponProjectile.BarrelAmount;
+                                                weaponProjectileVanilla.ChargeTime = weaponProjectile.ChargeTime;
+                                                weaponProjectileVanilla.Damage = weaponProjectile.Damage;
+                                                weaponProjectileVanilla.HeatInitial = weaponProjectile.HeatInitial;
+                                                weaponProjectileVanilla.HeatValue = weaponProjectile.HeatValue;
+                                                weaponProjectileVanilla.Lifetime = weaponProjectile.Lifetime;
+                                                weaponProjectileVanilla.MaxHits = weaponProjectile.MaxHits;
+                                                weaponProjectileVanilla.Range = weaponProjectile.Range;
+                                                weaponProjectileVanilla.ReloadRate = weaponProjectile.ReloadRate;
+                                                weaponProjectileVanilla.ReloadTime = weaponProjectile.ReloadTime;
+                                                weaponProjectileVanilla.Repair = weaponProjectile.Repair;
+                                                weaponProjectileVanilla.Ricochet = weaponProjectile.Ricochet;
+                                                weaponProjectileVanilla.Shield = weaponProjectile.Shield;
+                                                weaponProjectileVanilla.Speed = weaponProjectile.Speed;
+                                                weaponProjectileVanilla.TimeDiff = weaponProjectile.TimeDiff;
+                                                weaponProjectileVanilla.Changed = false;
+                                            }
                                             weaponProjectile.Changed = false;
                                         }
                                         else
@@ -447,8 +462,11 @@ namespace X4_Editor
                                             if (extractedProjectile.Name.Length > 1)
                                             {
                                                 parent.UIModel.UIModelProjectiles.Add(extractedProjectile);
-                                                foreach (var item in parent.UIModel.UIModelProjectiles)
-                                                    parent.UIModel.UIModelProjectilesVanilla.Add(item.Copy());
+                                                if (!activeMod)
+                                                {
+                                                    foreach (var item in parent.UIModel.UIModelProjectiles)
+                                                        parent.UIModel.UIModelProjectilesVanilla.Add(item.Copy());
+                                                }
                                             }
                                         }
                                     }
@@ -464,18 +482,33 @@ namespace X4_Editor
                         {
                             List<string> files = new List<string>();
 
-                            if (Directory.Exists(modPath + parent.PathToTurretsStandard))
-                                files.AddRange(Directory.GetFiles(modPath + parent.PathToTurretsStandard).ToList());
-                            if (Directory.Exists(modPath + parent.PathToTurretsEnergy))
-                                files.AddRange(Directory.GetFiles(modPath + parent.PathToTurretsEnergy).ToList());
-                            if (Directory.Exists(modPath + parent.PathToTurretsCapital))
-                                files.AddRange(Directory.GetFiles(modPath + parent.PathToTurretsCapital).ToList());
-                            if (Directory.Exists(modPath + parent.PathToTurretsHeavy))
-                                files.AddRange(Directory.GetFiles(modPath + parent.PathToTurretsHeavy).ToList());
-                            if (Directory.Exists(modPath + parent.PathToTurretsGuided))
-                                files.AddRange(Directory.GetFiles(modPath + parent.PathToTurretsGuided).ToList());
-                            if (Directory.Exists(modPath + parent.PathToTurretsDumbfire))
-                                files.AddRange(Directory.GetFiles(modPath + parent.PathToTurretsDumbfire).ToList());
+                            if (Directory.Exists(dir))
+                            {
+                                files.AddRange(Directory.GetFiles(dir).ToList());
+                            }
+                            //if (Directory.Exists(modPath + parent.PathToTurretsStandard))
+                            //    files.AddRange(Directory.GetFiles(modPath + parent.PathToTurretsStandard).ToList());
+                            //if (Directory.Exists(modPath + parent.PathToTurretsEnergy))
+                            //    files.AddRange(Directory.GetFiles(modPath + parent.PathToTurretsEnergy).ToList());
+                            //if (Directory.Exists(modPath + parent.PathToTurretsCapital))
+                            //    files.AddRange(Directory.GetFiles(modPath + parent.PathToTurretsCapital).ToList());
+                            //if (Directory.Exists(modPath + parent.PathToTurretsHeavy))
+                            //    files.AddRange(Directory.GetFiles(modPath + parent.PathToTurretsHeavy).ToList());
+                            //if (Directory.Exists(modPath + parent.PathToTurretsGuided))
+                            //    files.AddRange(Directory.GetFiles(modPath + parent.PathToTurretsGuided).ToList());
+                            //if (Directory.Exists(modPath + parent.PathToTurretsDumbfire))
+                            //    files.AddRange(Directory.GetFiles(modPath + parent.PathToTurretsDumbfire).ToList());
+
+
+                            //string extensionModPart = "";
+                            //string[] folders = parent.UIModel.ModPath2.Split('\\');
+                            //string lastFolderName = folders.Last();
+                            //extensionModPart = @"\extensions\" + lastFolderName;
+
+                            //if (Directory.Exists(dir) && dir.Contains(@"\extensions\" + lastFolderName + @"\extensions\") && dir.Contains("assets\\props\\WeaponSystems\\") && dir.Contains("macros"))
+                            //{
+                            //        files.AddRange(Directory.GetFiles(dir).ToList());
+                            //}
 
                             foreach (string file in files)
                             {
@@ -561,16 +594,19 @@ namespace X4_Editor
                                                         weapon.Reenable = Convert.ToInt32(value);
                                                     }
                                                 }
-                                                weaponVanilla.CoolDelay = weapon.CoolDelay;
-                                                weaponVanilla.CoolRate = weapon.CoolRate;
-                                                weaponVanilla.HullMax = weapon.HullMax;
-                                                weaponVanilla.HullThreshold = weapon.HullThreshold;
-                                                weaponVanilla.Overheat = weapon.Overheat;
-                                                weaponVanilla.Reenable = weapon.Reenable;
-                                                weaponVanilla.ReloadRate = weapon.ReloadRate;
-                                                weaponVanilla.ReloadTime = weapon.ReloadTime;
-                                                weaponVanilla.RotationAcceleration = weapon.RotationAcceleration;
-                                                weaponVanilla.RotationSpeed = weapon.RotationSpeed;
+                                                if (!activeMod)
+                                                {
+                                                    weaponVanilla.CoolDelay = weapon.CoolDelay;
+                                                    weaponVanilla.CoolRate = weapon.CoolRate;
+                                                    weaponVanilla.HullMax = weapon.HullMax;
+                                                    weaponVanilla.HullThreshold = weapon.HullThreshold;
+                                                    weaponVanilla.Overheat = weapon.Overheat;
+                                                    weaponVanilla.Reenable = weapon.Reenable;
+                                                    weaponVanilla.ReloadRate = weapon.ReloadRate;
+                                                    weaponVanilla.ReloadTime = weapon.ReloadTime;
+                                                    weaponVanilla.RotationAcceleration = weapon.RotationAcceleration;
+                                                    weaponVanilla.RotationSpeed = weapon.RotationSpeed;
+                                                }
                                                 weaponVanilla.Changed = false;
                                                 weapon.Changed = false;
                                             }
@@ -588,8 +624,11 @@ namespace X4_Editor
                                             if (extractedWeapon.Name.Length > 1)
                                             {
                                                 parent.UIModel.UIModelWeapons.Add(extractedWeapon);
-                                                foreach (var item in parent.UIModel.UIModelWeapons)
-                                                    parent.UIModel.UIModelWeaponsVanilla.Add(item.Copy());
+                                                if (!activeMod)
+                                                {
+                                                    foreach (var item in parent.UIModel.UIModelWeapons)
+                                                        parent.UIModel.UIModelWeaponsVanilla.Add(item.Copy());
+                                                }
                                             }
                                         }
                                     }
@@ -746,29 +785,32 @@ namespace X4_Editor
                                                     weapon.InertiaYaw = Utility.ParseToDouble(value);
                                                 }
                                             }
-                                            weaponVanilla.Ammunition = weapon.Ammunition;
-                                            weaponVanilla.BarrelAmount = weapon.BarrelAmount;
-                                            weaponVanilla.Damage = weapon.Damage;
-                                            weaponVanilla.Forward = weapon.Forward;
-                                            weaponVanilla.Guided = weapon.Guided;
-                                            weaponVanilla.Horizontal = weapon.Horizontal;
-                                            weaponVanilla.Hull = weapon.Hull;
-                                            weaponVanilla.InertiaPitch = weapon.InertiaPitch;
-                                            weaponVanilla.InertiaRoll = weapon.InertiaRoll;
-                                            weaponVanilla.InertiaYaw = weapon.InertiaYaw;
-                                            weaponVanilla.Lifetime = weapon.Lifetime;
-                                            weaponVanilla.Mass = weapon.Mass;
-                                            weaponVanilla.MissileAmount = weapon.MissileAmount;
-                                            weaponVanilla.Pitch = weapon.Pitch;
-                                            weaponVanilla.Range = weapon.Range;
-                                            weaponVanilla.Reload = weapon.Reload;
-                                            weaponVanilla.Retarget = weapon.Retarget;
-                                            weaponVanilla.Reverse = weapon.Reverse;
-                                            weaponVanilla.Roll = weapon.Roll;
-                                            weaponVanilla.Swarm = weapon.Swarm;
-                                            weaponVanilla.Vertical = weapon.Vertical;
-                                            weaponVanilla.Yaw = weapon.Yaw;
-                                            weaponVanilla.Changed = false;
+                                            if (!activeMod)
+                                            {
+                                                weaponVanilla.Ammunition = weapon.Ammunition;
+                                                weaponVanilla.BarrelAmount = weapon.BarrelAmount;
+                                                weaponVanilla.Damage = weapon.Damage;
+                                                weaponVanilla.Forward = weapon.Forward;
+                                                weaponVanilla.Guided = weapon.Guided;
+                                                weaponVanilla.Horizontal = weapon.Horizontal;
+                                                weaponVanilla.Hull = weapon.Hull;
+                                                weaponVanilla.InertiaPitch = weapon.InertiaPitch;
+                                                weaponVanilla.InertiaRoll = weapon.InertiaRoll;
+                                                weaponVanilla.InertiaYaw = weapon.InertiaYaw;
+                                                weaponVanilla.Lifetime = weapon.Lifetime;
+                                                weaponVanilla.Mass = weapon.Mass;
+                                                weaponVanilla.MissileAmount = weapon.MissileAmount;
+                                                weaponVanilla.Pitch = weapon.Pitch;
+                                                weaponVanilla.Range = weapon.Range;
+                                                weaponVanilla.Reload = weapon.Reload;
+                                                weaponVanilla.Retarget = weapon.Retarget;
+                                                weaponVanilla.Reverse = weapon.Reverse;
+                                                weaponVanilla.Roll = weapon.Roll;
+                                                weaponVanilla.Swarm = weapon.Swarm;
+                                                weaponVanilla.Vertical = weapon.Vertical;
+                                                weaponVanilla.Yaw = weapon.Yaw;
+                                                weaponVanilla.Changed = false;
+                                            }
                                             weapon.Changed = false;
                                         }
                                         else
@@ -777,8 +819,11 @@ namespace X4_Editor
                                             if (extractedMissile.Name.Length > 1)
                                             {
                                                 parent.UIModel.UIModelMissiles.Add(extractedMissile);
-                                                foreach (var item in parent.UIModel.UIModelMissiles)
-                                                    parent.UIModel.UIModelMissilesVanilla.Add(item.Copy());
+                                                if (!activeMod)
+                                                {
+                                                    foreach (var item in parent.UIModel.UIModelMissiles)
+                                                        parent.UIModel.UIModelMissilesVanilla.Add(item.Copy());
+                                                }
                                             }
                                         }
                                     }
@@ -929,26 +974,30 @@ namespace X4_Editor
                                                     ship.Cargo.CargoTags = value;
                                                 }
                                             }
-                                            //shipVanilla.Cargo = ship.Ammunition;
-                                            shipVanilla.ExplosionDamage = ship.ExplosionDamage;
-                                            shipVanilla.Forward = ship.Forward;
-                                            shipVanilla.GatherRrate = ship.GatherRrate;
-                                            shipVanilla.Horizontal = ship.Horizontal;
-                                            shipVanilla.HullMax = ship.HullMax;
-                                            shipVanilla.InertiaPitch = ship.InertiaPitch;
-                                            shipVanilla.InertiaRoll = ship.InertiaRoll;
-                                            shipVanilla.InertiaYaw = ship.InertiaYaw;
-                                            shipVanilla.Mass = ship.Mass;
-                                            shipVanilla.People = ship.People;
-                                            shipVanilla.Pitch = ship.Pitch;
-                                            shipVanilla.Reverse = ship.Reverse;
-                                            shipVanilla.Roll = ship.Roll;
-                                            shipVanilla.Secrecy = ship.Secrecy;
-                                            shipVanilla.StorageMissiles = ship.StorageMissiles;
-                                            shipVanilla.StorageUnits = ship.StorageUnits;
-                                            shipVanilla.Vertical = ship.Vertical;
-                                            shipVanilla.Yaw = ship.Yaw;
-                                            shipVanilla.Changed = false;
+
+                                            if (!activeMod)
+                                            {
+                                                //shipVanilla.Cargo = ship.Ammunition;
+                                                shipVanilla.ExplosionDamage = ship.ExplosionDamage;
+                                                shipVanilla.Forward = ship.Forward;
+                                                shipVanilla.GatherRrate = ship.GatherRrate;
+                                                shipVanilla.Horizontal = ship.Horizontal;
+                                                shipVanilla.HullMax = ship.HullMax;
+                                                shipVanilla.InertiaPitch = ship.InertiaPitch;
+                                                shipVanilla.InertiaRoll = ship.InertiaRoll;
+                                                shipVanilla.InertiaYaw = ship.InertiaYaw;
+                                                shipVanilla.Mass = ship.Mass;
+                                                shipVanilla.People = ship.People;
+                                                shipVanilla.Pitch = ship.Pitch;
+                                                shipVanilla.Reverse = ship.Reverse;
+                                                shipVanilla.Roll = ship.Roll;
+                                                shipVanilla.Secrecy = ship.Secrecy;
+                                                shipVanilla.StorageMissiles = ship.StorageMissiles;
+                                                shipVanilla.StorageUnits = ship.StorageUnits;
+                                                shipVanilla.Vertical = ship.Vertical;
+                                                shipVanilla.Yaw = ship.Yaw;
+                                                shipVanilla.Changed = false;
+                                            }
                                             ship.Changed = false;
                                         }
                                         else
@@ -957,8 +1006,11 @@ namespace X4_Editor
                                             if (extractedShip != null && extractedShip.Name.Length > 1 && extractedShip.Class != "storage")
                                             {
                                                 parent.UIModel.UIModelShips.Add(extractedShip);
-                                                foreach (var item in parent.UIModel.UIModelShips)
-                                                    parent.UIModel.UIModelShipsVanilla.Add(item.Copy());
+                                                if (!activeMod)
+                                                {
+                                                    foreach (var item in parent.UIModel.UIModelShips)
+                                                        parent.UIModel.UIModelShipsVanilla.Add(item.Copy());
+                                                }
                                             }
                                         }
                                     }

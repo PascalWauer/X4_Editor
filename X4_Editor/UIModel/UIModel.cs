@@ -325,7 +325,7 @@ namespace X4_Editor
         {
             get {
                 if (!Directory.Exists(m_Path))
-                    return "enter valid folder path here...";
+                    return "enter vanilla X4 folder path here...";
                 return m_Path;
             }
             set
@@ -343,7 +343,7 @@ namespace X4_Editor
             get
             {
                 if (!Directory.Exists(m_ModPath1))
-                    return "enter valid folder path here...";
+                    return "enter valid base mod path here...";
                 return m_ModPath1;
             }
             set
@@ -361,7 +361,7 @@ namespace X4_Editor
             get
             {
                 if (!Directory.Exists(m_ModPath2))
-                    return "enter valid folder path here...";
+                    return "enter active mod folder path here...";
                 return m_ModPath2;
             }
             set
@@ -379,13 +379,20 @@ namespace X4_Editor
             get
             {
                 if (!Directory.Exists(m_ExportPath))
-                    return "enter valid folder path here...";
+                    return "enter export folder path here...";
                 return m_ExportPath;
             }
             set
             {
                 if (!Directory.Exists(value) && !string.IsNullOrEmpty(value))
                     return;
+                if (value == Path || value == ModPath1)
+                {
+                    MessageBox.Show("Export Path must not be Vanilla Path or Base Mod Path. It must be Active Mod path or a new one!");
+                    m_ExportPath = "enter export folder path here...";
+                    NotifyPropertyChanged();
+                    return;
+                }
                 m_ExportPath = value;
                 NotifyPropertyChanged();
             }

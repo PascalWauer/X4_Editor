@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:X4_Editor"
         mc:Ignorable="d"
-        Title="X4 Editor Main" Height="900" Width="1395" MinHeight="900" MinWidth="1395" Background="DarkGray">
+        Title="X4 Editor 1.0.1 Main Window" Height="900" Width="1395" MinHeight="900" MinWidth="1395" Background="DarkGray">
     <Window.Resources>
         <Style x:Key="CustomCellStyle" TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
                 <Style.Triggers>
@@ -48,27 +48,27 @@
                 <StackPanel Orientation="Vertical" Margin="4,4,0,0" VerticalAlignment="Top" Background="Gray" HorizontalAlignment="Left">
                     <StackPanel Orientation="Horizontal">
                         <TextBox Margin="4,6,2,0" Width="240" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="Orange" Text="{Binding Path, UpdateSourceTrigger=LostFocus}" ToolTip="The folder path to your extracted X4 folder"></TextBox>
-                        <Button Width="80" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Vanilla" Background="Orange" Command="{x:Static local:X4Commands.SelectFolderCommand}" ToolTip="Select the extracted X4 folder"></Button>
+                        <Button Width="100" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Vanilla" Background="Orange" Command="{x:Static local:X4Commands.SelectFolderCommand}" ToolTip="Select the extracted X4 folder"></Button>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <TextBox Margin="4,6,2,0" Width="240" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="LightGoldenrodYellow" Text="{Binding ModPath1, UpdateSourceTrigger=LostFocus}" ToolTip="The folder path to the first mod you want to import"></TextBox>
-                        <Button Width="80" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Mod 1" Background="LightGoldenrodYellow" Command="{x:Static local:X4Commands.SelectMod1FolderCommand}" ToolTip="Select mod 1 you want to imoport"></Button>
+                        <TextBox Margin="4,6,2,0" Width="240" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="LightGoldenrodYellow" Text="{Binding ModPath1, UpdateSourceTrigger=LostFocus}" ToolTip="The folder path to the base mod your mod is depending of"></TextBox>
+                        <Button Width="100" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Base Mod" Background="LightGoldenrodYellow" Command="{x:Static local:X4Commands.SelectMod1FolderCommand}" ToolTip="Select base mod you want to import"></Button>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <TextBox Margin="4,6,2,6" Width="240" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="LightGoldenrodYellow" Text="{Binding ModPath2, UpdateSourceTrigger=LostFocus}" ToolTip="The folder path to the second mod you want to import"></TextBox>
-                        <Button Width="80" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Mod 2" Background="LightGoldenrodYellow" Command="{x:Static local:X4Commands.SelectMod2FolderCommand}" ToolTip="Select mod 2 you want to imoport"></Button>
+                        <TextBox Margin="4,6,2,6" Width="240" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="LightBlue" Text="{Binding ModPath2, UpdateSourceTrigger=LostFocus}" ToolTip="The folder path to the active mod you want to edit"></TextBox>
+                        <Button Width="100" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Active Mod" Background="LightBlue" Command="{x:Static local:X4Commands.SelectMod2FolderCommand}" ToolTip="Select your active mod"></Button>
                     </StackPanel>
 
                 </StackPanel>
 
                 <!-- Input files -->
                 <StackPanel Grid.Column="1" Orientation="Vertical" Margin="4,4,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Gray">
-                    <Button  Margin="0,6,0,0" Width="70" Height="20" Content="Read Vanilla" Command="{x:Static local:X4Commands.ReadAllVanillaFilesCommand}" Background="Orange"
-                            ToolTip="Reads all vanilla X4 files from the specific folder"></Button>
-                    <Button Margin="4,6" Width="70" Height="20" Content="Read Mod 1" Command="{x:Static local:X4Commands.ReadAllMod1FilesCommand}" Background="LightGoldenrodYellow"
-                            ToolTip="Reads all mod files from the specific mod folder"></Button>
-                    <Button Margin="4,0,4,6" Width="70" Height="20" Content="Read Mod 2" Command="{x:Static local:X4Commands.ReadAllMod2FilesCommand}" Background="LightGoldenrodYellow"
-                            ToolTip="Reads all mod files from the specific mod folder"></Button>
+                    <Button  Margin="0,6,0,0" Width="50" Height="20" Content="Read" Command="{x:Static local:X4Commands.ReadAllVanillaFilesCommand}" Background="Orange"
+                            ToolTip="Reads all vanilla X4 files from the specific folder. All tables will be cleared!"></Button>
+                    <Button Margin="4,6" Width="50" Height="20" Content="Read" Command="{x:Static local:X4Commands.ReadAllMod1FilesCommand}" Background="LightGoldenrodYellow"
+                            ToolTip="Clears all tables and reads all vannila and base mod files from the specific mod folder"></Button>
+                    <Button Margin="4,0,4,6" Width="50" Height="20" Content="Read" Command="{x:Static local:X4Commands.ReadAllMod2FilesCommand}" Background="LightBlue"
+                            ToolTip="Reads all active mod files from the specific mod folder"></Button>
                 </StackPanel>
                 
                 <!-- Mass calculations -->    
@@ -135,13 +135,13 @@
                 <!-- Export -->
                 <StackPanel Grid.Column="5" Orientation="Vertical" Margin="0,4,0,4" Height="84" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Gray" Visibility="Visible">
                     <StackPanel Orientation="Horizontal">
-                        <TextBox Margin="4,6,2,6" Width="240" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="LightGreen" Text="{Binding ExportPath}" ToolTip="The export folder">
+                        <TextBox Margin="4,6,2,6" Width="240" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="LightBlue" Text="{Binding ExportPath}" ToolTip="The export folder">
                         </TextBox>
-                        <Button Width="80" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Export" Background="LightGreen" Command="{x:Static local:X4Commands.SelectExportFolderCommand}"  ToolTip="Select the export folder"></Button>
+                        <Button Width="80" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Export" Background="LightBlue" Command="{x:Static local:X4Commands.SelectExportFolderCommand}"  ToolTip="Select the export folder"></Button>
                     </StackPanel>
                     <Button Margin="4,26,4,4" Command="{x:Static local:X4Commands.ShowHelp}" Content="Help"></Button>
                 </StackPanel>
-                <Button Grid.Column="6" Margin="4,0,4,0" Width="80" Height="85" Command="{x:Static local:X4Commands.WriteAllChangedFilesCommand}" Background="LightGreen"
+                <Button Grid.Column="6" Margin="4,0,4,0" Width="80" Height="85" Command="{x:Static local:X4Commands.WriteAllChangedFilesCommand}" Background="SkyBlue"
                             ToolTip="Writes all changed files back to the original folders. All old data will be overwritten">
                     <TextBlock TextWrapping="Wrap" TextAlignment="Center">Export Changes</TextBlock>
                 </Button>

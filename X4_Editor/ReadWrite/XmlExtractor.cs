@@ -22,7 +22,7 @@ namespace X4_Editor
             m_UIManager = uiManager;
         }
 
-        public void ReadAllWares(string waresPath)
+        public void ReadAllWares(string waresPath, bool activeMod = false)
         {
             if (File.Exists(waresPath))
             {
@@ -143,10 +143,13 @@ namespace X4_Editor
                         item.Changed = false;
                     }
                     //TODO: this needs to be done only in case of vanilla and not mods
-                    m_UIManager.UIModel.UIModelWaresVanilla.Clear();
-                    foreach (var item in m_UIManager.UIModel.UIModelWares)
+                    //m_UIManager.UIModel.UIModelWaresVanilla.Clear();
+                    if (!activeMod)
                     {
-                        m_UIManager.UIModel.UIModelWaresVanilla.Add(item.Copy());
+                        foreach (var item in m_UIManager.UIModel.UIModelWares)
+                        {
+                            m_UIManager.UIModel.UIModelWaresVanilla.Add(item.Copy());
+                        }
                     }
                 }
                 catch (Exception ex)
