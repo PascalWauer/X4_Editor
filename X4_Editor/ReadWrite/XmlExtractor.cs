@@ -87,6 +87,21 @@ namespace X4_Editor
                                                 additionalErrorText = wareID;
                                                 var wareToChange = this.m_UIManager.UIModel.UIModelWares.Where(x => x.Name == wareID).ToList();
 
+                                                //check for direct changes "@property"
+                                                if (wareSel.Contains("@threshold"))
+                                                {
+                                                    wareToChange.FirstOrDefault().Threshold = Utility.ParseToDouble(item.InnerText);
+                                                }
+                                                if (wareSel.Contains("@amount"))
+                                                {
+                                                    wareToChange.FirstOrDefault().Amount = Convert.ToInt32(item.InnerText);
+                                                }
+                                                if (wareSel.Contains("@time"))
+                                                {
+                                                    wareToChange.FirstOrDefault().Time = Convert.ToInt32(item.InnerText);
+                                                }
+ 
+
                                                 if (wareToChange != null && item.FirstChild != null)
                                                 {
                                                     wareToChange.FirstOrDefault().Changed = true;
@@ -171,13 +186,14 @@ namespace X4_Editor
                 xD.LoadXml(ware.ToString());
                 XmlNode xN = XmlHelper.ToXmlNode(ware);
                 XmlNodeList wareNodes = xN.SelectNodes("//ware");
+                
 
                 foreach (XmlNode item in wareNodes)
                 {
 
                     if (item.Attributes["id"] != null)
                     {
-
+                        XmlNode useNode = item.SelectSingleNode("use");
                         XmlNode priceNode = null;
                         foreach (XmlNode child in item.SelectNodes("price"))
                         {
@@ -193,7 +209,11 @@ namespace X4_Editor
                             Min = Convert.ToInt32(priceNode.Attributes["min"].Value),
                             Avg = Convert.ToInt32(priceNode.Attributes["average"].Value),
                         };
-
+                        if (useNode != null)
+                        {
+                            if (useNode.Attributes["threshold"] != null)
+                                uiModelWare.Threshold = Utility.ParseToDouble(useNode.Attributes["threshold"].Value);
+                        }
                         if (item.SelectNodes("./production").Count == 1)
                         {
                             XmlNodeList productionNode = item.SelectNodes("./production");
@@ -231,6 +251,7 @@ namespace X4_Editor
                                 }
                             }
                         }
+
                         else if (item.SelectNodes("./production").Count == 2)
                         {
                             int noXenon = 0;
