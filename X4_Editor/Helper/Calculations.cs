@@ -566,6 +566,10 @@ namespace X4_Editor.Helper
                         ware.Amount5 = (int)Calculate(operation, ware.Amount5, ref counter);
 
                     }
+                    if (dataGridCell.Column.DisplayIndex == 19)
+                    {
+                        ware.Threshold = Calculate(operation, ware.Threshold, ref counter);
+                    }
                 }
 
             }

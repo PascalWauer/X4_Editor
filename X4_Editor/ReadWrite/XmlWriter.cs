@@ -351,7 +351,7 @@ namespace X4_Editor
                         if (vanillaItem.HullMax != item.HullMax)
                             sw.WriteLine("\t<replace sel=\"//macros/macro/properties/hull/@max\">" + String.Format(CultureInfo.InvariantCulture, "{0:0}", item.HullMax) + "</replace>");
                         if (vanillaItem.HullThreshold != item.HullThreshold)
-                            sw.WriteLine("\t<replace sel=\"//macros/macro/properties/reload/@threshold\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.HullThreshold) + "</replace>");
+                            sw.WriteLine("\t<replace sel=\"//macros/macro/properties/hull/@threshold\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.HullThreshold) + "</replace>");
                         if (vanillaItem.Overheat != item.Overheat)
                             sw.WriteLine("\t<replace sel=\"//macros/macro/properties/heat/@overheat\">" + String.Format(CultureInfo.InvariantCulture, "{0:0}", item.Overheat) + "</replace>");
                         if (vanillaItem.CoolDelay != item.CoolDelay)
@@ -536,6 +536,10 @@ namespace X4_Editor
                                 sw.WriteLine("\t\t</primary> ");
                                 sw.WriteLine("\t</replace>");
                                 sw.WriteLine("");
+                            }
+                            if (vanillaItem.Threshold != item.Threshold)
+                            {
+                                sw.WriteLine("\t<replace sel=\"/wares/ware[@id='" + item.ID + "']/use/@threshold\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Threshold) + "</replace>");
                             }
                         }
                     }

@@ -264,7 +264,18 @@ namespace X4_Editor
                 X4Commands.RecalculatePriceCommand.Execute(null, null);
                 NotifyPropertyChanged();
             }
+        }
 
+        private double m_Threshold;
+        public double Threshold
+        {
+            get { return m_Threshold; }
+            set
+            {
+                m_Threshold = value;
+                Changed = true;
+                NotifyPropertyChanged();
+            }
         }
 
         public UIModelWare Copy()
