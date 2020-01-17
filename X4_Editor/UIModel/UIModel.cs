@@ -717,7 +717,7 @@ namespace X4_Editor
 
         private bool FilterShipsData(object item)
         {
-            if (!Ships)
+            if (!Ships || item == null)
                 return false;
 
             UIModelShip ship = item as UIModelShip;

@@ -853,7 +853,10 @@ namespace X4_Editor
                                         UIModelShip ship = null;
                                         if (fileName.Contains("storage"))
                                         {
-                                            ship = parent.UIModel.UIModelShips.FirstOrDefault(x => x.File.Contains(fileName.Replace("storage", "ship")));
+                                            if (files.Contains(fileName.Replace("storage", "ship")))
+                                                ship = parent.UIModel.UIModelShips.FirstOrDefault(x => x.File.Contains(fileName.Replace("storage", "ship")));
+                                            else if (files.Contains(fileName.Replace("storage", "unit")))
+                                                ship = parent.UIModel.UIModelShips.FirstOrDefault(x => x.File.Contains(fileName.Replace("storage", "unit")));
                                         }
                                         else
                                         {
