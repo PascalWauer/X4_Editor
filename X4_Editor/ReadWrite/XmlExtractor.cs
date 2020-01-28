@@ -852,144 +852,147 @@ namespace X4_Editor
                                 XmlNodeList shipDragNode = xN.SelectNodes("//properties/physics/drag");
                                 XmlNodeList shipShipTypeNode = xN.SelectNodes("//properties/ship");
 
-                                #region MyRegion for components
-                                if (shipShipTypeNode.Count > 0)
+                                if (shipMacroNode[0].Attributes["class"] != null && shipMacroNode[0].Attributes["class"].Value != "storage")
                                 {
-                                    Tuple<string, string, string> components = this.ReadShipComponents(file);
-                                    uiModelShip.Shields = components.Item1;
-                                    uiModelShip.Turrets = components.Item2;
-                                    uiModelShip.Weapons = components.Item3;
-                                }
-                                #endregion
-
-                                #region region for cargo 
-                                string CargoFile = file.FullName.Replace(m_UIManager.UIModel.ModPath1, m_UIManager.UIModel.Path).Replace(m_UIManager.UIModel.ModPath2, m_UIManager.UIModel.Path).Replace("ship", "storage");
-                                string CargoModFile1 = CargoFile.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath1).Replace("ship", "storage");
-                                string CargoModFile2 = CargoFile.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath2).Replace("ship", "storage");
-
-                                uiModelShip.File = file.FullName;
-                                uiModelShip.Name = shipMacroNode[0].Attributes["name"].Value;
-                                uiModelShip.Class = shipMacroNode[0].Attributes["class"].Value;
-
-
-
-                                string priorityCargoFile = "";
-                                if (File.Exists(CargoModFile2))
-                                {
-                                    priorityCargoFile = CargoModFile2;
-                                }
-                                else if (File.Exists(CargoModFile1))
-                                {
-                                    priorityCargoFile = CargoModFile1;
-                                }
-                                else if (File.Exists(CargoFile))
-                                    priorityCargoFile = CargoFile;
-
-                                if (!string.IsNullOrWhiteSpace(priorityCargoFile))
-                                {
-                                    uiModelShip.Cargo = new UIModelShipCargo();
-                                    XmlDocument Cargodoc = new XmlDocument();
-                                    Cargodoc.Load(priorityCargoFile);
-                                    string xmlcontents = Cargodoc.InnerXml;
-                                    Cargodoc.LoadXml(xmlcontents);
-
-                                    XmlNodeList shipCargoNode = Cargodoc.SelectNodes("//properties/cargo");
-
-                                    if (shipCargoNode.Count > 0)
+                                    #region MyRegion for components
+                                    if (shipShipTypeNode.Count > 0)
                                     {
-                                        uiModelShip.Cargo.File = priorityCargoFile;
-                                        uiModelShip.Cargo.CargoMax = Convert.ToInt32(shipCargoNode[0].Attributes["max"].Value);
-                                        uiModelShip.Cargo.CargoTags = shipCargoNode[0].Attributes["tags"].Value;
+                                        Tuple<string, string, string> components = this.ReadShipComponents(file);
+                                        uiModelShip.Shields = components.Item1;
+                                        uiModelShip.Turrets = components.Item2;
+                                        uiModelShip.Weapons = components.Item3;
                                     }
-                                    uiModelShip.Cargo.Changed = false;
-                                }
-                                #endregion
+                                    #endregion
 
-                                if (shipShipTypeNode.Count > 0)
-                                {
-                                    if (shipShipTypeNode[0].Attributes["type"] != null)
-                                        uiModelShip.Type = shipShipTypeNode[0].Attributes["type"].Value;
-                                }
+                                    #region region for cargo 
+                                    string CargoFile = file.FullName.Replace(m_UIManager.UIModel.ModPath1, m_UIManager.UIModel.Path).Replace(m_UIManager.UIModel.ModPath2, m_UIManager.UIModel.Path).Replace("ship", "storage");
+                                    string CargoModFile1 = CargoFile.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath1).Replace("ship", "storage");
+                                    string CargoModFile2 = CargoFile.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath2).Replace("ship", "storage");
 
-                                if (uiModelShip.Type == null || uiModelShip.Type == "cockpit")
-                                {
-                                    return null;
-                                }
+                                    uiModelShip.File = file.FullName;
+                                    uiModelShip.Name = shipMacroNode[0].Attributes["name"].Value;
+                                    uiModelShip.Class = shipMacroNode[0].Attributes["class"].Value;
 
 
-                                if (shipIdentificationNode.Count > 0)
-                                {
-                                    if (shipIdentificationNode[0].Attributes["name"] != null)
-                                        uiModelShip.IGName = this.GetIGName(shipIdentificationNode[0].Attributes["name"].Value);
-                                    else
-                                        uiModelShip.IGName = "'unknown'";
-                                }
 
-                                if (shipExplosionNode.Count > 0)
-                                {
-                                    if (shipExplosionNode[0].Attributes["value"] != null)
-                                        uiModelShip.ExplosionDamage = Convert.ToInt32(shipExplosionNode[0].Attributes["value"].Value);
-                                }
-                                if (shipStorageNode.Count > 0)
-                                {
-                                    if (shipStorageNode[0].Attributes["missile"] != null)
-                                        uiModelShip.StorageMissiles = Convert.ToInt32(shipStorageNode[0].Attributes["missile"].Value);
-                                    if (shipStorageNode[0].Attributes["unit"] != null)
-                                        uiModelShip.StorageUnits = Convert.ToInt32(shipStorageNode[0].Attributes["unit"].Value);
-                                }
-                                if (shipHullNode.Count > 0)
-                                {
-                                    if (shipHullNode[0].Attributes["max"] != null)
-                                        uiModelShip.HullMax = Convert.ToInt32(shipHullNode[0].Attributes["max"].Value);
-                                }
-                                if (shipGatherRateNode.Count > 0)
-                                {
-                                    if (shipGatherRateNode[0].Attributes["gas"] != null)
-                                        uiModelShip.GatherRrate = Utility.ParseToDouble(shipGatherRateNode[0].Attributes["gas"].Value);
-                                }
-                                if (shipSecrecyNode.Count > 0)
-                                {
-                                    if (shipSecrecyNode[0].Attributes["level"] != null)
-                                        uiModelShip.Secrecy = Convert.ToInt32(shipSecrecyNode[0].Attributes["level"].Value);
-                                }
-                                if (shipPeopleNode.Count > 0)
-                                {
-                                    if (shipPeopleNode[0].Attributes["capacity"] != null)
-                                        uiModelShip.People = Convert.ToInt32(shipPeopleNode[0].Attributes["capacity"].Value);
-                                }
-                                if (shipPhysicsNode.Count > 0)
-                                {
-                                    if (shipPhysicsNode[0].Attributes["mass"] != null)
-                                        uiModelShip.Mass = Utility.ParseToDouble(shipPhysicsNode[0].Attributes["mass"].Value);
-                                }
-                                if (shipInertiaNode.Count > 0)
-                                {
-                                    if (shipInertiaNode[0].Attributes["roll"] != null)
-                                        uiModelShip.InertiaRoll = Utility.ParseToDouble(shipInertiaNode[0].Attributes["roll"].Value);
-                                    if (shipInertiaNode[0].Attributes["yaw"] != null)
-                                        uiModelShip.InertiaYaw = Utility.ParseToDouble(shipInertiaNode[0].Attributes["yaw"].Value);
-                                    if (shipInertiaNode[0].Attributes["pitch"] != null)
-                                        uiModelShip.InertiaPitch = Utility.ParseToDouble(shipInertiaNode[0].Attributes["pitch"].Value);
-                                }
-                                if (shipDragNode.Count > 0)
-                                {
-                                    if (shipDragNode[0].Attributes["forward"] != null)
-                                        uiModelShip.Forward = Utility.ParseToDouble(shipDragNode[0].Attributes["forward"].Value);
-                                    if (shipDragNode[0].Attributes["reverse"] != null)
-                                        uiModelShip.Reverse = Utility.ParseToDouble(shipDragNode[0].Attributes["reverse"].Value);
-                                    if (shipDragNode[0].Attributes["horizontal"] != null)
-                                        uiModelShip.Horizontal = Utility.ParseToDouble(shipDragNode[0].Attributes["horizontal"].Value);
-                                    if (shipDragNode[0].Attributes["vertical"] != null)
-                                        uiModelShip.Vertical = Utility.ParseToDouble(shipDragNode[0].Attributes["vertical"].Value);
-                                    if (shipDragNode[0].Attributes["pitch"] != null)
-                                        uiModelShip.Pitch = Utility.ParseToDouble(shipDragNode[0].Attributes["pitch"].Value);
-                                    if (shipDragNode[0].Attributes["yaw"] != null)
-                                        uiModelShip.Yaw = Utility.ParseToDouble(shipDragNode[0].Attributes["yaw"].Value);
-                                    if (shipDragNode[0].Attributes["roll"] != null)
-                                        uiModelShip.Roll = Utility.ParseToDouble(shipDragNode[0].Attributes["roll"].Value);
-                                }
-                                uiModelShip.Changed = false;
+                                    string priorityCargoFile = "";
+                                    if (File.Exists(CargoModFile2))
+                                    {
+                                        priorityCargoFile = CargoModFile2;
+                                    }
+                                    else if (File.Exists(CargoModFile1))
+                                    {
+                                        priorityCargoFile = CargoModFile1;
+                                    }
+                                    else if (File.Exists(CargoFile))
+                                        priorityCargoFile = CargoFile;
 
+                                    if (!string.IsNullOrWhiteSpace(priorityCargoFile))
+                                    {
+                                        uiModelShip.Cargo = new UIModelShipCargo();
+                                        XmlDocument Cargodoc = new XmlDocument();
+                                        Cargodoc.Load(priorityCargoFile);
+                                        string xmlcontents = Cargodoc.InnerXml;
+                                        Cargodoc.LoadXml(xmlcontents);
+
+                                        XmlNodeList shipCargoNode = Cargodoc.SelectNodes("//properties/cargo");
+
+                                        if (shipCargoNode.Count > 0)
+                                        {
+                                            uiModelShip.Cargo.File = priorityCargoFile;
+                                            uiModelShip.Cargo.CargoMax = Convert.ToInt32(shipCargoNode[0].Attributes["max"].Value);
+                                            uiModelShip.Cargo.CargoTags = shipCargoNode[0].Attributes["tags"].Value;
+                                        }
+                                        uiModelShip.Cargo.Changed = false;
+                                    }
+                                    #endregion
+
+                                    if (shipShipTypeNode.Count > 0)
+                                    {
+                                        if (shipShipTypeNode[0].Attributes["type"] != null)
+                                            uiModelShip.Type = shipShipTypeNode[0].Attributes["type"].Value;
+                                    }
+
+                                    if (uiModelShip.Type == null || uiModelShip.Type == "cockpit")
+                                    {
+                                        return null;
+                                    }
+
+
+                                    if (shipIdentificationNode.Count > 0)
+                                    {
+                                        if (shipIdentificationNode[0].Attributes["name"] != null)
+                                            uiModelShip.IGName = this.GetIGName(shipIdentificationNode[0].Attributes["name"].Value);
+                                        else
+                                            uiModelShip.IGName = "'unknown'";
+                                    }
+
+                                    if (shipExplosionNode.Count > 0)
+                                    {
+                                        if (shipExplosionNode[0].Attributes["value"] != null)
+                                            uiModelShip.ExplosionDamage = Convert.ToInt32(shipExplosionNode[0].Attributes["value"].Value);
+                                    }
+                                    if (shipStorageNode.Count > 0)
+                                    {
+                                        if (shipStorageNode[0].Attributes["missile"] != null)
+                                            uiModelShip.StorageMissiles = Convert.ToInt32(shipStorageNode[0].Attributes["missile"].Value);
+                                        if (shipStorageNode[0].Attributes["unit"] != null)
+                                            uiModelShip.StorageUnits = Convert.ToInt32(shipStorageNode[0].Attributes["unit"].Value);
+                                    }
+                                    if (shipHullNode.Count > 0)
+                                    {
+                                        if (shipHullNode[0].Attributes["max"] != null)
+                                            uiModelShip.HullMax = Convert.ToInt32(shipHullNode[0].Attributes["max"].Value);
+                                    }
+                                    if (shipGatherRateNode.Count > 0)
+                                    {
+                                        if (shipGatherRateNode[0].Attributes["gas"] != null)
+                                            uiModelShip.GatherRrate = Utility.ParseToDouble(shipGatherRateNode[0].Attributes["gas"].Value);
+                                    }
+                                    if (shipSecrecyNode.Count > 0)
+                                    {
+                                        if (shipSecrecyNode[0].Attributes["level"] != null)
+                                            uiModelShip.Secrecy = Convert.ToInt32(shipSecrecyNode[0].Attributes["level"].Value);
+                                    }
+                                    if (shipPeopleNode.Count > 0)
+                                    {
+                                        if (shipPeopleNode[0].Attributes["capacity"] != null)
+                                            uiModelShip.People = Convert.ToInt32(shipPeopleNode[0].Attributes["capacity"].Value);
+                                    }
+                                    if (shipPhysicsNode.Count > 0)
+                                    {
+                                        if (shipPhysicsNode[0].Attributes["mass"] != null)
+                                            uiModelShip.Mass = Utility.ParseToDouble(shipPhysicsNode[0].Attributes["mass"].Value);
+                                    }
+                                    if (shipInertiaNode.Count > 0)
+                                    {
+                                        if (shipInertiaNode[0].Attributes["roll"] != null)
+                                            uiModelShip.InertiaRoll = Utility.ParseToDouble(shipInertiaNode[0].Attributes["roll"].Value);
+                                        if (shipInertiaNode[0].Attributes["yaw"] != null)
+                                            uiModelShip.InertiaYaw = Utility.ParseToDouble(shipInertiaNode[0].Attributes["yaw"].Value);
+                                        if (shipInertiaNode[0].Attributes["pitch"] != null)
+                                            uiModelShip.InertiaPitch = Utility.ParseToDouble(shipInertiaNode[0].Attributes["pitch"].Value);
+                                    }
+                                    if (shipDragNode.Count > 0)
+                                    {
+                                        if (shipDragNode[0].Attributes["forward"] != null)
+                                            uiModelShip.Forward = Utility.ParseToDouble(shipDragNode[0].Attributes["forward"].Value);
+                                        if (shipDragNode[0].Attributes["reverse"] != null)
+                                            uiModelShip.Reverse = Utility.ParseToDouble(shipDragNode[0].Attributes["reverse"].Value);
+                                        if (shipDragNode[0].Attributes["horizontal"] != null)
+                                            uiModelShip.Horizontal = Utility.ParseToDouble(shipDragNode[0].Attributes["horizontal"].Value);
+                                        if (shipDragNode[0].Attributes["vertical"] != null)
+                                            uiModelShip.Vertical = Utility.ParseToDouble(shipDragNode[0].Attributes["vertical"].Value);
+                                        if (shipDragNode[0].Attributes["pitch"] != null)
+                                            uiModelShip.Pitch = Utility.ParseToDouble(shipDragNode[0].Attributes["pitch"].Value);
+                                        if (shipDragNode[0].Attributes["yaw"] != null)
+                                            uiModelShip.Yaw = Utility.ParseToDouble(shipDragNode[0].Attributes["yaw"].Value);
+                                        if (shipDragNode[0].Attributes["roll"] != null)
+                                            uiModelShip.Roll = Utility.ParseToDouble(shipDragNode[0].Attributes["roll"].Value);
+                                    }
+                                    uiModelShip.Changed = false;
+
+                                }
                                 //var ShipExistsAlready = m_UIManager.UIModel.UIModelShips.Where(x => x.File == uiModelShip.File).ToList();
                                 //if (ShipExistsAlready.Count == 0)
                                 //{
