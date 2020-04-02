@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:X4_Editor"
         mc:Ignorable="d"
-        Title="X4 Editor 1.0.2 Main Window" Height="900" Width="1395" MinHeight="900" MinWidth="1395" Background="DarkGray">
+        Title="X4 Editor 1.0.3 Main Window" Height="900" Width="1395" MinHeight="900" MinWidth="1395" Background="DarkGray">
     <Window.Resources>
         <Style x:Key="CustomCellStyle" TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
                 <Style.Triggers>

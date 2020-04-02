@@ -119,7 +119,7 @@ namespace X4_Editor
                                         else
                                         {
                                             UIModelShield extractedShield = m_XmlExtractor.ReadSingleShield(new FileInfo(file));
-                                            if (extractedShield.Name.Length > 1)
+                                            if (extractedShield != null && extractedShield.Name.Length > 1)
                                             {
                                                 parent.UIModel.UIModelShields.Add(extractedShield);
                                                 if (!activeMod)
@@ -286,7 +286,7 @@ namespace X4_Editor
                                         else
                                         {
                                             UIModelEngine extractedEngine = m_XmlExtractor.ReadSingleEngineFile(new FileInfo(file));
-                                            if (extractedEngine.Name.Length > 1)
+                                            if (extractedEngine != null && extractedEngine.Name.Length > 1)
                                             {
                                                 parent.UIModel.UIModelEngines.Add(extractedEngine);
                                                 if (!activeMod)
@@ -459,7 +459,7 @@ namespace X4_Editor
                                         else
                                         {
                                             UIModelProjectile extractedProjectile = m_XmlExtractor.ReadSingleProjectile(new FileInfo(file));
-                                            if (extractedProjectile.Name.Length > 1)
+                                            if (extractedProjectile != null && extractedProjectile.Name.Length > 1)
                                             {
                                                 parent.UIModel.UIModelProjectiles.Add(extractedProjectile);
                                                 if (!activeMod)
@@ -607,21 +607,25 @@ namespace X4_Editor
                                                     weaponVanilla.RotationAcceleration = weapon.RotationAcceleration;
                                                     weaponVanilla.RotationSpeed = weapon.RotationSpeed;
                                                 }
-                                                weaponVanilla.Changed = false;
+                                                if (weaponVanilla != null)
+                                                    weaponVanilla.Changed = false;
                                                 weapon.Changed = false;
                                             }
                                             else
                                             {
                                                 weapon = m_XmlExtractor.ReadSingleWeapon(new FileInfo(file));
-                                                parent.UIModel.UIModelWeapons.Add(weapon);
+                                                if (weapon != null)
+                                                    parent.UIModel.UIModelWeapons.Add(weapon);
+                                                    //ToDo: check if this was necessary
                                                 foreach (var item in parent.UIModel.UIModelWeapons)
                                                     parent.UIModel.UIModelWeaponsVanilla.Add(item.Copy());
+                                                
                                             }
                                         }
                                         else
                                         {
                                             UIModelWeapon extractedWeapon = m_XmlExtractor.ReadSingleWeapon(new FileInfo(file));
-                                            if (extractedWeapon.Name.Length > 1)
+                                            if (extractedWeapon != null && extractedWeapon.Name.Length > 1)
                                             {
                                                 parent.UIModel.UIModelWeapons.Add(extractedWeapon);
                                                 if (!activeMod)
@@ -816,7 +820,7 @@ namespace X4_Editor
                                         else
                                         {
                                             UIModelMissile extractedMissile = m_XmlExtractor.ReadSingleMissile(new FileInfo(file));
-                                            if (extractedMissile.Name.Length > 1)
+                                            if (extractedMissile != null && extractedMissile.Name.Length > 1)
                                             {
                                                 parent.UIModel.UIModelMissiles.Add(extractedMissile);
                                                 if (!activeMod)
@@ -851,168 +855,163 @@ namespace X4_Editor
                                     using (StreamReader sr = new StreamReader(fileStream))
                                     {
                                         UIModelShip ship = null;
-                                        if (fileName.Contains("storage"))
+                                        if (!fileName.Contains("storage"))
                                         {
-                                            if (files.Contains(fileName.Replace("storage", "ship")))
-                                                ship = parent.UIModel.UIModelShips.FirstOrDefault(x => x.File.Contains(fileName.Replace("storage", "ship")));
-                                            else if (files.Contains(fileName.Replace("storage", "unit")))
-                                                ship = parent.UIModel.UIModelShips.FirstOrDefault(x => x.File.Contains(fileName.Replace("storage", "unit")));
-                                        }
-                                        else
-                                        {
+
                                             ship = parent.UIModel.UIModelShips.FirstOrDefault(x => x.File.Contains(fileName));
-                                        }
-                                        if (ship != null)
-                                        {
-                                            var shipVanilla = parent.UIModel.UIModelShipsVanilla.FirstOrDefault(x => x.File.Contains(fileName));
-                                            int index = parent.UIModel.UIModelShips.IndexOf(ship);
-                                            string line;
-                                            while (!sr.EndOfStream)
+
+                                            if (ship != null)
                                             {
-                                                line = sr.ReadLine();
-                                                if ( (line.Contains(@"<replace") && line.Contains("sel") && line.Contains(@"/macros") && line.Contains("macro']\">")) || line.Contains("<replace sel=\"//macros\">") )
+                                                var shipVanilla = parent.UIModel.UIModelShipsVanilla.FirstOrDefault(x => x.File.Contains(fileName));
+                                                int index = parent.UIModel.UIModelShips.IndexOf(ship);
+                                                string line;
+                                                while (!sr.EndOfStream)
                                                 {
-                                                    parent.UIModel.UIModelShips[index] = m_XmlExtractor.ReadSingleShipFile(new FileInfo(file));
-                                                    break;
+                                                    line = sr.ReadLine();
+                                                    if ((line.Contains(@"<replace") && line.Contains("sel") && line.Contains(@"/macros") && line.Contains("macro']\">")) || line.Contains("<replace sel=\"//macros\">"))
+                                                    {
+                                                        parent.UIModel.UIModelShips[index] = m_XmlExtractor.ReadSingleShipFile(new FileInfo(file));
+                                                        break;
+                                                    }
+
+                                                    if (line.Contains("@max") && line.Contains("hull"))
+                                                    {
+                                                        string value = line.Split('>')[1].Split('<')[0];
+                                                        ship.HullMax = Convert.ToInt32(value);
+                                                    }
+                                                    if (line.Contains("@value") && line.Contains("explosiondamage"))
+                                                    {
+                                                        string value = line.Split('>')[1].Split('<')[0];
+                                                        ship.ExplosionDamage = Convert.ToInt32(value);
+                                                    }
+                                                    if (line.Contains("@missile") && line.Contains("storage"))
+                                                    {
+                                                        string value = line.Split('>')[1].Split('<')[0];
+                                                        ship.StorageMissiles = Convert.ToInt32(value);
+                                                    }
+                                                    if (line.Contains("@unit") && line.Contains("storage"))
+                                                    {
+                                                        string value = line.Split('>')[1].Split('<')[0];
+                                                        ship.StorageUnits = Convert.ToInt32(value);
+                                                    }
+                                                    if (line.Contains("@level") && line.Contains("secrecy"))
+                                                    {
+                                                        string value = line.Split('>')[1].Split('<')[0];
+                                                        ship.Secrecy = Convert.ToInt32(value);
+                                                    }
+                                                    if (line.Contains("@gas") && line.Contains("gatherrate"))
+                                                    {
+                                                        string value = line.Split('>')[1].Split('<')[0];
+                                                        ship.GatherRrate = Utility.ParseToDouble(value);
+                                                    }
+                                                    if (line.Contains("@capacity") && line.Contains("people"))
+                                                    {
+                                                        string value = line.Split('>')[1].Split('<')[0];
+                                                        ship.People = Convert.ToInt32(value);
+                                                    }
+                                                    if (line.Contains("@mass") && line.Contains("physics"))
+                                                    {
+                                                        string value = line.Split('>')[1].Split('<')[0];
+                                                        ship.Mass = Convert.ToInt32(value);
+                                                    }
+                                                    if (line.Contains("@pitch") && line.Contains("inertia"))
+                                                    {
+                                                        string value = line.Split('>')[1].Split('<')[0];
+                                                        ship.InertiaPitch = Utility.ParseToDouble(value);
+                                                    }
+                                                    if (line.Contains("@yaw") && line.Contains("inertia"))
+                                                    {
+                                                        string value = line.Split('>')[1].Split('<')[0];
+                                                        ship.InertiaYaw = Utility.ParseToDouble(value);
+                                                    }
+                                                    if (line.Contains("@roll") && line.Contains("inertia"))
+                                                    {
+                                                        string value = line.Split('>')[1].Split('<')[0];
+                                                        ship.InertiaRoll = Utility.ParseToDouble(value);
+                                                    }
+                                                    if (line.Contains("@forward") && line.Contains("drag"))
+                                                    {
+                                                        string value = line.Split('>')[1].Split('<')[0];
+                                                        ship.Forward = Utility.ParseToDouble(value);
+                                                    }
+                                                    if (line.Contains("@reverse") && line.Contains("drag"))
+                                                    {
+                                                        string value = line.Split('>')[1].Split('<')[0];
+                                                        ship.Reverse = Utility.ParseToDouble(value);
+                                                    }
+                                                    if (line.Contains("@horizontal") && line.Contains("drag"))
+                                                    {
+                                                        string value = line.Split('>')[1].Split('<')[0];
+                                                        ship.Horizontal = Utility.ParseToDouble(value);
+                                                    }
+                                                    if (line.Contains("@vertical") && line.Contains("drag"))
+                                                    {
+                                                        string value = line.Split('>')[1].Split('<')[0];
+                                                        ship.Vertical = Utility.ParseToDouble(value);
+                                                    }
+                                                    if (line.Contains("@pitch") && line.Contains("drag"))
+                                                    {
+                                                        string value = line.Split('>')[1].Split('<')[0];
+                                                        ship.Pitch = Utility.ParseToDouble(value);
+                                                    }
+                                                    if (line.Contains("@yaw") && line.Contains("drag"))
+                                                    {
+                                                        string value = line.Split('>')[1].Split('<')[0];
+                                                        ship.Yaw = Utility.ParseToDouble(value);
+                                                    }
+                                                    if (line.Contains("@roll") && line.Contains("drag"))
+                                                    {
+                                                        string value = line.Split('>')[1].Split('<')[0];
+                                                        ship.Roll = Utility.ParseToDouble(value);
+                                                    }
+                                                    if (line.Contains("@max") && line.Contains("cargo"))
+                                                    {
+                                                        string value = line.Split('>')[1].Split('<')[0];
+                                                        ship.Cargo.CargoMax = Convert.ToInt32(value);
+                                                    }
+                                                    if (line.Contains("@tags") && line.Contains("cargo"))
+                                                    {
+                                                        string value = line.Split('>')[1].Split('<')[0];
+                                                        ship.Cargo.CargoTags = value;
+                                                    }
                                                 }
 
-                                                if (line.Contains("@max") && line.Contains("hull"))
-                                                {
-                                                    string value = line.Split('>')[1].Split('<')[0];
-                                                    ship.HullMax = Convert.ToInt32(value);
-                                                }
-                                                if (line.Contains("@value") && line.Contains("explosiondamage"))
-                                                {
-                                                    string value = line.Split('>')[1].Split('<')[0];
-                                                    ship.ExplosionDamage = Convert.ToInt32(value);
-                                                }
-                                                if (line.Contains("@missile") && line.Contains("storage"))
-                                                {
-                                                    string value = line.Split('>')[1].Split('<')[0];
-                                                    ship.StorageMissiles = Convert.ToInt32(value);
-                                                }
-                                                if (line.Contains("@unit") && line.Contains("storage"))
-                                                {
-                                                    string value = line.Split('>')[1].Split('<')[0];
-                                                    ship.StorageUnits = Convert.ToInt32(value);
-                                                }
-                                                if (line.Contains("@level") && line.Contains("secrecy"))
-                                                {
-                                                    string value = line.Split('>')[1].Split('<')[0];
-                                                    ship.Secrecy = Convert.ToInt32(value);
-                                                }
-                                                if (line.Contains("@gas") && line.Contains("gatherrate"))
-                                                {
-                                                    string value = line.Split('>')[1].Split('<')[0];
-                                                    ship.GatherRrate = Utility.ParseToDouble(value);
-                                                }
-                                                if (line.Contains("@capacity") && line.Contains("people"))
-                                                {
-                                                    string value = line.Split('>')[1].Split('<')[0];
-                                                    ship.People = Convert.ToInt32(value);
-                                                }
-                                                if (line.Contains("@mass") && line.Contains("physics"))
-                                                {
-                                                    string value = line.Split('>')[1].Split('<')[0];
-                                                    ship.Mass = Convert.ToInt32(value);
-                                                }
-                                                if (line.Contains("@pitch") && line.Contains("inertia"))
-                                                {
-                                                    string value = line.Split('>')[1].Split('<')[0];
-                                                    ship.InertiaPitch = Utility.ParseToDouble(value);
-                                                }
-                                                if (line.Contains("@yaw") && line.Contains("inertia"))
-                                                {
-                                                    string value = line.Split('>')[1].Split('<')[0];
-                                                    ship.InertiaYaw = Utility.ParseToDouble(value);
-                                                }
-                                                if (line.Contains("@roll") && line.Contains("inertia"))
-                                                {
-                                                    string value = line.Split('>')[1].Split('<')[0];
-                                                    ship.InertiaRoll = Utility.ParseToDouble(value);
-                                                }
-                                                if (line.Contains("@forward") && line.Contains("drag"))
-                                                {
-                                                    string value = line.Split('>')[1].Split('<')[0];
-                                                    ship.Forward = Utility.ParseToDouble(value);
-                                                }
-                                                if (line.Contains("@reverse") && line.Contains("drag"))
-                                                {
-                                                    string value = line.Split('>')[1].Split('<')[0];
-                                                    ship.Reverse = Utility.ParseToDouble(value);
-                                                }
-                                                if (line.Contains("@horizontal") && line.Contains("drag"))
-                                                {
-                                                    string value = line.Split('>')[1].Split('<')[0];
-                                                    ship.Horizontal = Utility.ParseToDouble(value);
-                                                }
-                                                if (line.Contains("@vertical") && line.Contains("drag"))
-                                                {
-                                                    string value = line.Split('>')[1].Split('<')[0];
-                                                    ship.Vertical = Utility.ParseToDouble(value);
-                                                }
-                                                if (line.Contains("@pitch") && line.Contains("drag"))
-                                                {
-                                                    string value = line.Split('>')[1].Split('<')[0];
-                                                    ship.Pitch = Utility.ParseToDouble(value);
-                                                }
-                                                if (line.Contains("@yaw") && line.Contains("drag"))
-                                                {
-                                                    string value = line.Split('>')[1].Split('<')[0];
-                                                    ship.Yaw = Utility.ParseToDouble(value);
-                                                }
-                                                if (line.Contains("@roll") && line.Contains("drag"))
-                                                {
-                                                    string value = line.Split('>')[1].Split('<')[0];
-                                                    ship.Roll = Utility.ParseToDouble(value);
-                                                }
-                                                if (line.Contains("@max") && line.Contains("cargo"))
-                                                {
-                                                    string value = line.Split('>')[1].Split('<')[0];
-                                                    ship.Cargo.CargoMax = Convert.ToInt32(value);
-                                                }
-                                                if (line.Contains("@tags") && line.Contains("cargo"))
-                                                {
-                                                    string value = line.Split('>')[1].Split('<')[0];
-                                                    ship.Cargo.CargoTags = value;
-                                                }
-                                            }
-
-                                            if (!activeMod)
-                                            {
-                                                //shipVanilla.Cargo = ship.Ammunition;
-                                                shipVanilla.ExplosionDamage = ship.ExplosionDamage;
-                                                shipVanilla.Forward = ship.Forward;
-                                                shipVanilla.GatherRrate = ship.GatherRrate;
-                                                shipVanilla.Horizontal = ship.Horizontal;
-                                                shipVanilla.HullMax = ship.HullMax;
-                                                shipVanilla.InertiaPitch = ship.InertiaPitch;
-                                                shipVanilla.InertiaRoll = ship.InertiaRoll;
-                                                shipVanilla.InertiaYaw = ship.InertiaYaw;
-                                                shipVanilla.Mass = ship.Mass;
-                                                shipVanilla.People = ship.People;
-                                                shipVanilla.Pitch = ship.Pitch;
-                                                shipVanilla.Reverse = ship.Reverse;
-                                                shipVanilla.Roll = ship.Roll;
-                                                shipVanilla.Secrecy = ship.Secrecy;
-                                                shipVanilla.StorageMissiles = ship.StorageMissiles;
-                                                shipVanilla.StorageUnits = ship.StorageUnits;
-                                                shipVanilla.Vertical = ship.Vertical;
-                                                shipVanilla.Yaw = ship.Yaw;
-                                                shipVanilla.Changed = false;
-                                            }
-                                            ship.Changed = false;
-                                        }
-                                        else
-                                        {
-                                            UIModelShip extractedShip = m_XmlExtractor.ReadSingleShipFile(new FileInfo(file));
-                                            if (extractedShip != null && extractedShip.Name.Length > 1 && extractedShip.Class != "storage")
-                                            {
-                                                parent.UIModel.UIModelShips.Add(extractedShip);
                                                 if (!activeMod)
                                                 {
-                                                    foreach (var item in parent.UIModel.UIModelShips)
-                                                        parent.UIModel.UIModelShipsVanilla.Add(item.Copy());
+                                                    //shipVanilla.Cargo = ship.Ammunition;
+                                                    shipVanilla.ExplosionDamage = ship.ExplosionDamage;
+                                                    shipVanilla.Forward = ship.Forward;
+                                                    shipVanilla.GatherRrate = ship.GatherRrate;
+                                                    shipVanilla.Horizontal = ship.Horizontal;
+                                                    shipVanilla.HullMax = ship.HullMax;
+                                                    shipVanilla.InertiaPitch = ship.InertiaPitch;
+                                                    shipVanilla.InertiaRoll = ship.InertiaRoll;
+                                                    shipVanilla.InertiaYaw = ship.InertiaYaw;
+                                                    shipVanilla.Mass = ship.Mass;
+                                                    shipVanilla.People = ship.People;
+                                                    shipVanilla.Pitch = ship.Pitch;
+                                                    shipVanilla.Reverse = ship.Reverse;
+                                                    shipVanilla.Roll = ship.Roll;
+                                                    shipVanilla.Secrecy = ship.Secrecy;
+                                                    shipVanilla.StorageMissiles = ship.StorageMissiles;
+                                                    shipVanilla.StorageUnits = ship.StorageUnits;
+                                                    shipVanilla.Vertical = ship.Vertical;
+                                                    shipVanilla.Yaw = ship.Yaw;
+                                                    shipVanilla.Changed = false;
+                                                }
+                                                ship.Changed = false;
+                                            }
+                                            else
+                                            {
+                                                UIModelShip extractedShip = m_XmlExtractor.ReadSingleShipFile(new FileInfo(file));
+                                                if (extractedShip != null && extractedShip.Name.Length > 1 && extractedShip.Class != "storage")
+                                                {
+                                                    parent.UIModel.UIModelShips.Add(extractedShip);
+                                                    if (!activeMod)
+                                                    {
+                                                        foreach (var item in parent.UIModel.UIModelShips)
+                                                            parent.UIModel.UIModelShipsVanilla.Add(item.Copy());
+                                                    }
                                                 }
                                             }
                                         }

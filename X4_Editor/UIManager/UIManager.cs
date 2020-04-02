@@ -575,7 +575,7 @@ namespace X4_Editor
                 foreach (var item in xmlEnginesList)
                 {
                     UIModelEngine engine = m_XmlExtractor.ReadSingleEngineFile(item);
-                    if (engine.Name.Length > 1)
+                    if (engine != null && engine.Name.Length > 1)
                         this.UIModel.UIModelEngines.Add(engine);
                 }
                 this.UIModel.UIModelEnginesVanilla.Clear();
@@ -599,7 +599,7 @@ namespace X4_Editor
                 foreach (var item in xmlShieldsList)
                 {
                     UIModelShield shield = m_XmlExtractor.ReadSingleShield(item);
-                    if (shield.Name.Length > 1)
+                    if (shield != null &&shield.Name.Length > 1)
                         this.UIModel.UIModelShields.Add(shield);
                 }
                 foreach (var item in this.UIModel.UIModelShields)
@@ -619,7 +619,6 @@ namespace X4_Editor
             foreach (var item in xmlWeaponsList)
             {
                 this.UIModel.UIModelWeapons.Add(m_XmlExtractor.ReadSingleWeapon(item));
-
             }
 
             this.UIModel.UIModelWeaponsVanilla.Clear();
@@ -639,7 +638,7 @@ namespace X4_Editor
             foreach (var item in xmlProjectilesList)
             {
                 UIModelProjectile projectile = m_XmlExtractor.ReadSingleProjectile(item);
-                if (projectile.Name.Length > 1)
+                if (projectile != null && projectile.Name.Length > 1)
                     this.UIModel.UIModelProjectiles.Add(projectile);
             }
             this.UIModel.UIModelProjectilesVanilla.Clear();
@@ -653,7 +652,7 @@ namespace X4_Editor
             foreach (var item in xmlMissilesList)
             {
                 UIModelMissile missile = m_XmlExtractor.ReadSingleMissile(item);
-                if (missile.Name.Length > 1)
+                if (missile != null && missile.Name.Length > 1)
                     this.UIModel.UIModelMissiles.Add(missile);
             }
             this.UIModel.UIModelMissilesVanilla.Clear();

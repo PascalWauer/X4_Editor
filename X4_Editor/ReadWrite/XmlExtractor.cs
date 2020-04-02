@@ -320,6 +320,8 @@ namespace X4_Editor
 
         public UIModelProjectile ReadSingleProjectile(FileInfo file)
         {
+            if (file.FullName.EndsWith(".sig"))
+                    return null;
             UIModelProjectile uiModelProjectile = new UIModelProjectile()
             {
                 File = "",
@@ -421,6 +423,8 @@ namespace X4_Editor
         }
         public UIModelMissile ReadSingleMissile(FileInfo file)
         {
+            if (file.FullName.EndsWith(".sig"))
+                return null;
             UIModelMissile uiModelMissile = new UIModelMissile()
             {
                 File = "",
@@ -545,6 +549,8 @@ namespace X4_Editor
         }
         public UIModelEngine ReadSingleEngineFile(FileInfo file)
         {
+            if (file.FullName.EndsWith(".sig"))
+                return null;
             UIModelEngine uiModelEngine = new UIModelEngine()
             {
                 File = "",
@@ -654,6 +660,8 @@ namespace X4_Editor
         }
         public UIModelShield ReadSingleShield(FileInfo file)
         {
+            if (file.FullName.EndsWith(".sig"))
+                return null;
             UIModelShield uiModelShield = new UIModelShield()
             {
                 File = "",
@@ -717,10 +725,10 @@ namespace X4_Editor
             return uiModelShield;
         }
 
-
-
         public UIModelWeapon ReadSingleWeapon(FileInfo xmlWeaponFileInfo)
         {
+            if (xmlWeaponFileInfo.FullName.EndsWith(".sig"))
+                return null;
             UIModelWeapon uiModelWeapon = new UIModelWeapon() { Name = "", File = xmlWeaponFileInfo.FullName };
 
             using (XmlReader reader = XmlReader.Create(xmlWeaponFileInfo.FullName))
@@ -812,6 +820,8 @@ namespace X4_Editor
         }
         public UIModelShip ReadSingleShipFile(FileInfo file)
         {
+            if (file.FullName.EndsWith(".sig"))
+                return null;
             UIModelShip uiModelShip = new UIModelShip()
             {
                 File = "",
@@ -865,9 +875,35 @@ namespace X4_Editor
                                     #endregion
 
                                     #region region for cargo 
-                                    string CargoFile = file.FullName.Replace(m_UIManager.UIModel.ModPath1, m_UIManager.UIModel.Path).Replace(m_UIManager.UIModel.ModPath2, m_UIManager.UIModel.Path).Replace("ship", "storage");
-                                    string CargoModFile1 = CargoFile.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath1).Replace("ship", "storage");
-                                    string CargoModFile2 = CargoFile.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath2).Replace("ship", "storage");
+                                    string CargoFile = file.FullName.Replace(m_UIManager.UIModel.ModPath1, m_UIManager.UIModel.Path).Replace(m_UIManager.UIModel.ModPath2, m_UIManager.UIModel.Path).Replace("ship_", "storage_");
+                                    string CargoModFile1 = "";
+                                    string CargoModFile2 = "";
+                                    // different cases: 1. storage file is in the same folder
+                                    //                  2. storage file is in a mod folder
+                                    // storage file can be the same name with ships_ replaced by storage or units_ replaced by storage
+
+                                    if (file.Name.Contains("ship_"))
+                                    {
+                                        if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath1).Replace("ship_", "storage_")))
+                                        {
+                                            CargoModFile1 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath1).Replace("ship_", "storage_");
+                                        }
+                                        if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath2).Replace("ship_", "storage_")))
+                                        {
+                                            CargoModFile2 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath2).Replace("ship_", "storage_");
+                                        }
+                                    }
+                                    if (file.Name.Contains("units_"))
+                                    {
+                                        if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath1).Replace("units_", "storage_units_")))
+                                        {
+                                            CargoModFile1 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath1).Replace("units_", "storage_units_");
+                                        }
+                                        if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath2).Replace("units_", "storage_units_")))
+                                        {
+                                            CargoModFile2 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath2).Replace("units_", "storage_units_");
+                                        }
+                                    }
 
                                     uiModelShip.File = file.FullName;
                                     uiModelShip.Name = shipMacroNode[0].Attributes["name"].Value;
