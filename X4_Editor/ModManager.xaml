@@ -15,35 +15,35 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Vertical" Margin="4,4,4,4" VerticalAlignment="Top" Background="Gray" HorizontalAlignment="Left">
             <StackPanel Orientation="Horizontal">
-                <TextBox Margin="4,6,2,0" Width="440" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="Orange" Text="{Binding Path, UpdateSourceTrigger=LostFocus}" ToolTip="The folder path to your extracted X4 folder"></TextBox>
-                <Button Width="100" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Vanilla" Background="Orange" Command="{x:Static local:X4Commands.SelectFolderCommand}" ToolTip="Select the extracted X4 folder"></Button>
+                <TextBox Margin="4,6,2,0" Width="460" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="Orange" Text="{Binding Path, UpdateSourceTrigger=LostFocus}" ToolTip="The folder path to your extracted X4 folder"></TextBox>
+                <Button Width="80" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Vanilla" Background="Orange" Command="{x:Static local:X4Commands.SelectFolderCommand}" ToolTip="Select the extracted X4 folder"></Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <TextBox Margin="4,6,2,0" Width="440" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="LightGoldenrodYellow" Text="{Binding ModPath1, UpdateSourceTrigger=LostFocus}" ToolTip="The folder path to the mod you want to read"></TextBox>
-                <Button Width="100" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Base Mod" Background="LightGoldenrodYellow" Command="{x:Static local:X4Commands.SelectMod1FolderCommand}" ToolTip="Select mod you want to import"></Button>
+                <TextBox Margin="4,6,2,0" Width="460" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="LightGoldenrodYellow" Text="{Binding ModPath1, UpdateSourceTrigger=LostFocus}" ToolTip="The folder path to the mod you want to read"></TextBox>
+                <Button Width="80" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Mod 1" Background="LightGoldenrodYellow" Command="{x:Static local:X4Commands.SelectMod1FolderCommand}" ToolTip="Select mod you want to import"></Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <TextBox Margin="4,6,2,0" Width="440" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="LightGoldenrodYellow" Text="{Binding ModPath2, UpdateSourceTrigger=LostFocus}" ToolTip="The folder path to the mod you want to read"></TextBox>
-                <Button Width="100" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Base Mod" Background="LightGoldenrodYellow" Command="{x:Static local:X4Commands.SelectMod2FolderCommand}" ToolTip="Select mod you want to import"></Button>
+                <TextBox Margin="4,6,2,0" Width="460" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="LightGoldenrodYellow" Text="{Binding ModPath2, UpdateSourceTrigger=LostFocus}" ToolTip="The folder path to the mod you want to read"></TextBox>
+                <Button Width="80" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Mod 2" Background="LightGoldenrodYellow" Command="{x:Static local:X4Commands.SelectMod2FolderCommand}" ToolTip="Select mod you want to import"></Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <TextBox Margin="4,6,2,0" Width="440" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="LightGoldenrodYellow" Text="{Binding ModPath3, UpdateSourceTrigger=LostFocus}" ToolTip="The folder path to the mod you want to read"></TextBox>
-                <Button Width="100" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Base Mod" Background="LightGoldenrodYellow" Command="{x:Static local:X4Commands.SelectMod3FolderCommand}" ToolTip="Select mod you want to import"></Button>
+                <TextBox Margin="4,6,2,0" Width="460" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="LightGoldenrodYellow" Text="{Binding ModPath3, UpdateSourceTrigger=LostFocus}" ToolTip="The folder path to the mod you want to read"></TextBox>
+                <Button Width="80" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Mod 3" Background="LightGoldenrodYellow" Command="{x:Static local:X4Commands.SelectMod3FolderCommand}" ToolTip="Select mod you want to import"></Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <TextBox Margin="4,6,2,0" Width="440" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="LightGoldenrodYellow" Text="{Binding ModPath4, UpdateSourceTrigger=LostFocus}" ToolTip="The folder path to the mod you want to read"></TextBox>
-                <Button Width="100" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Base Mod" Background="LightGoldenrodYellow" Command="{x:Static local:X4Commands.SelectMod4FolderCommand}" ToolTip="Select mod you want to import"></Button>
+                <TextBox Margin="4,6,2,0" Width="460" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="LightGoldenrodYellow" Text="{Binding ModPath4, UpdateSourceTrigger=LostFocus}" ToolTip="The folder path to the mod you want to read"></TextBox>
+                <Button Width="80" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Mod 4" Background="LightGoldenrodYellow" Command="{x:Static local:X4Commands.SelectMod4FolderCommand}" ToolTip="Select mod you want to import"></Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <TextBox Margin="4,6,2,0" Width="440" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="LightGoldenrodYellow" Text="{Binding ModPath5, UpdateSourceTrigger=LostFocus}" ToolTip="The folder path to the mod you want to read"></TextBox>
-                <Button Width="100" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Base Mod" Background="LightGoldenrodYellow" Command="{x:Static local:X4Commands.SelectMod5FolderCommand}" ToolTip="Select mod you want to import"></Button>
+                <TextBox Margin="4,6,2,0" Width="460" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="LightGoldenrodYellow" Text="{Binding ModPath5, UpdateSourceTrigger=LostFocus}" ToolTip="The folder path to the mod you want to read"></TextBox>
+                <Button Width="80" Margin="2,6,4,0" VerticalAlignment="Top" Height="20" Content="Select Mod 5" Background="LightGoldenrodYellow" Command="{x:Static local:X4Commands.SelectMod5FolderCommand}" ToolTip="Select mod you want to import"></Button>
             </StackPanel>            
             <StackPanel Orientation="Horizontal">
-                <TextBox Margin="4,6,2,0" Width="440" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="LightGoldenrodYellow" Text="{Binding ModPath6, UpdateSourceTrigger=LostFocus}" ToolTip="The folder path to the mod you want to read"></TextBox>
-                <Button Width="100" Margin="2,6,4,6" VerticalAlignment="Top" Height="20" Content="Select Active Mod" Background="LightGoldenrodYellow" Command="{x:Static local:X4Commands.SelectMod6FolderCommand}" ToolTip="Select mod you want to import"></Button>
+                <TextBox Margin="4,6,2,0" Width="460" VerticalAlignment="Top" Height="20" BorderThickness="2" Background="LightGoldenrodYellow" Text="{Binding ModPath6, UpdateSourceTrigger=LostFocus}" ToolTip="The folder path to the mod you want to read"></TextBox>
+                <Button Width="80" Margin="2,6,4,6" VerticalAlignment="Top" Height="20" Content="Select Mod 6" Background="LightGoldenrodYellow" Command="{x:Static local:X4Commands.SelectMod6FolderCommand}" ToolTip="Select mod you want to import"></Button>
             </StackPanel>
         </StackPanel>
         <TextBlock Grid.Row="1" Margin="6,0,6,0" Text="Keep in mind that the order the mods will be read is from top to bottom. Keep the load order the same as in game to prevent conflicts." TextWrapping="Wrap"></TextBlock>
-        <Button Grid.Row="2" Margin="6" Height="20" Width="80" Content="Close" Command="{x:Static local:X4Commands.CloseModPathManager}"></Button>
+        <Button Grid.Row="2" Margin="6" Height="20" Width="100" Content="Save and close" Command="{x:Static local:X4Commands.CloseModPathManager}"></Button>
     </Grid>
 </Window>

@@ -110,23 +110,6 @@ namespace X4_Editor
             
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.ShowHelp, this.ExecuteShowHelp));
 
-            WaresWindow.CommandBindings.Add(new CommandBinding(X4Commands.OnWaresWindowCellRightClick, this.ExecuteOnWaresWindowCellRightClick));
-
-            m_ReadWriteConfig.LoadConfig();
-            this.TextDictionary = new Dictionary<string, string>();
-            this.TextDictionary = m_XmlExtractor.ReadTextXml(this.UIModel.Path + this.PathToTexts + @"\0001-l044.xml", this.TextDictionary);
-            MainWindow.Show();
-            WaresWindow.Owner = this.MainWindow;
-        }
-
-        private void ExecuteCloseModPathManager(object sender, ExecutedRoutedEventArgs e)
-        {
-            m_ReadWriteConfig.SaveConfig();
-            ModManager.Close();
-        }
-
-        private void ExecuteOpenModPathManager(object sender, ExecutedRoutedEventArgs e)
-        {   
             ModManager = new ModManager();
             ModManager.DataContext = this.UIModel;
             ModManager.CommandBindings.Add(new CommandBinding(X4Commands.SelectFolderCommand, this.ExecuteSelectFolderCommand));
@@ -137,6 +120,29 @@ namespace X4_Editor
             ModManager.CommandBindings.Add(new CommandBinding(X4Commands.SelectMod5FolderCommand, this.ExecuteSelectMod5FolderCommand));
             ModManager.CommandBindings.Add(new CommandBinding(X4Commands.SelectMod6FolderCommand, this.ExecuteSelectMod6FolderCommand));
             ModManager.CommandBindings.Add(new CommandBinding(X4Commands.CloseModPathManager, this.ExecuteCloseModPathManager));
+
+            m_ReadWriteConfig.LoadConfig();
+            this.TextDictionary = new Dictionary<string, string>();
+            this.TextDictionary = m_XmlExtractor.ReadTextXml(this.UIModel.Path + this.PathToTexts + @"\0001-l044.xml", this.TextDictionary);
+            MainWindow.Show();
+
+            this.WaresWindow = new WaresWindow();
+            this.WaresWindow.Owner = this.MainWindow;
+            this.WaresWindow.DataContext = this.UIModel;
+            this.WaresWindow.CommandBindings.Add(new CommandBinding(X4Commands.OnWaresWindowCellRightClick, this.ExecuteOnWaresWindowCellRightClick));
+
+            ModManager.Owner = this.MainWindow;
+            WaresWindow.Owner = this.MainWindow;
+        }
+
+        private void ExecuteCloseModPathManager(object sender, ExecutedRoutedEventArgs e)
+        {
+            m_ReadWriteConfig.SaveConfig();
+            ModManager.Hide();
+        }
+
+        private void ExecuteOpenModPathManager(object sender, ExecutedRoutedEventArgs e)
+        {   
             ModManager.Show();
         }
 
@@ -491,14 +497,15 @@ namespace X4_Editor
         }
         private void ExecuteShowWaresWindowCommand(object sender, ExecutedRoutedEventArgs e)
         {
-            if (!WaresWindow.IsVisible)
-            {
-                this.WaresWindow = new WaresWindow();
-                this.WaresWindow.Owner =this.MainWindow;
-                this.WaresWindow.DataContext = this.UIModel;
-                this.WaresWindow.CommandBindings.Add(new CommandBinding(X4Commands.OnWaresWindowCellRightClick, this.ExecuteOnWaresWindowCellRightClick));
-                this.WaresWindow.Show();
-            }
+            //if (!WaresWindow.IsVisible)
+            //{
+            //    this.WaresWindow = new WaresWindow();
+            //    this.WaresWindow.Owner =this.MainWindow;
+            //    this.WaresWindow.DataContext = this.UIModel;
+            //    this.WaresWindow.CommandBindings.Add(new CommandBinding(X4Commands.OnWaresWindowCellRightClick, this.ExecuteOnWaresWindowCellRightClick));
+            //    this.WaresWindow.Show();
+            //}
+            this.WaresWindow.Show();
         }
         private void ExecuteFilterCommand(object sender, ExecutedRoutedEventArgs e)
         {
@@ -870,6 +877,7 @@ namespace X4_Editor
         /// <param name="e"></param>
         private void ExecuteReadAllModFilesCommand(object sender, ExecutedRoutedEventArgs e)
         {
+            Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait; 
             if (Directory.Exists(UIModel.Path))
             {
                 VanillaXmlFiles.Clear();
@@ -913,6 +921,7 @@ namespace X4_Editor
                 Mod6XmlFiles.AddRange(Directory.GetFiles(UIModel.ModPath6, "*.xml", SearchOption.AllDirectories));
                 m_ModFilesReader.ReadAllModFilesFromFolder(this.UIModel.ModPath6);
             }
+            Mouse.OverrideCursor = null;
         }
     }
 }

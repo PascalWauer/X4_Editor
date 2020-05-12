@@ -1166,8 +1166,8 @@ namespace X4_Editor
 
                             this.CalculateModules(file, ref shields_S, ref shields_M, ref shields_L, ref shields_XL, ref turrets_M, ref turrets_L, ref weapons_S, ref weapons_M, ref weapons_L, Connections, Names, ref NoUniqueNameIds);
 
-                            if (NoUniqueNameIds.Length > 0)
-                                MessageBox.Show(NoUniqueNameIds);
+                            //if (NoUniqueNameIds.Length > 0)
+                            //    MessageBox.Show(NoUniqueNameIds);
                         }
                     }
                 }
@@ -1194,8 +1194,8 @@ namespace X4_Editor
 
                             this.CalculateModules(file, ref shields_S, ref shields_M, ref shields_L, ref shields_XL, ref turrets_M, ref turrets_L, ref weapons_S, ref weapons_M, ref weapons_L, Connections, Names, ref NoUniqueNameIds);
 
-                            if (NoUniqueNameIds.Length > 0)
-                                MessageBox.Show(NoUniqueNameIds);
+                            //if (NoUniqueNameIds.Length > 0)
+                            //    MessageBox.Show(NoUniqueNameIds);
                         }
                         else if (doc.Descendants().Where(x => x.Name.LocalName == "add").ToList().Count > 0)
                         {
@@ -1206,8 +1206,8 @@ namespace X4_Editor
                                 List<string> Names = new List<string>();
                                 string NoUniqueNameIds = "";
                                 this.CalculateModules(file, ref shields_S, ref shields_M, ref shields_L, ref shields_XL, ref turrets_M, ref turrets_L, ref weapons_S, ref weapons_M, ref weapons_L, Connections, Names, ref NoUniqueNameIds);
-                                if (NoUniqueNameIds.Length > 0)
-                                    MessageBox.Show(NoUniqueNameIds);
+                                //if (NoUniqueNameIds.Length > 0)
+                                //    MessageBox.Show(NoUniqueNameIds);
                             }
                         }
                     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,5 +29,12 @@ namespace X4_Editor
         {
             X4Commands.CloseModPathManager.Execute(this, null);
         }
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            this.Hide();
+            e.Cancel = true;
+        }
+
     }
 }
