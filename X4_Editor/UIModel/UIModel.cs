@@ -372,7 +372,74 @@ namespace X4_Editor
                 NotifyPropertyChanged();
             }
         }
-
+        private string m_ModPath3;
+        public string ModPath3
+        {
+            get
+            {
+                if (!Directory.Exists(m_ModPath3))
+                    return "enter active mod folder path here...";
+                return m_ModPath3;
+            }
+            set
+            {
+                if (!Directory.Exists(value) && !string.IsNullOrEmpty(value))
+                    return;
+                m_ModPath3 = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private string m_ModPath4;
+        public string ModPath4
+        {
+            get
+            {
+                if (!Directory.Exists(m_ModPath4))
+                    return "enter active mod folder path here...";
+                return m_ModPath4;
+            }
+            set
+            {
+                if (!Directory.Exists(value) && !string.IsNullOrEmpty(value))
+                    return;
+                m_ModPath4 = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private string m_ModPath5;
+        public string ModPath5
+        {
+            get
+            {
+                if (!Directory.Exists(m_ModPath5))
+                    return "enter active mod folder path here...";
+                return m_ModPath5;
+            }
+            set
+            {
+                if (!Directory.Exists(value) && !string.IsNullOrEmpty(value))
+                    return;
+                m_ModPath5 = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private string m_ModPath6;
+        public string ModPath6
+        {
+            get
+            {
+                if (!Directory.Exists(m_ModPath6))
+                    return "enter active mod folder path here...";
+                return m_ModPath6;
+            }
+            set
+            {
+                if (!Directory.Exists(value) && !string.IsNullOrEmpty(value))
+                    return;
+                m_ModPath6 = value;
+                NotifyPropertyChanged();
+            }
+        }
         private string m_ExportPath;
         public string ExportPath
         {

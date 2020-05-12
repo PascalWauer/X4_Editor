@@ -25,7 +25,7 @@ namespace X4_Editor
             {
                 if (!Directory.Exists(modPath))
                 {
-                    MessageBox.Show("Enter a valid folder path for mod files", "No valid mod folder");
+                    //MessageBox.Show("Enter a valid folder path for mod files", "No valid mod folder");
                 }
                 else
                 {

@@ -32,6 +32,22 @@ namespace X4_Editor
                     sw.WriteLine("Mod 2 Path: " + m_UIManager.UIModel.ModPath2);
                 else
                     sw.WriteLine("Mod 2 Path: ");
+                if (Directory.Exists(m_UIManager.UIModel.ModPath3))
+                    sw.WriteLine("Mod 3 Path: " + m_UIManager.UIModel.ModPath3);
+                else
+                    sw.WriteLine("Mod 3 Path: ");
+                if (Directory.Exists(m_UIManager.UIModel.ModPath4))
+                    sw.WriteLine("Mod 4 Path: " + m_UIManager.UIModel.ModPath4);
+                else
+                    sw.WriteLine("Mod 4 Path: ");
+                if (Directory.Exists(m_UIManager.UIModel.ModPath5))
+                    sw.WriteLine("Mod 5 Path: " + m_UIManager.UIModel.ModPath5);
+                else
+                    sw.WriteLine("Mod 5 Path: ");
+                if (Directory.Exists(m_UIManager.UIModel.ModPath6))
+                    sw.WriteLine("Mod 6 Path: " + m_UIManager.UIModel.ModPath6);
+                else
+                    sw.WriteLine("Mod 6 Path: ");
                 if (Directory.Exists(m_UIManager.UIModel.ExportPath))
                     sw.WriteLine("Mod export Path: " + m_UIManager.UIModel.ExportPath);
                 else
@@ -110,6 +126,30 @@ namespace X4_Editor
                             line = line.Replace("Mod 2 Path: ", "");
                             if (line.Length > 0)
                                 m_UIManager.UIModel.ModPath2 = line;
+                        }
+                        else if (line.Contains("Mod 3 Path: "))
+                        {
+                            line = line.Replace("Mod 3 Path: ", "");
+                            if (line.Length > 0)
+                                m_UIManager.UIModel.ModPath3 = line;
+                        }
+                        else if (line.Contains("Mod 4 Path: "))
+                        {
+                            line = line.Replace("Mod 4 Path: ", "");
+                            if (line.Length > 0)
+                                m_UIManager.UIModel.ModPath4 = line;
+                        }
+                        else if (line.Contains("Mod 5 Path: "))
+                        {
+                            line = line.Replace("Mod 5 Path: ", "");
+                            if (line.Length > 0)
+                                m_UIManager.UIModel.ModPath5 = line;
+                        }
+                        else if (line.Contains("Mod 6 Path: "))
+                        {
+                            line = line.Replace("Mod 6 Path: ", "");
+                            if (line.Length > 0)
+                                m_UIManager.UIModel.ModPath6 = line;
                         }
                         else if (line.Contains("Mod export Path: "))
                         {

@@ -48,6 +48,7 @@ namespace X4_Editor
         public Dictionary<string, string> TextDictionary = new Dictionary<string, string>();
         public MainWindow MainWindow { get; set; }
         public WaresWindow WaresWindow { get; set; }
+        public ModManager ModManager { get; set; }
         public UIModel UIModel { get; set; }
         public XmlExtractor m_XmlExtractor;
         public XmlWriter m_XmlWriter;
@@ -58,6 +59,7 @@ namespace X4_Editor
         {
             MainWindow = new MainWindow();
             WaresWindow = new WaresWindow();
+            ModManager = new ModManager();
             m_XmlExtractor = new XmlExtractor(this);
             m_XmlWriter = new XmlWriter(this);
             m_ReadWriteConfig = new ReadWriteConfig(this);
@@ -65,12 +67,13 @@ namespace X4_Editor
             this.UIModel = new UIModel();
             MainWindow.DataContext = this.UIModel;
             WaresWindow.DataContext = this.UIModel;
+            
             m_ModFilesReader = new ModFilesReader(this, m_XmlExtractor);
             MainWindow.Closing += OnClosing;
             
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.ReadAllVanillaFilesCommand, this.ExecuteReadAllVanillaFilesCommand));
-            MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.ReadAllMod1FilesCommand, this.ExecuteReadAllMod1FilesCommand));
-            MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.ReadAllMod2FilesCommand, this.ExecuteReadAllMod2FilesCommand));
+            MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.ReadAllModFilesCommand, this.ExecuteReadAllModFilesCommand));
+            MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.OpenModPathManager, this.ExecuteOpenModPathManager));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.FilterCommand, this.ExecuteFilterCommand));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.WriteAllChangedFilesCommand, this.ExecuteWriteAllChangedFilesCommand));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.AddToValueCommand, this.ExecuteAddToValueCommand, CanExecuteCalculate));
@@ -87,14 +90,37 @@ namespace X4_Editor
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.RecalculatePriceCommand, this.ExecuteRecalculatePriceCommand));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.OnWeaponDoubleClick, this.ExecuteOnWeaponDoubleClick));
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.OnProjectileDoubleClick, this.ExecuteOnProjectileDoubleClick));
+            
             MainWindow.CommandBindings.Add(new CommandBinding(X4Commands.ShowHelp, this.ExecuteShowHelp));
 
             WaresWindow.CommandBindings.Add(new CommandBinding(X4Commands.OnWaresWindowCellRightClick, this.ExecuteOnWaresWindowCellRightClick));
+
             m_ReadWriteConfig.LoadConfig();
             this.TextDictionary = new Dictionary<string, string>();
             this.TextDictionary = m_XmlExtractor.ReadTextXml(this.UIModel.Path + this.PathToTexts + @"\0001-l044.xml", this.TextDictionary);
             MainWindow.Show();
             WaresWindow.Owner = this.MainWindow;
+        }
+
+        private void ExecuteCloseModPathManager(object sender, ExecutedRoutedEventArgs e)
+        {
+            m_ReadWriteConfig.SaveConfig();
+            ModManager.Close();
+        }
+
+        private void ExecuteOpenModPathManager(object sender, ExecutedRoutedEventArgs e)
+        {   
+            ModManager = new ModManager();
+            ModManager.DataContext = this.UIModel;
+            ModManager.CommandBindings.Add(new CommandBinding(X4Commands.SelectFolderCommand, this.ExecuteSelectFolderCommand));
+            ModManager.CommandBindings.Add(new CommandBinding(X4Commands.SelectMod1FolderCommand, this.ExecuteSelectMod1FolderCommand));
+            ModManager.CommandBindings.Add(new CommandBinding(X4Commands.SelectMod2FolderCommand, this.ExecuteSelectMod2FolderCommand));
+            ModManager.CommandBindings.Add(new CommandBinding(X4Commands.SelectMod3FolderCommand, this.ExecuteSelectMod3FolderCommand));
+            ModManager.CommandBindings.Add(new CommandBinding(X4Commands.SelectMod4FolderCommand, this.ExecuteSelectMod4FolderCommand));
+            ModManager.CommandBindings.Add(new CommandBinding(X4Commands.SelectMod5FolderCommand, this.ExecuteSelectMod5FolderCommand));
+            ModManager.CommandBindings.Add(new CommandBinding(X4Commands.SelectMod6FolderCommand, this.ExecuteSelectMod6FolderCommand));
+            ModManager.CommandBindings.Add(new CommandBinding(X4Commands.CloseModPathManager, this.ExecuteCloseModPathManager));
+            ModManager.Show();
         }
 
         private void ExecuteShowHelp(object sender, ExecutedRoutedEventArgs e)
@@ -217,6 +243,16 @@ namespace X4_Editor
                 }
             }
         }
+
+        private string GetModFolder(string path)
+        {
+            if (Directory.Exists(path))
+            {
+                DirectoryInfo di = new DirectoryInfo(path);
+                return di.FullName;
+            }
+            else return String.Empty;
+        }
         private void ExecuteSelectMod1FolderCommand(object sender, ExecutedRoutedEventArgs e)
         {
             using (var fbd = new FolderBrowserDialog())
@@ -224,9 +260,13 @@ namespace X4_Editor
                 fbd.Description = "Select the extracted folder containing the X4 folders.";
                 fbd.ShowNewFolderButton = false;
 
-                if (Directory.Exists(this.UIModel.Path))
+                if (Directory.Exists(GetModFolder(this.UIModel.ModPath1)))
                 {
-                    fbd.SelectedPath = this.UIModel.Path;
+                    fbd.SelectedPath = GetModFolder(this.UIModel.ModPath1);
+                }
+                else if (Directory.Exists(GetModFolder(this.UIModel.Path)))
+                {
+                    fbd.SelectedPath = GetModFolder(this.UIModel.Path);
                 }
                 DialogResult result = fbd.ShowDialog();
 
@@ -241,12 +281,20 @@ namespace X4_Editor
         {
             using (var fbd = new FolderBrowserDialog())
             {
-                fbd.Description = "Select the extracted folder containing the X4 folders.";
+                fbd.Description = "Select the extracted folder containing the mod.";
                 fbd.ShowNewFolderButton = false;
 
-                if (Directory.Exists(this.UIModel.Path))
+                if (Directory.Exists(GetModFolder(this.UIModel.ModPath2)))
                 {
-                    fbd.SelectedPath = this.UIModel.Path;
+                    fbd.SelectedPath = GetModFolder(this.UIModel.ModPath2);
+                }
+                else if (Directory.Exists(GetModFolder(this.UIModel.ModPath1)))
+                {
+                    fbd.SelectedPath = GetModFolder(this.UIModel.ModPath1);
+                }
+                else if (Directory.Exists(GetModFolder(this.UIModel.Path)))
+                {
+                    fbd.SelectedPath = GetModFolder(this.UIModel.Path);
                 }
                 DialogResult result = fbd.ShowDialog();
 
@@ -256,7 +304,119 @@ namespace X4_Editor
                     m_ReadWriteConfig.SaveConfig();
                 }
             }
-        }         
+        }
+        private void ExecuteSelectMod3FolderCommand(object sender, ExecutedRoutedEventArgs e)
+        {
+            using (var fbd = new FolderBrowserDialog())
+            {
+                fbd.Description = "Select the extracted folder containing the mod.";
+                fbd.ShowNewFolderButton = false;
+
+                if (Directory.Exists(GetModFolder(this.UIModel.ModPath3)))
+                {
+                    fbd.SelectedPath = GetModFolder(this.UIModel.ModPath3);
+                }
+                else if (Directory.Exists(GetModFolder(this.UIModel.ModPath2)))
+                {
+                    fbd.SelectedPath = GetModFolder(this.UIModel.ModPath2);
+                }
+                else if (Directory.Exists(GetModFolder(this.UIModel.Path)))
+                {
+                    fbd.SelectedPath = GetModFolder(this.UIModel.Path);
+                }
+                DialogResult result = fbd.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                {
+                    this.UIModel.ModPath3 = fbd.SelectedPath;
+                    m_ReadWriteConfig.SaveConfig();
+                }
+            }
+        }
+        private void ExecuteSelectMod4FolderCommand(object sender, ExecutedRoutedEventArgs e)
+        {
+            using (var fbd = new FolderBrowserDialog())
+            {
+                fbd.Description = "Select the extracted folder containing the mod.";
+                fbd.ShowNewFolderButton = false;
+
+                if (Directory.Exists(GetModFolder(this.UIModel.ModPath4)))
+                {
+                    fbd.SelectedPath = GetModFolder(this.UIModel.ModPath4);
+                }
+                else if (Directory.Exists(GetModFolder(this.UIModel.ModPath3)))
+                {
+                    fbd.SelectedPath = GetModFolder(this.UIModel.ModPath3);
+                }
+                else if (Directory.Exists(GetModFolder(this.UIModel.Path)))
+                {
+                    fbd.SelectedPath = GetModFolder(this.UIModel.Path);
+                }
+                DialogResult result = fbd.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                {
+                    this.UIModel.ModPath4 = fbd.SelectedPath;
+                    m_ReadWriteConfig.SaveConfig();
+                }
+            }
+        }
+        private void ExecuteSelectMod5FolderCommand(object sender, ExecutedRoutedEventArgs e)
+        {
+            using (var fbd = new FolderBrowserDialog())
+            {
+                fbd.Description = "Select the extracted folder containing the mod.";
+                fbd.ShowNewFolderButton = false;
+
+                if (Directory.Exists(GetModFolder(this.UIModel.ModPath5)))
+                {
+                    fbd.SelectedPath = GetModFolder(this.UIModel.ModPath5);
+                }
+                else if (Directory.Exists(GetModFolder(this.UIModel.ModPath4)))
+                {
+                    fbd.SelectedPath = GetModFolder(this.UIModel.ModPath4);
+                }
+                else if (Directory.Exists(GetModFolder(this.UIModel.Path)))
+                {
+                    fbd.SelectedPath = GetModFolder(this.UIModel.Path);
+                }
+                DialogResult result = fbd.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                {
+                    this.UIModel.ModPath5 = fbd.SelectedPath;
+                    m_ReadWriteConfig.SaveConfig();
+                }
+            }
+        }
+        private void ExecuteSelectMod6FolderCommand(object sender, ExecutedRoutedEventArgs e)
+        {
+            using (var fbd = new FolderBrowserDialog())
+            {
+                fbd.Description = "Select the extracted folder containing the mod.";
+                fbd.ShowNewFolderButton = false;
+
+                if (Directory.Exists(GetModFolder(this.UIModel.ModPath6)))
+                {
+                    fbd.SelectedPath = GetModFolder(this.UIModel.ModPath6);
+                }
+                else if (Directory.Exists(GetModFolder(this.UIModel.ModPath5)))
+                {
+                    fbd.SelectedPath = GetModFolder(this.UIModel.ModPath5);
+                }
+                else if (Directory.Exists(GetModFolder(this.UIModel.Path)))
+                {
+                    fbd.SelectedPath = GetModFolder(this.UIModel.Path);
+                }
+                DialogResult result = fbd.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                {
+                    this.UIModel.ModPath6 = fbd.SelectedPath;
+                    m_ReadWriteConfig.SaveConfig();
+                }
+            }
+        }
         private void ExecuteRecalculatePriceCommand(object sender, ExecutedRoutedEventArgs e)
         {
             this.UIModel.CalculateWarePrices();
@@ -689,15 +849,16 @@ namespace X4_Editor
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ExecuteReadAllMod1FilesCommand(object sender, ExecutedRoutedEventArgs e)
+        private void ExecuteReadAllModFilesCommand(object sender, ExecutedRoutedEventArgs e)
         {
 
             this.ExecuteReadAllVanillaFilesCommand(null, null);
             m_ModFilesReader.ReadAllModFilesFromFolder(this.UIModel.ModPath1);
-        }
-        private void ExecuteReadAllMod2FilesCommand(object sender, ExecutedRoutedEventArgs e)
-        {
-            m_ModFilesReader.ReadAllModFilesFromFolder(this.UIModel.ModPath2, true);
+            m_ModFilesReader.ReadAllModFilesFromFolder(this.UIModel.ModPath2);
+            m_ModFilesReader.ReadAllModFilesFromFolder(this.UIModel.ModPath3);
+            m_ModFilesReader.ReadAllModFilesFromFolder(this.UIModel.ModPath4);
+            m_ModFilesReader.ReadAllModFilesFromFolder(this.UIModel.ModPath5);
+            m_ModFilesReader.ReadAllModFilesFromFolder(this.UIModel.ModPath6);
         }
     }
 }

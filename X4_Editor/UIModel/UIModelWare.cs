@@ -99,15 +99,15 @@ namespace X4_Editor
             }
         }
 
-        public string Margin
+        public int Margin
         {
             get
             {
                 if (CalculatedPrice != 0)
                 {
-                    return Convert.ToInt16((((decimal)Avg / (decimal)CalculatedPrice) -1) * 100).ToString() + " %" ;
+                    return Convert.ToInt16((((decimal)Avg / (decimal)CalculatedPrice) - 1) * 100);
                 }
-                return "0 %";
+                else return 0;
             }
         }
 
