@@ -864,6 +864,8 @@ namespace X4_Editor
                         var match = this.UIModelWares.FirstOrDefault(X => X.Name == item.Ware5);
                         item.CalculatedPrice = item.CalculatedPrice + match.Avg * item.Amount5;
                     }
+                    if (item.Amount > 1)
+                        item.CalculatedPrice = item.CalculatedPrice / item.Amount;
                     item.Update();
                 }
             }

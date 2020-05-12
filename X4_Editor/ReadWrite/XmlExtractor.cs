@@ -252,59 +252,52 @@ namespace X4_Editor
                             }
                         }
 
-                        else if (item.SelectNodes("./production").Count == 2)
+                        else if (item.SelectNodes("./production").Count >= 2)
                         {
-                            int noXenon = 0;
-                            bool xenon = false;
-
                             XmlNodeList productionNodes = item.SelectNodes("./production");
-                            if (item.SelectNodes("./production")[0].Attributes["method"].Value == "xenon" && item.SelectNodes("./production")[1].Attributes["method"].Value == "default")
-                            {
-                                noXenon = 1;
-                                xenon = true;
-                            }
-                            if (item.SelectNodes("./production")[1].Attributes["method"].Value == "xenon" && item.SelectNodes("./production")[0].Attributes["method"].Value == "default")
-                            {
-                                noXenon = 0;
-                                xenon = true;
-                            }
-                            // only if one of the two production ways is xenon and the other one is default, show default
-                            if (xenon)
-                            {
-                                productionNodes = item.SelectNodes("./production")[noXenon].ChildNodes[0].ChildNodes;
 
-                                if (productionNodes.Count > 0)
+                            int defaultIndex = 0;
+                            for (int i = 0; i < productionNodes.Count; i++ )
+                            {
+                                if (item.SelectNodes("./production")[i].Attributes["method"].Value == "default")
+                                    defaultIndex = i;
+                            }
+                            
+                            // always take default production values
+
+                            productionNodes = item.SelectNodes("./production")[defaultIndex].ChildNodes[0].ChildNodes;
+
+                            if (productionNodes.Count > 0)
+                            {
+                                uiModelWare.Time = Utility.ParseToDouble(item.SelectNodes("./production")[defaultIndex].Attributes["time"].Value);
+                                uiModelWare.Amount = Convert.ToInt32(item.SelectNodes("./production")[defaultIndex].Attributes["amount"].Value);
+                            }
+                            for (int i = 0; i < item.SelectNodes("./production/primary/ware").Count; i++)
+                            {
+                                if (i == 0 && productionNodes[i] != null)
                                 {
-                                    uiModelWare.Time = Utility.ParseToDouble(item.SelectNodes("./production")[noXenon].Attributes["time"].Value);
-                                    uiModelWare.Amount = Convert.ToInt32(item.SelectNodes("./production")[noXenon].Attributes["amount"].Value);
+                                    uiModelWare.Ware1 = productionNodes[i].Attributes["ware"].Value;
+                                    uiModelWare.Amount1 = Convert.ToInt32(productionNodes[i].Attributes["amount"].Value);
                                 }
-                                for (int i = 0; i < item.SelectNodes("./production/primary/ware").Count; i++)
+                                if (i == 1 && productionNodes[i] != null)
                                 {
-                                    if (i == 0 && productionNodes[i] != null)
-                                    {
-                                        uiModelWare.Ware1 = productionNodes[i].Attributes["ware"].Value;
-                                        uiModelWare.Amount1 = Convert.ToInt32(productionNodes[i].Attributes["amount"].Value);
-                                    }
-                                    if (i == 1 && productionNodes[i] != null)
-                                    {
-                                        uiModelWare.Ware2 = productionNodes[i].Attributes["ware"].Value;
-                                        uiModelWare.Amount2 = Convert.ToInt32(productionNodes[i].Attributes["amount"].Value);
-                                    }
-                                    if (i == 2 && productionNodes[i] != null)
-                                    {
-                                        uiModelWare.Ware3 = productionNodes[i].Attributes["ware"].Value;
-                                        uiModelWare.Amount3 = Convert.ToInt32(productionNodes[i].Attributes["amount"].Value);
-                                    }
-                                    if (i == 3 && productionNodes[i] != null)
-                                    {
-                                        uiModelWare.Ware4 = productionNodes[i].Attributes["ware"].Value;
-                                        uiModelWare.Amount4 = Convert.ToInt32(productionNodes[i].Attributes["amount"].Value);
-                                    }
-                                    if (i == 4 && productionNodes[i] != null)
-                                    {
-                                        uiModelWare.Ware5 = productionNodes[i].Attributes["ware"].Value;
-                                        uiModelWare.Amount5 = Convert.ToInt32(productionNodes[i].Attributes["amount"].Value);
-                                    }
+                                    uiModelWare.Ware2 = productionNodes[i].Attributes["ware"].Value;
+                                    uiModelWare.Amount2 = Convert.ToInt32(productionNodes[i].Attributes["amount"].Value);
+                                }
+                                if (i == 2 && productionNodes[i] != null)
+                                {
+                                    uiModelWare.Ware3 = productionNodes[i].Attributes["ware"].Value;
+                                    uiModelWare.Amount3 = Convert.ToInt32(productionNodes[i].Attributes["amount"].Value);
+                                }
+                                if (i == 3 && productionNodes[i] != null)
+                                {
+                                    uiModelWare.Ware4 = productionNodes[i].Attributes["ware"].Value;
+                                    uiModelWare.Amount4 = Convert.ToInt32(productionNodes[i].Attributes["amount"].Value);
+                                }
+                                if (i == 4 && productionNodes[i] != null)
+                                {
+                                    uiModelWare.Ware5 = productionNodes[i].Attributes["ware"].Value;
+                                    uiModelWare.Amount5 = Convert.ToInt32(productionNodes[i].Attributes["amount"].Value);
                                 }
                             }
                         }
