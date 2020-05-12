@@ -823,220 +823,264 @@ namespace X4_Editor
 
             };
 
-            using (XmlReader reader = XmlReader.Create(file.FullName))
+            try
             {
-                while (reader.Read())
+                XDocument doc = XDocument.Load(file.FullName);
+                if (doc.Descendants("macros") != null)
                 {
-                    try
+                    var ships = doc.Descendants("macro").Where(p => p.Attribute("class") != null);
+
+                    foreach (var ship in ships)
                     {
-                        if (reader.NodeType == XmlNodeType.Element && reader.Name == "macros")
+                        XmlDocument xD = new XmlDocument();
+                        xD.LoadXml(ship.ToString());
+                        XmlNode xN = XmlHelper.ToXmlNode(ship);
+
+                        XmlNodeList shipComponentNode = xN.SelectNodes("//component");
+                        XmlNodeList shipMacroNode = xN.SelectNodes("/macro");
+                        XmlNodeList shipIdentificationNode = xN.SelectNodes("//properties/identification");
+                        XmlNodeList shipExplosionNode = xN.SelectNodes("//properties/explosiondamage");
+                        XmlNodeList shipStorageNode = xN.SelectNodes("//properties/storage");
+                        XmlNodeList shipHullNode = xN.SelectNodes("//properties/hull");
+                        XmlNodeList shipSecrecyNode = xN.SelectNodes("//properties/secrecy");
+                        XmlNodeList shipGatherRateNode = xN.SelectNodes("//properties/gatherrate");
+                        XmlNodeList shipPeopleNode = xN.SelectNodes("//properties/people");
+                        XmlNodeList shipPhysicsNode = xN.SelectNodes("//properties/physics");
+                        XmlNodeList shipInertiaNode = xN.SelectNodes("//properties/physics/inertia");
+                        XmlNodeList shipDragNode = xN.SelectNodes("//properties/physics/drag");
+                        XmlNodeList shipShipTypeNode = xN.SelectNodes("//properties/ship");
+
+                        if (shipMacroNode[0].Attributes["class"] != null && shipMacroNode[0].Attributes["class"].Value != "storage")
                         {
-                            XDocument doc = XDocument.Load(file.FullName);
-
-                            var ships = doc.Descendants("macro").Where(p => p.Attribute("class") != null);
-
-                            foreach (var ship in ships)
+                            #region MyRegion for components
+                            if (shipShipTypeNode.Count > 0)
                             {
-                                XmlDocument xD = new XmlDocument();
-                                xD.LoadXml(ship.ToString());
-                                XmlNode xN = XmlHelper.ToXmlNode(ship);
-
-                                XmlNodeList shipComponentNode = xN.SelectNodes("//component");
-                                XmlNodeList shipMacroNode = xN.SelectNodes("/macro");
-                                XmlNodeList shipIdentificationNode = xN.SelectNodes("//properties/identification");
-                                XmlNodeList shipExplosionNode = xN.SelectNodes("//properties/explosiondamage");
-                                XmlNodeList shipStorageNode = xN.SelectNodes("//properties/storage");
-                                XmlNodeList shipHullNode = xN.SelectNodes("//properties/hull");
-                                XmlNodeList shipSecrecyNode = xN.SelectNodes("//properties/secrecy");
-                                XmlNodeList shipGatherRateNode = xN.SelectNodes("//properties/gatherrate");
-                                XmlNodeList shipPeopleNode = xN.SelectNodes("//properties/people");
-                                XmlNodeList shipPhysicsNode = xN.SelectNodes("//properties/physics");
-                                XmlNodeList shipInertiaNode = xN.SelectNodes("//properties/physics/inertia");
-                                XmlNodeList shipDragNode = xN.SelectNodes("//properties/physics/drag");
-                                XmlNodeList shipShipTypeNode = xN.SelectNodes("//properties/ship");
-
-                                if (shipMacroNode[0].Attributes["class"] != null && shipMacroNode[0].Attributes["class"].Value != "storage")
-                                {
-                                    #region MyRegion for components
-                                    if (shipShipTypeNode.Count > 0)
-                                    {
-                                        Tuple<string, string, string> components = this.ReadShipComponents(file);
-                                        uiModelShip.Shields = components.Item1;
-                                        uiModelShip.Turrets = components.Item2;
-                                        uiModelShip.Weapons = components.Item3;
-                                    }
-                                    #endregion
-
-                                    #region region for cargo 
-                                    string CargoFile = file.FullName.Replace(m_UIManager.UIModel.ModPath1, m_UIManager.UIModel.Path).Replace(m_UIManager.UIModel.ModPath2, m_UIManager.UIModel.Path).Replace("ship_", "storage_");
-                                    string CargoModFile1 = "";
-                                    string CargoModFile2 = "";
-                                    // different cases: 1. storage file is in the same folder
-                                    //                  2. storage file is in a mod folder
-                                    // storage file can be the same name with ships_ replaced by storage or units_ replaced by storage
-
-                                    if (file.Name.Contains("ship_"))
-                                    {
-                                        if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath1).Replace("ship_", "storage_")))
-                                        {
-                                            CargoModFile1 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath1).Replace("ship_", "storage_");
-                                        }
-                                        if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath2).Replace("ship_", "storage_")))
-                                        {
-                                            CargoModFile2 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath2).Replace("ship_", "storage_");
-                                        }
-                                    }
-                                    if (file.Name.Contains("units_"))
-                                    {
-                                        if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath1).Replace("units_", "storage_units_")))
-                                        {
-                                            CargoModFile1 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath1).Replace("units_", "storage_units_");
-                                        }
-                                        if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath2).Replace("units_", "storage_units_")))
-                                        {
-                                            CargoModFile2 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath2).Replace("units_", "storage_units_");
-                                        }
-                                    }
-
-                                    uiModelShip.File = file.FullName;
-                                    uiModelShip.Name = shipMacroNode[0].Attributes["name"].Value;
-                                    uiModelShip.Class = shipMacroNode[0].Attributes["class"].Value;
-
-
-
-                                    string priorityCargoFile = "";
-                                    if (File.Exists(CargoModFile2))
-                                    {
-                                        priorityCargoFile = CargoModFile2;
-                                    }
-                                    else if (File.Exists(CargoModFile1))
-                                    {
-                                        priorityCargoFile = CargoModFile1;
-                                    }
-                                    else if (File.Exists(CargoFile))
-                                        priorityCargoFile = CargoFile;
-
-                                    if (!string.IsNullOrWhiteSpace(priorityCargoFile))
-                                    {
-                                        uiModelShip.Cargo = new UIModelShipCargo();
-                                        XmlDocument Cargodoc = new XmlDocument();
-                                        Cargodoc.Load(priorityCargoFile);
-                                        string xmlcontents = Cargodoc.InnerXml;
-                                        Cargodoc.LoadXml(xmlcontents);
-
-                                        XmlNodeList shipCargoNode = Cargodoc.SelectNodes("//properties/cargo");
-
-                                        if (shipCargoNode.Count > 0)
-                                        {
-                                            uiModelShip.Cargo.File = priorityCargoFile;
-                                            uiModelShip.Cargo.CargoMax = Convert.ToInt32(shipCargoNode[0].Attributes["max"].Value);
-                                            uiModelShip.Cargo.CargoTags = shipCargoNode[0].Attributes["tags"].Value;
-                                        }
-                                        uiModelShip.Cargo.Changed = false;
-                                    }
-                                    #endregion
-
-                                    if (shipShipTypeNode.Count > 0)
-                                    {
-                                        if (shipShipTypeNode[0].Attributes["type"] != null)
-                                            uiModelShip.Type = shipShipTypeNode[0].Attributes["type"].Value;
-                                    }
-
-                                    if (uiModelShip.Type == null || uiModelShip.Type == "cockpit")
-                                    {
-                                        return null;
-                                    }
-
-
-                                    if (shipIdentificationNode.Count > 0)
-                                    {
-                                        if (shipIdentificationNode[0].Attributes["name"] != null)
-                                            uiModelShip.IGName = this.GetIGName(shipIdentificationNode[0].Attributes["name"].Value);
-                                        else
-                                            uiModelShip.IGName = "'unknown'";
-                                    }
-
-                                    if (shipExplosionNode.Count > 0)
-                                    {
-                                        if (shipExplosionNode[0].Attributes["value"] != null)
-                                            uiModelShip.ExplosionDamage = Convert.ToInt32(shipExplosionNode[0].Attributes["value"].Value);
-                                    }
-                                    if (shipStorageNode.Count > 0)
-                                    {
-                                        if (shipStorageNode[0].Attributes["missile"] != null)
-                                            uiModelShip.StorageMissiles = Convert.ToInt32(shipStorageNode[0].Attributes["missile"].Value);
-                                        if (shipStorageNode[0].Attributes["unit"] != null)
-                                            uiModelShip.StorageUnits = Convert.ToInt32(shipStorageNode[0].Attributes["unit"].Value);
-                                    }
-                                    if (shipHullNode.Count > 0)
-                                    {
-                                        if (shipHullNode[0].Attributes["max"] != null)
-                                            uiModelShip.HullMax = Convert.ToInt32(shipHullNode[0].Attributes["max"].Value);
-                                    }
-                                    if (shipGatherRateNode.Count > 0)
-                                    {
-                                        if (shipGatherRateNode[0].Attributes["gas"] != null)
-                                            uiModelShip.GatherRrate = Utility.ParseToDouble(shipGatherRateNode[0].Attributes["gas"].Value);
-                                    }
-                                    if (shipSecrecyNode.Count > 0)
-                                    {
-                                        if (shipSecrecyNode[0].Attributes["level"] != null)
-                                            uiModelShip.Secrecy = Convert.ToInt32(shipSecrecyNode[0].Attributes["level"].Value);
-                                    }
-                                    if (shipPeopleNode.Count > 0)
-                                    {
-                                        if (shipPeopleNode[0].Attributes["capacity"] != null)
-                                            uiModelShip.People = Convert.ToInt32(shipPeopleNode[0].Attributes["capacity"].Value);
-                                    }
-                                    if (shipPhysicsNode.Count > 0)
-                                    {
-                                        if (shipPhysicsNode[0].Attributes["mass"] != null)
-                                            uiModelShip.Mass = Utility.ParseToDouble(shipPhysicsNode[0].Attributes["mass"].Value);
-                                    }
-                                    if (shipInertiaNode.Count > 0)
-                                    {
-                                        if (shipInertiaNode[0].Attributes["roll"] != null)
-                                            uiModelShip.InertiaRoll = Utility.ParseToDouble(shipInertiaNode[0].Attributes["roll"].Value);
-                                        if (shipInertiaNode[0].Attributes["yaw"] != null)
-                                            uiModelShip.InertiaYaw = Utility.ParseToDouble(shipInertiaNode[0].Attributes["yaw"].Value);
-                                        if (shipInertiaNode[0].Attributes["pitch"] != null)
-                                            uiModelShip.InertiaPitch = Utility.ParseToDouble(shipInertiaNode[0].Attributes["pitch"].Value);
-                                    }
-                                    if (shipDragNode.Count > 0)
-                                    {
-                                        if (shipDragNode[0].Attributes["forward"] != null)
-                                            uiModelShip.Forward = Utility.ParseToDouble(shipDragNode[0].Attributes["forward"].Value);
-                                        if (shipDragNode[0].Attributes["reverse"] != null)
-                                            uiModelShip.Reverse = Utility.ParseToDouble(shipDragNode[0].Attributes["reverse"].Value);
-                                        if (shipDragNode[0].Attributes["horizontal"] != null)
-                                            uiModelShip.Horizontal = Utility.ParseToDouble(shipDragNode[0].Attributes["horizontal"].Value);
-                                        if (shipDragNode[0].Attributes["vertical"] != null)
-                                            uiModelShip.Vertical = Utility.ParseToDouble(shipDragNode[0].Attributes["vertical"].Value);
-                                        if (shipDragNode[0].Attributes["pitch"] != null)
-                                            uiModelShip.Pitch = Utility.ParseToDouble(shipDragNode[0].Attributes["pitch"].Value);
-                                        if (shipDragNode[0].Attributes["yaw"] != null)
-                                            uiModelShip.Yaw = Utility.ParseToDouble(shipDragNode[0].Attributes["yaw"].Value);
-                                        if (shipDragNode[0].Attributes["roll"] != null)
-                                            uiModelShip.Roll = Utility.ParseToDouble(shipDragNode[0].Attributes["roll"].Value);
-                                    }
-                                    uiModelShip.Changed = false;
-
-                                }
-                                //var ShipExistsAlready = m_UIManager.UIModel.UIModelShips.Where(x => x.File == uiModelShip.File).ToList();
-                                //if (ShipExistsAlready.Count == 0)
-                                //{
-                                //    //m_UIManager.UIModel.UIModelShipsVanilla.Add(uiModelShip.Copy());
-                                //    m_UIManager.UIModel.UIModelShips.Add(uiModelShip);
-                                //}
+                                Tuple<string, string, string> components = this.ReadShipComponents(file);
+                                uiModelShip.Shields = components.Item1;
+                                uiModelShip.Turrets = components.Item2;
+                                uiModelShip.Weapons = components.Item3;
                             }
+                            #endregion
+
+                            #region region for cargo 
+                            string CargoFile = file.FullName.Replace(m_UIManager.UIModel.ModPath1, m_UIManager.UIModel.Path).Replace(m_UIManager.UIModel.ModPath2, m_UIManager.UIModel.Path).Replace("ship_", "storage_");
+                            string CargoModFile1 = "";
+                            string CargoModFile2 = "";
+                            string CargoModFile3 = "";
+                            string CargoModFile4 = "";
+                            string CargoModFile5 = "";
+                            string CargoModFile6 = "";
+                            // different cases: 1. storage file is in the same folder
+                            //                  2. storage file is in a mod folder
+                            // storage file can be the same name with ships_ replaced by storage or units_ replaced by storage
+
+                            if (file.Name.Contains("ship_"))
+                            {
+                                if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath1).Replace("ship_", "storage_")))
+                                {
+                                    CargoModFile1 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath1).Replace("ship_", "storage_");
+                                }
+                                if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath2).Replace("ship_", "storage_")))
+                                {
+                                    CargoModFile2 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath2).Replace("ship_", "storage_");
+                                }
+                                if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath3).Replace("ship_", "storage_")))
+                                {
+                                    CargoModFile3 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath3).Replace("ship_", "storage_");
+                                }
+                                if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath4).Replace("ship_", "storage_")))
+                                {
+                                    CargoModFile4 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath4).Replace("ship_", "storage_");
+                                }
+                                if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath5).Replace("ship_", "storage_")))
+                                {
+                                    CargoModFile5 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath5).Replace("ship_", "storage_");
+                                }
+                                if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath6).Replace("ship_", "storage_")))
+                                {
+                                    CargoModFile6 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath6).Replace("ship_", "storage_");
+                                }
+                            }
+                            if (file.Name.Contains("units_"))
+                            {
+                                if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath1).Replace("units_", "storage_units_")))
+                                {
+                                    CargoModFile1 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath1).Replace("units_", "storage_units_");
+                                }
+                                if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath2).Replace("units_", "storage_units_")))
+                                {
+                                    CargoModFile2 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath2).Replace("units_", "storage_units_");
+                                }
+                                if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath3).Replace("units_", "storage_units_")))
+                                {
+                                    CargoModFile3 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath3).Replace("units_", "storage_units_");
+                                }
+                                if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath4).Replace("units_", "storage_units_")))
+                                {
+                                    CargoModFile4 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath4).Replace("units_", "storage_units_");
+                                }
+                                if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath5).Replace("units_", "storage_units_")))
+                                {
+                                    CargoModFile5 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath5).Replace("units_", "storage_units_");
+                                }
+                                if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath6).Replace("units_", "storage_units_")))
+                                {
+                                    CargoModFile6 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath6).Replace("units_", "storage_units_");
+                                }
+                            }
+
+                            uiModelShip.File = file.FullName;
+                            uiModelShip.Name = shipMacroNode[0].Attributes["name"].Value;
+                            uiModelShip.Class = shipMacroNode[0].Attributes["class"].Value;
+
+                            string priorityCargoFile = "";
+                            if (File.Exists(CargoModFile6))
+                            {
+                                priorityCargoFile = CargoModFile6;
+                            }
+                            else if(File.Exists(CargoModFile5))
+                            {
+                                priorityCargoFile = CargoModFile5;
+                            }
+                            else if(File.Exists(CargoModFile4))
+                            {
+                                priorityCargoFile = CargoModFile4;
+                            }
+                            else if(File.Exists(CargoModFile3))
+                            {
+                                priorityCargoFile = CargoModFile3;
+                            }
+                            else if(File.Exists(CargoModFile2))
+                            {
+                                priorityCargoFile = CargoModFile2;
+                            }
+                            else if (File.Exists(CargoModFile1))
+                            {
+                                priorityCargoFile = CargoModFile1;
+                            }
+                            else if (File.Exists(CargoFile))
+                                priorityCargoFile = CargoFile;
+
+                            if (!string.IsNullOrWhiteSpace(priorityCargoFile))
+                            {
+                                uiModelShip.Cargo = new UIModelShipCargo();
+                                XmlDocument Cargodoc = new XmlDocument();
+                                Cargodoc.Load(priorityCargoFile);
+                                string xmlcontents = Cargodoc.InnerXml;
+                                Cargodoc.LoadXml(xmlcontents);
+
+                                XmlNodeList shipCargoNode = Cargodoc.SelectNodes("//properties/cargo");
+
+                                if (shipCargoNode.Count > 0)
+                                {
+                                    uiModelShip.Cargo.File = priorityCargoFile;
+                                    uiModelShip.Cargo.CargoMax = Convert.ToInt32(shipCargoNode[0].Attributes["max"].Value);
+                                    uiModelShip.Cargo.CargoTags = shipCargoNode[0].Attributes["tags"].Value;
+                                }
+                                uiModelShip.Cargo.Changed = false;
+                            }
+                            #endregion
+
+                            if (shipShipTypeNode.Count > 0)
+                            {
+                                if (shipShipTypeNode[0].Attributes["type"] != null)
+                                    uiModelShip.Type = shipShipTypeNode[0].Attributes["type"].Value;
+                            }
+
+                            if (uiModelShip.Type == null || uiModelShip.Type == "cockpit")
+                            {
+                                return null;
+                            }
+
+
+                            if (shipIdentificationNode.Count > 0)
+                            {
+                                if (shipIdentificationNode[0].Attributes["name"] != null)
+                                    uiModelShip.IGName = this.GetIGName(shipIdentificationNode[0].Attributes["name"].Value);
+                                else
+                                    uiModelShip.IGName = "'unknown'";
+                            }
+
+                            if (shipExplosionNode.Count > 0)
+                            {
+                                if (shipExplosionNode[0].Attributes["value"] != null)
+                                    uiModelShip.ExplosionDamage = Convert.ToInt32(shipExplosionNode[0].Attributes["value"].Value);
+                            }
+                            if (shipStorageNode.Count > 0)
+                            {
+                                if (shipStorageNode[0].Attributes["missile"] != null)
+                                    uiModelShip.StorageMissiles = Convert.ToInt32(shipStorageNode[0].Attributes["missile"].Value);
+                                if (shipStorageNode[0].Attributes["unit"] != null)
+                                    uiModelShip.StorageUnits = Convert.ToInt32(shipStorageNode[0].Attributes["unit"].Value);
+                            }
+                            if (shipHullNode.Count > 0)
+                            {
+                                if (shipHullNode[0].Attributes["max"] != null)
+                                    uiModelShip.HullMax = Convert.ToInt32(shipHullNode[0].Attributes["max"].Value);
+                            }
+                            if (shipGatherRateNode.Count > 0)
+                            {
+                                if (shipGatherRateNode[0].Attributes["gas"] != null)
+                                    uiModelShip.GatherRrate = Utility.ParseToDouble(shipGatherRateNode[0].Attributes["gas"].Value);
+                            }
+                            if (shipSecrecyNode.Count > 0)
+                            {
+                                if (shipSecrecyNode[0].Attributes["level"] != null)
+                                    uiModelShip.Secrecy = Convert.ToInt32(shipSecrecyNode[0].Attributes["level"].Value);
+                            }
+                            if (shipPeopleNode.Count > 0)
+                            {
+                                if (shipPeopleNode[0].Attributes["capacity"] != null)
+                                    uiModelShip.People = Convert.ToInt32(shipPeopleNode[0].Attributes["capacity"].Value);
+                            }
+                            if (shipPhysicsNode.Count > 0)
+                            {
+                                if (shipPhysicsNode[0].Attributes["mass"] != null)
+                                    uiModelShip.Mass = Utility.ParseToDouble(shipPhysicsNode[0].Attributes["mass"].Value);
+                            }
+                            if (shipInertiaNode.Count > 0)
+                            {
+                                if (shipInertiaNode[0].Attributes["roll"] != null)
+                                    uiModelShip.InertiaRoll = Utility.ParseToDouble(shipInertiaNode[0].Attributes["roll"].Value);
+                                if (shipInertiaNode[0].Attributes["yaw"] != null)
+                                    uiModelShip.InertiaYaw = Utility.ParseToDouble(shipInertiaNode[0].Attributes["yaw"].Value);
+                                if (shipInertiaNode[0].Attributes["pitch"] != null)
+                                    uiModelShip.InertiaPitch = Utility.ParseToDouble(shipInertiaNode[0].Attributes["pitch"].Value);
+                            }
+                            if (shipDragNode.Count > 0)
+                            {
+                                if (shipDragNode[0].Attributes["forward"] != null)
+                                    uiModelShip.Forward = Utility.ParseToDouble(shipDragNode[0].Attributes["forward"].Value);
+                                if (shipDragNode[0].Attributes["reverse"] != null)
+                                    uiModelShip.Reverse = Utility.ParseToDouble(shipDragNode[0].Attributes["reverse"].Value);
+                                if (shipDragNode[0].Attributes["horizontal"] != null)
+                                    uiModelShip.Horizontal = Utility.ParseToDouble(shipDragNode[0].Attributes["horizontal"].Value);
+                                if (shipDragNode[0].Attributes["vertical"] != null)
+                                    uiModelShip.Vertical = Utility.ParseToDouble(shipDragNode[0].Attributes["vertical"].Value);
+                                if (shipDragNode[0].Attributes["pitch"] != null)
+                                    uiModelShip.Pitch = Utility.ParseToDouble(shipDragNode[0].Attributes["pitch"].Value);
+                                if (shipDragNode[0].Attributes["yaw"] != null)
+                                    uiModelShip.Yaw = Utility.ParseToDouble(shipDragNode[0].Attributes["yaw"].Value);
+                                if (shipDragNode[0].Attributes["roll"] != null)
+                                    uiModelShip.Roll = Utility.ParseToDouble(shipDragNode[0].Attributes["roll"].Value);
+                            }
+                            uiModelShip.Changed = false;
+
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception(file.FullName + " could not be loaded.");
+                        //var ShipExistsAlready = m_UIManager.UIModel.UIModelShips.Where(x => x.File == uiModelShip.File).ToList();
+                        //if (ShipExistsAlready.Count == 0)
+                        //{
+                        //    //m_UIManager.UIModel.UIModelShipsVanilla.Add(uiModelShip.Copy());
+                        //    m_UIManager.UIModel.UIModelShips.Add(uiModelShip);
+                        //}
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                throw new Exception(file.FullName + " could not be loaded.");
+            }
+
             return uiModelShip;
         }
 
@@ -1047,6 +1091,7 @@ namespace X4_Editor
                 throw new DirectoryNotFoundException(file.DirectoryName + " not found");
             }
             string ComponentPath = Directory.GetParent(file.DirectoryName).ToString() + @"\" + file.Name.Replace("_macro", "");
+            string shipCOmponentFileName = file.Name.Replace("_a_macro", "").Replace("_b_macro", "").Replace("_c_macro", "").Replace("_d_macro", "").Replace("_macro", "");
             string VanillaPath = "";
             string shields = "";
             string turrets = "";
@@ -1060,6 +1105,7 @@ namespace X4_Editor
             int weapons_S = 0;
             int weapons_M = 0;
             int weapons_L = 0;
+            string FileInModContainingComponents = "";
             if (!File.Exists(ComponentPath))
             {
                 string newComponentPath = "";
@@ -1068,22 +1114,50 @@ namespace X4_Editor
                 {
                     newComponentPath = newComponentPath + path[i] + "_";
                 }
-                ComponentPath = newComponentPath.Substring(0, newComponentPath.Length - 1) + ".xml";
+                //ComponentPath = newComponentPath.Substring(0, newComponentPath.Length - 1) + ".xml";
+                ComponentPath = FindFileInFolder(this.m_UIManager.UIModel.Path, shipCOmponentFileName);
             }
             // if file does not exists it maybe exist in vanilla folder
             if (File.Exists(ComponentPath))
             {
-                //because modpath1+2 are unique this should work
-                VanillaPath = ComponentPath.Replace(this.m_UIManager.UIModel.ModPath1, m_UIManager.UIModel.Path);
-                VanillaPath = ComponentPath.Replace(this.m_UIManager.UIModel.ModPath2, m_UIManager.UIModel.Path);
+                if (!String.IsNullOrEmpty(FindFileInFolder(this.m_UIManager.UIModel.ModPath1, shipCOmponentFileName)))
+                {
+                    FileInModContainingComponents = FindFileInFolder(this.m_UIManager.UIModel.ModPath1, shipCOmponentFileName);
+                    ComponentPath = ComponentPath.Replace(this.m_UIManager.UIModel.ModPath1, this.m_UIManager.UIModel.Path);
+                }
+                else if (!String.IsNullOrEmpty(FindFileInFolder(this.m_UIManager.UIModel.ModPath2, shipCOmponentFileName)))
+                {
+                    FileInModContainingComponents = FindFileInFolder(this.m_UIManager.UIModel.ModPath2, shipCOmponentFileName);
+                    ComponentPath = ComponentPath.Replace(this.m_UIManager.UIModel.ModPath2, this.m_UIManager.UIModel.Path);
+                }
+                else if (!String.IsNullOrEmpty(FindFileInFolder(this.m_UIManager.UIModel.ModPath3, shipCOmponentFileName)))
+                {
+                    FileInModContainingComponents = FindFileInFolder(this.m_UIManager.UIModel.ModPath3, shipCOmponentFileName);
+                    ComponentPath = ComponentPath.Replace(this.m_UIManager.UIModel.ModPath3, this.m_UIManager.UIModel.Path);
+                }
+                else if (!String.IsNullOrEmpty(FindFileInFolder(this.m_UIManager.UIModel.ModPath4, shipCOmponentFileName)))
+                {
+                    FileInModContainingComponents = FindFileInFolder(this.m_UIManager.UIModel.ModPath4, shipCOmponentFileName);
+                    ComponentPath = ComponentPath.Replace(this.m_UIManager.UIModel.ModPath4, this.m_UIManager.UIModel.Path);
+                }
+                else if (!String.IsNullOrEmpty(FindFileInFolder(this.m_UIManager.UIModel.ModPath5, shipCOmponentFileName)))
+                {
+                    FileInModContainingComponents = FindFileInFolder(this.m_UIManager.UIModel.ModPath5, shipCOmponentFileName);
+                    ComponentPath = ComponentPath.Replace(this.m_UIManager.UIModel.ModPath5, this.m_UIManager.UIModel.Path);
+                }
+                else if (!String.IsNullOrEmpty(FindFileInFolder(this.m_UIManager.UIModel.ModPath6, shipCOmponentFileName)))
+                { 
+                    FileInModContainingComponents = FindFileInFolder(this.m_UIManager.UIModel.ModPath6, shipCOmponentFileName);
+                    ComponentPath = ComponentPath.Replace(this.m_UIManager.UIModel.ModPath6, this.m_UIManager.UIModel.Path);
+                }
             }
-            if (File.Exists(VanillaPath))
+            if (File.Exists(ComponentPath))
             {
                 try
                 {
-                    using (XmlReader reader = XmlReader.Create(VanillaPath))
+                    using (XmlReader reader = XmlReader.Create(ComponentPath))
                     {
-                        XDocument doc = XDocument.Load(VanillaPath);
+                        XDocument doc = XDocument.Load(ComponentPath);
                         if (doc.Descendants().Where(x => x.Name.LocalName == "components").ToList().Count > 0)
                         {
                             List<XElement> Connections = doc.Descendants().Where(x => x.Name.LocalName == "connection").ToList();
@@ -1104,14 +1178,13 @@ namespace X4_Editor
 
             }
             // excpect only addition of new components - no removal or alteration of components!
-            if (File.Exists(ComponentPath) && !VanillaPath.Equals(ComponentPath))
+            if (File.Exists(FileInModContainingComponents))
             {
                 // if file exists the vanilla components need to be checked first as base
                 try
                 {
-                    //using (XmlReader reader = XmlReader.Create(ComponentPath))
                     {
-                        XDocument doc = XDocument.Load(ComponentPath);
+                        XDocument doc = XDocument.Load(FileInModContainingComponents);
                         if (doc.Descendants().Where(x => x.Name.LocalName == "components").ToList().Count > 0)
                         {
                             List<XElement> components = doc.Descendants().Where(x => x.Name.LocalName == "components").ToList();
@@ -1150,6 +1223,29 @@ namespace X4_Editor
             turrets = AddIfNotNull(turrets_M, "M ") + AddIfNotNull(turrets_L, "L ");
             weapons = AddIfNotNull(weapons_S, "S ") + AddIfNotNull(weapons_M, "M ") + AddIfNotNull(weapons_L, "L ");
             return new Tuple<string, string, string>(shields, turrets, weapons);
+        }
+
+        private string FindFileInFolder(string folder, string searchedFile)
+        {
+            if (folder == this.m_UIManager.UIModel.Path)
+                return this.m_UIManager.VanillaXmlFiles.Where(x => x.Contains("\\" + searchedFile)).FirstOrDefault();
+            if (folder.Contains(this.m_UIManager.UIModel.ModPath1))
+                return this.m_UIManager.Mod1XmlFiles.Where(x => x.Contains("\\" + searchedFile)).FirstOrDefault();
+            if (folder.Contains(this.m_UIManager.UIModel.ModPath2))
+                return this.m_UIManager.Mod2XmlFiles.Where(x => x.Contains("\\" + searchedFile)).FirstOrDefault();
+            if (folder.Contains(this.m_UIManager.UIModel.ModPath3))
+                return this.m_UIManager.Mod3XmlFiles.Where(x => x.Contains("\\" + searchedFile)).FirstOrDefault();
+            if (folder.Contains(this.m_UIManager.UIModel.ModPath4))
+                return this.m_UIManager.Mod4XmlFiles.Where(x => x.Contains("\\" + searchedFile)).FirstOrDefault();
+            if (folder.Contains(this.m_UIManager.UIModel.ModPath5))
+                return this.m_UIManager.Mod5XmlFiles.Where(x => x.Contains("\\" + searchedFile)).FirstOrDefault();
+            if (folder.Contains(this.m_UIManager.UIModel.ModPath6))
+                return this.m_UIManager.Mod6XmlFiles.Where(x => x.Contains("\\" + searchedFile)).FirstOrDefault();
+            //if (Directory.Exists(folder))
+            //{
+            //    return Directory.EnumerateFiles(folder, searchedFile, SearchOption.AllDirectories).FirstOrDefault();
+            //}
+            return String.Empty;
         }
 
         private void CalculateModules(FileInfo file, ref int shields_S, ref int shields_M, ref int shields_L, ref int shields_XL, ref int turrets_M, ref int turrets_L, ref int weapons_S, ref int weapons_M, ref int weapons_L, List<XElement> Connections, List<string> Names, ref string NoUniqueNameIds)

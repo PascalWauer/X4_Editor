@@ -18,6 +18,52 @@ namespace X4_Editor
             m_UIManager = uiManager;
         }
 
+        private string GetOutputExtensionsModFolder(string filepath)
+        {
+            string extensionModPart = "";
+
+            if (filepath.Contains(m_UIManager.UIModel.ModPath5))
+            {
+                string[] folders = m_UIManager.UIModel.ModPath5.Split('\\');
+                string lastFolderName = folders.Last();
+                extensionModPart = @"\extensions\" + lastFolderName;
+            }
+            else if (filepath.Contains(m_UIManager.UIModel.ModPath4))
+            {
+                string[] folders = m_UIManager.UIModel.ModPath4.Split('\\');
+                string lastFolderName = folders.Last();
+                extensionModPart = @"\extensions\" + lastFolderName;
+            }
+            else if (filepath.Contains(m_UIManager.UIModel.ModPath3))
+            {
+                string[] folders = m_UIManager.UIModel.ModPath3.Split('\\');
+                string lastFolderName = folders.Last();
+                extensionModPart = @"\extensions\" + lastFolderName;
+            }
+            else if (filepath.Contains(m_UIManager.UIModel.ModPath2))
+            {
+                string[] folders = m_UIManager.UIModel.ModPath2.Split('\\');
+                string lastFolderName = folders.Last();
+                extensionModPart = @"\extensions\" + lastFolderName;
+            }
+            else if (filepath.Contains(m_UIManager.UIModel.ModPath1))
+            {
+                string[] folders = m_UIManager.UIModel.ModPath1.Split('\\');
+                string lastFolderName = folders.Last();
+                extensionModPart = @"\extensions\" + lastFolderName;
+            }
+            else
+                extensionModPart = "";
+
+            //string outputPath = m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToShips;
+
+            //if (!Directory.Exists(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToShips))
+            //{
+            //    Directory.CreateDirectory(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToShips);
+            //}
+
+            return extensionModPart;
+        }
         public void WriteAllChanges()
         {
             bool fileswritten = false;
@@ -28,13 +74,7 @@ namespace X4_Editor
 
                 if (item.Changed)
                 {
-                    string extensionModPart = "";
-                    if (item.File.Contains(m_UIManager.UIModel.ModPath1))
-                    {
-                        string[] folders = m_UIManager.UIModel.ModPath1.Split('\\');
-                        string lastFolderName = folders.Last();
-                        extensionModPart = @"\extensions\" + lastFolderName;
-                    }
+                    string extensionModPart = GetOutputExtensionsModFolder(item.File);
 
                     if (!Directory.Exists(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToShields))
                     {
@@ -68,13 +108,7 @@ namespace X4_Editor
 
                 if (item.Changed)
                 {
-                    string extensionModPart = "";
-                    if (item.File.Contains(m_UIManager.UIModel.ModPath1))
-                    {
-                        string[] folders = m_UIManager.UIModel.ModPath1.Split('\\');
-                        string lastFolderName = folders.Last();
-                        extensionModPart = @"\extensions\" + lastFolderName;
-                    }
+                    string extensionModPart = GetOutputExtensionsModFolder(item.File);
 
                     if (!Directory.Exists(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToEngines))
                     {
@@ -133,84 +167,86 @@ namespace X4_Editor
             {
                 var vanillaItem = m_UIManager.UIModel.UIModelShipsVanilla.Where(x => x.Name == item.Name).FirstOrDefault();
 
+
+                string shipClasssFolder = item.File.Split(new[] { "units" }, StringSplitOptions.None)[1].Split(new[] { "macros" }, StringSplitOptions.None)[0];
+
+ 
                 if (item.Changed)
                 {
-                    string shipClasssFolder = item.File.Split(new[] { "units" }, StringSplitOptions.None)[1].Split(new[] { "macros" }, StringSplitOptions.None)[0];
+                    string extensionModPart = GetOutputExtensionsModFolder(item.File);
 
-                    string extensionModPart = "";
-                    if (item.File.Contains(m_UIManager.UIModel.ModPath1))
-                    {
-                        string[] folders = m_UIManager.UIModel.ModPath1.Split('\\');
-                        string lastFolderName = folders.Last();
-                        extensionModPart = @"\extensions\" + lastFolderName;
-                    }
+                    string outputPath = m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToShips + shipClasssFolder + "macros" + item.File.Split(new[] { "macros" }, StringSplitOptions.None)[1];
 
                     if (!Directory.Exists(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToShips + shipClasssFolder + @"\macros"))
                     {
                         Directory.CreateDirectory(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToShips + shipClasssFolder + @"\macros");
                     }
-
-                    string outputPath = m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToShips + shipClasssFolder + "macros" + item.File.Split(new[] { "macros" }, StringSplitOptions.None)[1];
-
                     using (StreamWriter sw = new StreamWriter(outputPath))
-                    {
-                        //sw.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-                        sw.WriteLine("<diff> ");
-                        if (vanillaItem == null || vanillaItem.HullMax != item.HullMax)
-                            sw.WriteLine("\t<replace sel=\"//macros/macro/properties/hull/@max\">" + item.HullMax + "</replace>");
-                        if (vanillaItem == null || vanillaItem.ExplosionDamage != item.ExplosionDamage)
-                            sw.WriteLine("\t<replace sel=\"//macros/macro/properties/boost/@explosiondamage\">" + item.ExplosionDamage + "</replace>");
-                        if (vanillaItem == null || vanillaItem.StorageMissiles != item.StorageMissiles)
-                            sw.WriteLine("\t<replace sel=\"//macros/macro/properties/storage/@missile\">" + item.StorageMissiles + "</replace>");
-                        if (vanillaItem == null || vanillaItem.StorageUnits != item.StorageUnits)
-                            sw.WriteLine("\t<replace sel=\"//macros/macro/properties/storage/@unit\">" + item.StorageUnits + "</replace>");
-                        if (vanillaItem == null || vanillaItem.Secrecy != item.Secrecy)
-                            sw.WriteLine("\t<replace sel=\"//macros/macro/properties/secrecy/@level\">" + item.Secrecy + "</replace>");
-                        if (vanillaItem == null || vanillaItem.People != item.People)
-                            sw.WriteLine("\t<replace sel=\"//macros/macro/properties/people/@capacity\">" + item.People + "</replace>");
-                        if (vanillaItem == null || vanillaItem.GatherRrate != item.GatherRrate)
-                            sw.WriteLine("\t<replace sel=\"//macros/macro/properties/gatherrate/@gas\">" + item.GatherRrate + "</replace>");
-                        if (vanillaItem == null || vanillaItem.Mass != item.Mass)
-                            sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/@mass\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Mass) + "</replace>");
-                        if (vanillaItem == null || vanillaItem.InertiaPitch != item.InertiaPitch)
-                            sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/inertia/@pitch\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.InertiaPitch) + "</replace>");
-                        if (vanillaItem == null || vanillaItem.InertiaYaw != item.InertiaYaw)
-                            sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/inertia/@yaw\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.InertiaYaw) + "</replace>");
-                        if (vanillaItem == null || vanillaItem.InertiaRoll != item.InertiaRoll)
-                            sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/inertia/@roll\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.InertiaRoll) + "</replace>");
-                        if (vanillaItem == null || vanillaItem.Forward != item.Forward)
-                            sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/drag/@forward\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Forward) + "</replace>");
-                        if (vanillaItem == null || vanillaItem.Reverse != item.Reverse)
-                            sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/drag/@reverse\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Reverse) + "</replace>");
-                        if (vanillaItem == null || vanillaItem.Horizontal != item.Horizontal)
-                            sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/drag/@horizontal\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Horizontal) + "</replace>");
-                        if (vanillaItem == null || vanillaItem.Vertical != item.Vertical)
-                            sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/drag/@vertical\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Vertical) + "</replace>");
-                        if (vanillaItem == null || vanillaItem.Pitch != item.Pitch)
-                            sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/drag/@pitch\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Pitch) + "</replace>");
-                        if (vanillaItem == null || vanillaItem.Yaw != item.Yaw)
-                            sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/drag/@yaw\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Yaw) + "</replace>");
-                        if (vanillaItem == null || vanillaItem.Roll != item.Roll)
-                            sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/drag/@roll\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Roll) + "</replace>");
-                        sw.WriteLine("</diff> ");
-
-                        fileswritten = true;
-                    }
-
-                    if (item.Cargo != null && item.Cargo.Changed)
-                    {
-                        using (StreamWriter sw = new StreamWriter(outputPath.Replace("ship", "storage")))
                         {
                             //sw.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
                             sw.WriteLine("<diff> ");
-                            if (vanillaItem == null || vanillaItem.Cargo.CargoMax != item.Cargo.CargoMax)
-                                sw.WriteLine("\t<replace sel=\"//macros/macro/properties/cargo/@max\">" + item.Cargo.CargoMax + "</replace>");
-                            if (vanillaItem == null || vanillaItem.Cargo.CargoTags != item.Cargo.CargoTags)
-                                sw.WriteLine("\t<replace sel=\"//macros/macro/properties/cargo/@tags\">" + item.Cargo.CargoTags + "</replace>");
+                            if (vanillaItem == null || vanillaItem.HullMax != item.HullMax)
+                                sw.WriteLine("\t<replace sel=\"//macros/macro/properties/hull/@max\">" + item.HullMax + "</replace>");
+                            if (vanillaItem == null || vanillaItem.ExplosionDamage != item.ExplosionDamage)
+                                sw.WriteLine("\t<replace sel=\"//macros/macro/properties/boost/@explosiondamage\">" + item.ExplosionDamage + "</replace>");
+                            if (vanillaItem == null || vanillaItem.StorageMissiles != item.StorageMissiles)
+                                sw.WriteLine("\t<replace sel=\"//macros/macro/properties/storage/@missile\">" + item.StorageMissiles + "</replace>");
+                            if (vanillaItem == null || vanillaItem.StorageUnits != item.StorageUnits)
+                                sw.WriteLine("\t<replace sel=\"//macros/macro/properties/storage/@unit\">" + item.StorageUnits + "</replace>");
+                            if (vanillaItem == null || vanillaItem.Secrecy != item.Secrecy)
+                                sw.WriteLine("\t<replace sel=\"//macros/macro/properties/secrecy/@level\">" + item.Secrecy + "</replace>");
+                            if (vanillaItem == null || vanillaItem.People != item.People)
+                                sw.WriteLine("\t<replace sel=\"//macros/macro/properties/people/@capacity\">" + item.People + "</replace>");
+                            if (vanillaItem == null || vanillaItem.GatherRrate != item.GatherRrate)
+                                sw.WriteLine("\t<replace sel=\"//macros/macro/properties/gatherrate/@gas\">" + item.GatherRrate + "</replace>");
+                            if (vanillaItem == null || vanillaItem.Mass != item.Mass)
+                                sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/@mass\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Mass) + "</replace>");
+                            if (vanillaItem == null || vanillaItem.InertiaPitch != item.InertiaPitch)
+                                sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/inertia/@pitch\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.InertiaPitch) + "</replace>");
+                            if (vanillaItem == null || vanillaItem.InertiaYaw != item.InertiaYaw)
+                                sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/inertia/@yaw\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.InertiaYaw) + "</replace>");
+                            if (vanillaItem == null || vanillaItem.InertiaRoll != item.InertiaRoll)
+                                sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/inertia/@roll\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.InertiaRoll) + "</replace>");
+                            if (vanillaItem == null || vanillaItem.Forward != item.Forward)
+                                sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/drag/@forward\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Forward) + "</replace>");
+                            if (vanillaItem == null || vanillaItem.Reverse != item.Reverse)
+                                sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/drag/@reverse\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Reverse) + "</replace>");
+                            if (vanillaItem == null || vanillaItem.Horizontal != item.Horizontal)
+                                sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/drag/@horizontal\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Horizontal) + "</replace>");
+                            if (vanillaItem == null || vanillaItem.Vertical != item.Vertical)
+                                sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/drag/@vertical\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Vertical) + "</replace>");
+                            if (vanillaItem == null || vanillaItem.Pitch != item.Pitch)
+                                sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/drag/@pitch\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Pitch) + "</replace>");
+                            if (vanillaItem == null || vanillaItem.Yaw != item.Yaw)
+                                sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/drag/@yaw\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Yaw) + "</replace>");
+                            if (vanillaItem == null || vanillaItem.Roll != item.Roll)
+                                sw.WriteLine("\t<replace sel=\"//macros/macro/properties/physics/drag/@roll\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Roll) + "</replace>");
                             sw.WriteLine("</diff> ");
 
                             fileswritten = true;
                         }
+                }
+                if (item.Cargo != null && item.Cargo.Changed)
+                {
+                    string extensionModPart = GetOutputExtensionsModFolder(item.File);
+
+                    string outputPath = m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToShips + shipClasssFolder + "macros" + item.File.Split(new[] { "macros" }, StringSplitOptions.None)[1];
+
+                    if (!Directory.Exists(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToShips + shipClasssFolder + @"\macros"))
+                    {
+                        Directory.CreateDirectory(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToShips + shipClasssFolder + @"\macros");
+                    }
+                    using (StreamWriter sw = new StreamWriter(outputPath.Replace("ship", "storage")))
+                    {
+                        //sw.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+                        sw.WriteLine("<diff> ");
+                        if (vanillaItem == null || vanillaItem.Cargo.CargoMax != item.Cargo.CargoMax)
+                            sw.WriteLine("\t<replace sel=\"//macros/macro/properties/cargo/@max\">" + item.Cargo.CargoMax + "</replace>");
+                        if (vanillaItem == null || vanillaItem.Cargo.CargoTags != item.Cargo.CargoTags)
+                            sw.WriteLine("\t<replace sel=\"//macros/macro/properties/cargo/@tags\">" + item.Cargo.CargoTags + "</replace>");
+                        sw.WriteLine("</diff> ");
+
+                        fileswritten = true;
                     }
                 }
             }
@@ -221,13 +257,7 @@ namespace X4_Editor
 
                 if (item.Changed)
                 {
-                    string extensionModPart = "";
-                    if (item.File.Contains(m_UIManager.UIModel.ModPath1))
-                    {
-                        string[] folders = m_UIManager.UIModel.ModPath1.Split('\\');
-                        string lastFolderName = folders.Last();
-                        extensionModPart = @"\extensions\" + lastFolderName;
-                    }
+                    string extensionModPart = GetOutputExtensionsModFolder(item.File);
 
                     if (!Directory.Exists(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToProjectiles))
                     {
@@ -289,13 +319,7 @@ namespace X4_Editor
 
                 if (item.Changed)
                 {
-                    string extensionModPart = "";
-                    if (item.File.Contains(m_UIManager.UIModel.ModPath1))
-                    {
-                        string[] folders = m_UIManager.UIModel.ModPath1.Split('\\');
-                        string lastFolderName = folders.Last();
-                        extensionModPart = @"\extensions\" + lastFolderName;
-                    }
+                    string extensionModPart = GetOutputExtensionsModFolder(item.File);
 
                     if (item.File.Contains(m_UIManager.PathToTurretsStandard) && !Directory.Exists(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToTurretsStandard))
                     {
@@ -373,13 +397,7 @@ namespace X4_Editor
 
                 if (item.Changed)
                 {
-                    string extensionModPart = "";
-                    if (item.File.Contains(m_UIManager.UIModel.ModPath1))
-                    {
-                        string[] folders = m_UIManager.UIModel.ModPath1.Split('\\');
-                        string lastFolderName = folders.Last();
-                        extensionModPart = @"\extensions\" + lastFolderName;
-                    }
+                    string extensionModPart = GetOutputExtensionsModFolder(item.File);
 
                     if (!Directory.Exists(m_UIManager.UIModel.ExportPath + extensionModPart + m_UIManager.PathToMissiles))
                     {

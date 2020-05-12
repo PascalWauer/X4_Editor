@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -43,6 +44,14 @@ namespace X4_Editor
         public string PathToEngines = @"\assets\props\Engines\macros";
         public string PathToTexts = @"\t";
 
+        public List<string> VanillaXmlFiles;
+        public List<string> Mod1XmlFiles;
+        public List<string> Mod2XmlFiles;
+        public List<string> Mod3XmlFiles;
+        public List<string> Mod4XmlFiles;
+        public List<string> Mod5XmlFiles;
+        public List<string> Mod6XmlFiles;
+
         private ModFilesReader m_ModFilesReader;
 
         public Dictionary<string, string> TextDictionary = new Dictionary<string, string>();
@@ -67,7 +76,15 @@ namespace X4_Editor
             this.UIModel = new UIModel();
             MainWindow.DataContext = this.UIModel;
             WaresWindow.DataContext = this.UIModel;
-            
+
+            VanillaXmlFiles = new List<string>();
+            Mod1XmlFiles = new List<string>();
+            Mod2XmlFiles = new List<string>();
+            Mod3XmlFiles = new List<string>();
+            Mod4XmlFiles = new List<string>();
+            Mod5XmlFiles = new List<string>();
+            Mod6XmlFiles = new List<string>();
+
             m_ModFilesReader = new ModFilesReader(this, m_XmlExtractor);
             MainWindow.Closing += OnClosing;
             
@@ -649,13 +666,15 @@ namespace X4_Editor
             {
                 DirectoryInfo di = new DirectoryInfo(folderPath);
 
-                xmlList.AddRange(di.GetFiles("*.xml"));
+                List<FileInfo> tmpXmlList = new List<FileInfo>();
+                tmpXmlList.AddRange(di.GetFiles("*.xml", SearchOption.AllDirectories));
+                xmlList.AddRange(tmpXmlList.Where(x => x.FullName.Contains("macros")));
+                //DirectoryInfo[] folders = di.GetDirectories();
 
-                DirectoryInfo[] folders = di.GetDirectories();
-                foreach(var item in folders)
-                {
-                    xmlList = GetAllXmlInSubFolders(item.FullName, xmlList);
-                }
+                //foreach(var item in folders)
+                //{
+                //        xmlList = GetAllXmlInSubFolders(item.FullName, xmlList);
+                //}
             }
             return xmlList;
         }
@@ -851,14 +870,49 @@ namespace X4_Editor
         /// <param name="e"></param>
         private void ExecuteReadAllModFilesCommand(object sender, ExecutedRoutedEventArgs e)
         {
-
+            if (Directory.Exists(UIModel.Path))
+            {
+                VanillaXmlFiles.Clear();
+                VanillaXmlFiles.AddRange(Directory.GetFiles(UIModel.Path, "*.xml", SearchOption.AllDirectories));
+                m_ModFilesReader.ReadAllModFilesFromFolder(this.UIModel.Path);
+            }
             this.ExecuteReadAllVanillaFilesCommand(null, null);
-            m_ModFilesReader.ReadAllModFilesFromFolder(this.UIModel.ModPath1);
-            m_ModFilesReader.ReadAllModFilesFromFolder(this.UIModel.ModPath2);
-            m_ModFilesReader.ReadAllModFilesFromFolder(this.UIModel.ModPath3);
-            m_ModFilesReader.ReadAllModFilesFromFolder(this.UIModel.ModPath4);
-            m_ModFilesReader.ReadAllModFilesFromFolder(this.UIModel.ModPath5);
-            m_ModFilesReader.ReadAllModFilesFromFolder(this.UIModel.ModPath6);
+            if (Directory.Exists(UIModel.ModPath1))
+            {
+                Mod1XmlFiles.Clear();
+                Mod1XmlFiles.AddRange(Directory.GetFiles(UIModel.ModPath1, "*.xml", SearchOption.AllDirectories));
+                m_ModFilesReader.ReadAllModFilesFromFolder(this.UIModel.ModPath1);
+            }
+            if (Directory.Exists(UIModel.ModPath2))
+            {
+                Mod2XmlFiles.Clear();
+                Mod2XmlFiles.AddRange(Directory.GetFiles(UIModel.ModPath2, "*.xml", SearchOption.AllDirectories));
+                m_ModFilesReader.ReadAllModFilesFromFolder(this.UIModel.ModPath2);
+            }
+            if (Directory.Exists(UIModel.ModPath3))
+            {
+                Mod3XmlFiles.Clear();
+                Mod3XmlFiles.AddRange(Directory.GetFiles(UIModel.ModPath3, "*.xml", SearchOption.AllDirectories));
+                m_ModFilesReader.ReadAllModFilesFromFolder(this.UIModel.ModPath3);
+            }
+            if (Directory.Exists(UIModel.ModPath4))
+            {
+                Mod4XmlFiles.Clear();
+                Mod4XmlFiles.AddRange(Directory.GetFiles(UIModel.ModPath4, "*.xml", SearchOption.AllDirectories));
+                m_ModFilesReader.ReadAllModFilesFromFolder(this.UIModel.ModPath4);
+            }
+            if (Directory.Exists(UIModel.ModPath5))
+            {
+                Mod5XmlFiles.Clear();
+                Mod5XmlFiles.AddRange(Directory.GetFiles(UIModel.ModPath5, "*.xml", SearchOption.AllDirectories));
+                m_ModFilesReader.ReadAllModFilesFromFolder(this.UIModel.ModPath5);
+            }
+            if (Directory.Exists(UIModel.ModPath6))
+            {
+                Mod6XmlFiles.Clear();
+                Mod6XmlFiles.AddRange(Directory.GetFiles(UIModel.ModPath6, "*.xml", SearchOption.AllDirectories));
+                m_ModFilesReader.ReadAllModFilesFromFolder(this.UIModel.ModPath6);
+            }
         }
     }
 }

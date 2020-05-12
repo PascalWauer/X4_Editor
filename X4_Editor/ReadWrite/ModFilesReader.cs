@@ -857,8 +857,7 @@ namespace X4_Editor
                                         UIModelShip ship = null;
                                         if (!fileName.Contains("storage"))
                                         {
-
-                                            ship = parent.UIModel.UIModelShips.FirstOrDefault(x => x.File.Contains(fileName));
+                                            ship = parent.UIModel.UIModelShips.FirstOrDefault(x => x != null && x.File != null && x.File.Contains(fileName));
 
                                             if (ship != null)
                                             {
@@ -870,7 +869,11 @@ namespace X4_Editor
                                                     line = sr.ReadLine();
                                                     if ((line.Contains(@"<replace") && line.Contains("sel") && line.Contains(@"/macros") && line.Contains("macro']\">")) || line.Contains("<replace sel=\"//macros\">"))
                                                     {
-                                                        parent.UIModel.UIModelShips[index] = m_XmlExtractor.ReadSingleShipFile(new FileInfo(file));
+                                                        ship = m_XmlExtractor.ReadSingleShipFile(new FileInfo(file));
+                                                        if (ship != null)
+                                                            parent.UIModel.UIModelShips[index] = m_XmlExtractor.ReadSingleShipFile(new FileInfo(file));
+                                                        else
+                                                            MessageBox.Show(file + " could not be read. Something with that file is wrong.");
                                                         break;
                                                     }
 
