@@ -876,56 +876,56 @@ namespace X4_Editor
 
                             if (file.Name.Contains("ship_"))
                             {
-                                if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath1).Replace("ship_", "storage_")))
+                                if (m_UIManager.Mod1XmlFiles.Where(x => x.Contains(file.Name.Replace("ship_", "storage_"))).FirstOrDefault() != null)
                                 {
-                                    CargoModFile1 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath1).Replace("ship_", "storage_");
+                                    CargoModFile1 = m_UIManager.Mod1XmlFiles.Where(x => x.Contains(file.Name.Replace("ship_", "storage_"))).FirstOrDefault();
                                 }
-                                if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath2).Replace("ship_", "storage_")))
+                                if (m_UIManager.Mod2XmlFiles.Where(x => x.Contains(file.Name.Replace("ship_", "storage_"))).FirstOrDefault() != null)
                                 {
-                                    CargoModFile2 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath2).Replace("ship_", "storage_");
+                                    CargoModFile2 = m_UIManager.Mod2XmlFiles.Where(x => x.Contains(file.Name.Replace("ship_", "storage_"))).FirstOrDefault();
                                 }
-                                if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath3).Replace("ship_", "storage_")))
+                                if (m_UIManager.Mod3XmlFiles.Where(x => x.Contains(file.Name.Replace("ship_", "storage_"))).FirstOrDefault() != null)
                                 {
-                                    CargoModFile3 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath3).Replace("ship_", "storage_");
+                                    CargoModFile3 = m_UIManager.Mod3XmlFiles.Where(x => x.Contains(file.Name.Replace("ship_", "storage_"))).FirstOrDefault();
                                 }
-                                if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath4).Replace("ship_", "storage_")))
+                                if (m_UIManager.Mod4XmlFiles.Where(x => x.Contains(file.Name.Replace("ship_", "storage_"))).FirstOrDefault() != null)
                                 {
-                                    CargoModFile4 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath4).Replace("ship_", "storage_");
+                                    CargoModFile4 = m_UIManager.Mod4XmlFiles.Where(x => x.Contains(file.Name.Replace("ship_", "storage_"))).FirstOrDefault();
                                 }
-                                if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath5).Replace("ship_", "storage_")))
+                                if (m_UIManager.Mod5XmlFiles.Where(x => x.Contains(file.Name.Replace("ship_", "storage_"))).FirstOrDefault() != null)
                                 {
-                                    CargoModFile5 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath5).Replace("ship_", "storage_");
+                                    CargoModFile5 = m_UIManager.Mod5XmlFiles.Where(x => x.Contains(file.Name.Replace("ship_", "storage_"))).FirstOrDefault();
                                 }
-                                if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath6).Replace("ship_", "storage_")))
+                                if (m_UIManager.Mod6XmlFiles.Where(x => x.Contains(file.Name.Replace("ship_", "storage_"))).FirstOrDefault() != null)
                                 {
-                                    CargoModFile6 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath6).Replace("ship_", "storage_");
+                                    CargoModFile6 = m_UIManager.Mod6XmlFiles.Where(x => x.Contains(file.Name.Replace("ship_", "storage_"))).FirstOrDefault();
                                 }
                             }
                             if (file.Name.Contains("units_"))
                             {
-                                if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath1).Replace("units_", "storage_units_")))
+                                if (m_UIManager.Mod1XmlFiles.Where(x => x.Contains(file.Name.Replace("units_", "storage_units_"))).FirstOrDefault() != null)
                                 {
-                                    CargoModFile1 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath1).Replace("units_", "storage_units_");
+                                    CargoModFile1 = m_UIManager.Mod1XmlFiles.Where(x => x.Contains(file.Name.Replace("units_", "storage_units_"))).FirstOrDefault();
                                 }
-                                if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath2).Replace("units_", "storage_units_")))
+                                if (m_UIManager.Mod2XmlFiles.Where(x => x.Contains(file.Name.Replace("units_", "storage_units_"))).FirstOrDefault() != null)
                                 {
-                                    CargoModFile2 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath2).Replace("units_", "storage_units_");
+                                    CargoModFile2 = m_UIManager.Mod2XmlFiles.Where(x => x.Contains(file.Name.Replace("units_", "storage_units_"))).FirstOrDefault();
                                 }
-                                if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath3).Replace("units_", "storage_units_")))
+                                if (m_UIManager.Mod3XmlFiles.Where(x => x.Contains(file.Name.Replace("units_", "storage_units_"))).FirstOrDefault() != null)
                                 {
-                                    CargoModFile3 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath3).Replace("units_", "storage_units_");
+                                    CargoModFile3 = m_UIManager.Mod3XmlFiles.Where(x => x.Contains(file.Name.Replace("units_", "storage_units_"))).FirstOrDefault();
                                 }
-                                if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath4).Replace("units_", "storage_units_")))
+                                if (m_UIManager.Mod4XmlFiles.Where(x => x.Contains(file.Name.Replace("units_", "storage_units_"))).FirstOrDefault() != null)
                                 {
-                                    CargoModFile4 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath4).Replace("units_", "storage_units_");
+                                    CargoModFile4 = m_UIManager.Mod4XmlFiles.Where(x => x.Contains(file.Name.Replace("units_", "storage_units_"))).FirstOrDefault();
                                 }
-                                if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath5).Replace("units_", "storage_units_")))
+                                if (m_UIManager.Mod5XmlFiles.Where(x => x.Contains(file.Name.Replace("units_", "storage_units_"))).FirstOrDefault() != null)
                                 {
-                                    CargoModFile5 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath5).Replace("units_", "storage_units_");
+                                    CargoModFile5 = m_UIManager.Mod5XmlFiles.Where(x => x.Contains(file.Name.Replace("units_", "storage_units_"))).FirstOrDefault();
                                 }
-                                if (File.Exists(file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath6).Replace("units_", "storage_units_")))
+                                if (m_UIManager.Mod6XmlFiles.Where(x => x.Contains(file.Name.Replace("units_", "storage_units_"))).FirstOrDefault() != null)
                                 {
-                                    CargoModFile6 = file.FullName.Replace(m_UIManager.UIModel.Path, m_UIManager.UIModel.ModPath6).Replace("units_", "storage_units_");
+                                    CargoModFile6 = m_UIManager.Mod6XmlFiles.Where(x => x.Contains(file.Name.Replace("units_", "storage_units_"))).FirstOrDefault();
                                 }
                             }
 
