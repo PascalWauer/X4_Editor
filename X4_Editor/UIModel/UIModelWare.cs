@@ -71,6 +71,7 @@ namespace X4_Editor
                 Changed = true;
                 X4Commands.RecalculatePriceCommand.Execute(null, null);
                 NotifyPropertyChanged();
+                NotifyPropertyChanged("Margin");
             }
         }
 
@@ -95,17 +96,16 @@ namespace X4_Editor
                 m_CalculatedPrice = value;
                 Changed = true;
                 NotifyPropertyChanged();
-                //
+                NotifyPropertyChanged("Margin");
             }
         }
-
         public int Margin
         {
             get
             {
                 if (CalculatedPrice != 0)
                 {
-                    return Convert.ToInt16((((decimal)Avg / (decimal)CalculatedPrice) - 1) * 100);
+                    return Convert.ToInt32((((decimal)Avg / (decimal)CalculatedPrice) - 1) * 100);
                 }
                 else return 0;
             }
@@ -133,6 +133,7 @@ namespace X4_Editor
                 Changed = true;
                 X4Commands.RecalculatePriceCommand.Execute(null, null);
                 NotifyPropertyChanged();
+                NotifyPropertyChanged("Margin");
             }
         }
 
@@ -159,6 +160,7 @@ namespace X4_Editor
                 Changed = true;
                 X4Commands.RecalculatePriceCommand.Execute(null, null);
                 NotifyPropertyChanged();
+                NotifyPropertyChanged("Margin");
             }
         }
 
@@ -185,6 +187,7 @@ namespace X4_Editor
                 Changed = true;
                 X4Commands.RecalculatePriceCommand.Execute(null, null);
                 NotifyPropertyChanged();
+                NotifyPropertyChanged("Margin");
             }
         }
 
@@ -211,6 +214,7 @@ namespace X4_Editor
                 Changed = true;
                 X4Commands.RecalculatePriceCommand.Execute(null, null);
                 NotifyPropertyChanged();
+                NotifyPropertyChanged("Margin");
             }
         }
 
@@ -237,6 +241,7 @@ namespace X4_Editor
                 Changed = true;
                 X4Commands.RecalculatePriceCommand.Execute(null, null);
                 NotifyPropertyChanged();
+                NotifyPropertyChanged("Margin");
             }
         }
 
@@ -263,6 +268,7 @@ namespace X4_Editor
                 Changed = true;
                 X4Commands.RecalculatePriceCommand.Execute(null, null);
                 NotifyPropertyChanged();
+                NotifyPropertyChanged("Margin");
             }
         }
 
@@ -286,6 +292,7 @@ namespace X4_Editor
         public void Update()
         {
             NotifyPropertyChanged("Margin");
+            NotifyPropertyChanged("CalculatedPrice");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

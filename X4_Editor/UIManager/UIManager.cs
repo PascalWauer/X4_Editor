@@ -130,6 +130,7 @@ namespace X4_Editor
             this.WaresWindow.Owner = this.MainWindow;
             this.WaresWindow.DataContext = this.UIModel;
             this.WaresWindow.CommandBindings.Add(new CommandBinding(X4Commands.OnWaresWindowCellRightClick, this.ExecuteOnWaresWindowCellRightClick));
+            this.WaresWindow.CommandBindings.Add(new CommandBinding(X4Commands.RecalculatePriceCommand, this.ExecuteRecalculatePriceCommand));
 
             ModManager.Owner = this.MainWindow;
             WaresWindow.Owner = this.MainWindow;
@@ -921,6 +922,7 @@ namespace X4_Editor
                 Mod6XmlFiles.AddRange(Directory.GetFiles(UIModel.ModPath6, "*.xml", SearchOption.AllDirectories));
                 m_ModFilesReader.ReadAllModFilesFromFolder(this.UIModel.ModPath6);
             }
+            this.UIModel.AllWaresLoaded = true;
             Mouse.OverrideCursor = null;
         }
     }
