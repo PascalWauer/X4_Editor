@@ -533,13 +533,13 @@ namespace X4_Editor
                                 sw.WriteLine("\t</replace>");
                             }
                             if (vanillaItem.Amount != item.Amount)
-                                sw.WriteLine("\t<replace sel=\"/wares/ware[@id='" + item.ID + "']/production/@amount\">" + String.Format(CultureInfo.InvariantCulture, "{0:0}", item.Amount) + "</replace>");
+                                sw.WriteLine("\t<replace sel=\"/wares/ware[@id='" + item.ID + "']/production[@method='default']/@amount\">" + String.Format(CultureInfo.InvariantCulture, "{0:0}", item.Amount) + "</replace>");
                             if (vanillaItem.Time != item.Time)
-                                sw.WriteLine("\t<replace sel=\"/wares/ware[@id='" + item.ID + "']/production/@time\">" + String.Format(CultureInfo.InvariantCulture, "{0:0}", item.Time) + "</replace>");
+                                sw.WriteLine("\t<replace sel=\"/wares/ware[@id='" + item.ID + "']/production[@method='default']/@time\">" + String.Format(CultureInfo.InvariantCulture, "{0:0}", item.Time) + "</replace>");
 
                             if (vanillaItem.Amount1 != item.Amount1 || vanillaItem.Amount2 != item.Amount2 || vanillaItem.Amount3 != item.Amount3 || vanillaItem.Amount4 != item.Amount4 || vanillaItem.Amount5 != item.Amount5)
                             {
-                                sw.WriteLine("\t<replace sel=\"/wares/ware[@id='" + item.ID + "']/production/primary\">");
+                                sw.WriteLine("\t<replace sel=\"/wares/ware[@id='" + item.ID + "']/production[@method='default']/primary\">");
                                 sw.WriteLine("\t\t<primary> ");
                                 if (item.Amount1 > 0)
                                     sw.WriteLine("\t\t\t<ware ware=\"" + item.Ware1 + "\" amount=\"" + item.Amount1 + "\" />");

@@ -85,64 +85,98 @@ namespace X4_Editor
                                                 string wareSel = item.Attributes["sel"].Value;
                                                 string wareID = wareSel.Split('\'')[1];
                                                 additionalErrorText = wareID;
-                                                var wareToChange = this.m_UIManager.UIModel.UIModelWares.Where(x => x.Name == wareID).ToList();
+                                                var wareToChange = this.m_UIManager.UIModel.UIModelWares.Where(x => x.Name == wareID).FirstOrDefault();
+                                                var vanillaWareToChange = this.m_UIManager.UIModel.UIModelWaresVanilla.Where(x => x.Name == wareID).FirstOrDefault();
 
+                                                if (wareToChange.Name.Contains("arawn"))
+                                                    additionalErrorText = wareID;
                                                 //check for direct changes "@property"
                                                 if (wareSel.Contains("@threshold"))
                                                 {
-                                                    wareToChange.FirstOrDefault().Threshold = Utility.ParseToDouble(item.InnerText);
+                                                    wareToChange.Threshold = Utility.ParseToDouble(item.InnerText);
+                                                    vanillaWareToChange.Threshold = Utility.ParseToDouble(item.InnerText);
+
                                                 }
                                                 if (wareSel.Contains("@amount"))
                                                 {
-                                                    wareToChange.FirstOrDefault().Amount = Convert.ToInt32(item.InnerText);
+                                                    wareToChange.Amount = Convert.ToInt32(item.InnerText);
+                                                    vanillaWareToChange.Amount = Convert.ToInt32(item.InnerText);
                                                 }
                                                 if (wareSel.Contains("@time"))
                                                 {
-                                                    wareToChange.FirstOrDefault().Time = Convert.ToInt32(item.InnerText);
+                                                    wareToChange.Time = Convert.ToInt32(item.InnerText);
+                                                    vanillaWareToChange.Time = Convert.ToInt32(item.InnerText);
                                                 }
  
 
                                                 if (wareToChange != null && item.FirstChild != null)
                                                 {
-                                                    wareToChange.FirstOrDefault().Changed = true;
                                                     if (item.FirstChild.LocalName == "price")
                                                     {
-                                                        wareToChange.FirstOrDefault().Min = Convert.ToInt32(item.FirstChild.Attributes["min"].Value);
-                                                        wareToChange.FirstOrDefault().Max = Convert.ToInt32(item.FirstChild.Attributes["max"].Value);
-                                                        wareToChange.FirstOrDefault().Avg = Convert.ToInt32(item.FirstChild.Attributes["average"].Value);
+                                                        wareToChange.Min = Convert.ToInt32(item.FirstChild.Attributes["min"].Value);
+                                                        vanillaWareToChange.Min = Convert.ToInt32(item.FirstChild.Attributes["min"].Value);
+                                                        wareToChange.Max = Convert.ToInt32(item.FirstChild.Attributes["max"].Value);
+                                                        vanillaWareToChange.Max = Convert.ToInt32(item.FirstChild.Attributes["max"].Value);
+                                                        wareToChange.Avg = Convert.ToInt32(item.FirstChild.Attributes["average"].Value);
+                                                        vanillaWareToChange.Avg = Convert.ToInt32(item.FirstChild.Attributes["average"].Value);
                                                     }
-                                                    if (item.FirstChild.LocalName == "primary")
+                                                    XmlNode primaryNode = null;
+
+                                                    foreach (XmlNode node in item.ChildNodes)
                                                     {
-                                                        for (int i = 0; i < item.FirstChild.ChildNodes.Count; i++)
+                                                        if (node.LocalName == "primary")
+                                                        {
+                                                            primaryNode = node;
+                                                        }
+                                                        if (node.LocalName == "production")
+                                                        {
+                                                            if (node.FirstChild != null)
+                                                                primaryNode = node.FirstChild;
+                                                        }
+                                                    }
+
+                                                    if (primaryNode != null)
+                                                    {
+                                                        for (int i = 0; i < primaryNode.ChildNodes.Count; i++)
                                                         {
                                                             if (i == 0)
                                                             {
-                                                                wareToChange.FirstOrDefault().Ware1 = item.FirstChild.ChildNodes[i].Attributes["ware"].Value;
-                                                                wareToChange.FirstOrDefault().Amount1 = Convert.ToInt32(item.FirstChild.ChildNodes[i].Attributes["amount"].Value);
+                                                                wareToChange.Ware1 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
+                                                                vanillaWareToChange.Ware1 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
+                                                                wareToChange.Amount1 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
+                                                                vanillaWareToChange.Amount1 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
                                                             }
                                                             if (i == 1)
                                                             {
-                                                                wareToChange.FirstOrDefault().Ware2 = item.FirstChild.ChildNodes[i].Attributes["ware"].Value;
-                                                                wareToChange.FirstOrDefault().Amount2 = Convert.ToInt32(item.FirstChild.ChildNodes[i].Attributes["amount"].Value);
+                                                                wareToChange.Ware2 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
+                                                                vanillaWareToChange.Ware2 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
+                                                                wareToChange.Amount2 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
+                                                                vanillaWareToChange.Amount2 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
                                                             }
                                                             if (i == 2)
                                                             {
-                                                                wareToChange.FirstOrDefault().Ware3 = item.FirstChild.ChildNodes[i].Attributes["ware"].Value;
-                                                                wareToChange.FirstOrDefault().Amount3 = Convert.ToInt32(item.FirstChild.ChildNodes[i].Attributes["amount"].Value);
+                                                                wareToChange.Ware3 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
+                                                                vanillaWareToChange.Ware3 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
+                                                                wareToChange.Amount3 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
+                                                                vanillaWareToChange.Amount3 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
                                                             }
                                                             if (i == 3)
                                                             {
-                                                                wareToChange.FirstOrDefault().Ware4 = item.FirstChild.ChildNodes[i].Attributes["ware"].Value;
-                                                                wareToChange.FirstOrDefault().Amount4 = Convert.ToInt32(item.FirstChild.ChildNodes[i].Attributes["amount"].Value);
+                                                                wareToChange.Ware4 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
+                                                                vanillaWareToChange.Ware4 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
+                                                                wareToChange.Amount4 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
+                                                                vanillaWareToChange.Amount4 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
                                                             }
                                                             if (i == 4)
                                                             {
-                                                                wareToChange.FirstOrDefault().Ware5 = item.FirstChild.ChildNodes[i].Attributes["ware"].Value;
-                                                                wareToChange.FirstOrDefault().Amount5 = Convert.ToInt32(item.FirstChild.ChildNodes[i].Attributes["amount"].Value);
+                                                                wareToChange.Ware5 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
+                                                                vanillaWareToChange.Ware5 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
+                                                                wareToChange.Amount5 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
+                                                                vanillaWareToChange.Amount5 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
                                                             }
                                                         }
                                                     }
-                                                    wareToChange.FirstOrDefault().Changed = false;
+                                                    wareToChange.Changed = false;
                                                 }
                                             }
                                         }
@@ -159,7 +193,7 @@ namespace X4_Editor
                     }
                     //TODO: this needs to be done only in case of vanilla and not mods
                     //m_UIManager.UIModel.UIModelWaresVanilla.Clear();
-                    if (!activeMod)
+                    //if (!activeMod)
                     {
                         foreach (var item in m_UIManager.UIModel.UIModelWares)
                         {
