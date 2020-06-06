@@ -66,6 +66,7 @@ namespace X4_Editor
                                         if (shield != null)
                                         {
                                             int index = parent.UIModel.UIModelShields.IndexOf(shield);
+                                            int indexVanilla = parent.UIModel.UIModelShieldsVanilla.IndexOf(shieldVanilla);
                                             string line;
 
                                             while (!sr.EndOfStream)
@@ -75,6 +76,8 @@ namespace X4_Editor
                                                 if (line.Contains(@"<replace") && line.Contains("sel") && line.Contains(@"/macros") && !line.Contains("@"))
                                                 {
                                                     parent.UIModel.UIModelShields[index] = m_XmlExtractor.ReadSingleShield(new FileInfo(file));
+                                                    if (indexVanilla >= 0 )
+                                                        parent.UIModel.UIModelShieldsVanilla[indexVanilla] = parent.UIModel.UIModelShields[index].Copy();
                                                     break;
                                                 }
 
@@ -124,8 +127,9 @@ namespace X4_Editor
                                                 parent.UIModel.UIModelShields.Add(extractedShield);
                                                 if (!activeMod)
                                                 {
-                                                    foreach (var item in parent.UIModel.UIModelShields)
-                                                        parent.UIModel.UIModelShieldsVanilla.Add(item.Copy());
+                                                    //foreach (var item in parent.UIModel.UIModelShields)
+                                                        //parent.UIModel.UIModelShieldsVanilla.Add(item.Copy());
+                                                        parent.UIModel.UIModelShieldsVanilla.Add(parent.UIModel.UIModelShields.Last().Copy());
                                                 }
                                             }
                                         }
@@ -156,6 +160,7 @@ namespace X4_Editor
                                         if (engine != null)
                                         {
                                             int index = parent.UIModel.UIModelEngines.IndexOf(engine);
+                                            int indexVanilla = parent.UIModel.UIModelEnginesVanilla.IndexOf(engineVanilla);
                                             string line;
 
                                             while (!sr.EndOfStream)
@@ -165,6 +170,8 @@ namespace X4_Editor
                                                 if (line.Contains(@"<replace") && line.Contains("sel") && line.Contains(@"/macros") && !line.Contains("@"))
                                                 {
                                                     parent.UIModel.UIModelEngines[index] = m_XmlExtractor.ReadSingleEngineFile(new FileInfo(file));
+                                                    if (indexVanilla >= 0)
+                                                        parent.UIModel.UIModelEnginesVanilla[indexVanilla] = parent.UIModel.UIModelEngines[index].Copy();
                                                     break;
                                                 }
 
@@ -291,8 +298,9 @@ namespace X4_Editor
                                                 parent.UIModel.UIModelEngines.Add(extractedEngine);
                                                 if (!activeMod)
                                                 {
-                                                    foreach (var item in parent.UIModel.UIModelEngines)
-                                                        parent.UIModel.UIModelEnginesVanilla.Add(item.Copy());
+                                                    //foreach (var item in parent.UIModel.UIModelEngines)
+                                                        //parent.UIModel.UIModelEnginesVanilla.Add(item.Copy());
+                                                        parent.UIModel.UIModelEnginesVanilla.Add(parent.UIModel.UIModelEngines.Last().Copy());
                                                 }
                                             }
                                         }
@@ -327,6 +335,7 @@ namespace X4_Editor
                                             if (weaponProjectile != null)
                                             {
                                                 int index = parent.UIModel.UIModelProjectiles.IndexOf(weaponProjectile);
+                                                int indexVanilla = parent.UIModel.UIModelProjectilesVanilla.IndexOf(weaponProjectileVanilla);
 
                                                 string line;
                                                 while (!sr.EndOfStream)
@@ -336,6 +345,8 @@ namespace X4_Editor
                                                     if (line.Contains(@"<replace") && line.Contains("sel") && line.Contains("/macros") && !line.Contains("@"))
                                                     {
                                                         parent.UIModel.UIModelProjectiles[index] = m_XmlExtractor.ReadSingleProjectile(new FileInfo(file));
+                                                        if (indexVanilla >= 0)
+                                                            parent.UIModel.UIModelProjectilesVanilla[indexVanilla] = parent.UIModel.UIModelProjectiles[index].Copy();
                                                         break;
                                                     }
 
@@ -464,8 +475,9 @@ namespace X4_Editor
                                                 parent.UIModel.UIModelProjectiles.Add(extractedProjectile);
                                                 if (!activeMod)
                                                 {
-                                                    foreach (var item in parent.UIModel.UIModelProjectiles)
-                                                        parent.UIModel.UIModelProjectilesVanilla.Add(item.Copy());
+                                                    //foreach (var item in parent.UIModel.UIModelProjectiles)
+                                                        //parent.UIModel.UIModelProjectilesVanilla.Add(item.Copy());
+                                                        parent.UIModel.UIModelProjectilesVanilla.Add(extractedProjectile.Copy());
                                                 }
                                             }
                                         }
@@ -527,6 +539,8 @@ namespace X4_Editor
                                             if (weapon != null)
                                             {
                                                 int index = parent.UIModel.UIModelWeapons.IndexOf(weapon);
+                                                int indexVanilla = parent.UIModel.UIModelWeaponsVanilla.IndexOf(weaponVanilla);
+
                                                 string line;
                                                 while (!sr.EndOfStream)
                                                 {
@@ -535,6 +549,8 @@ namespace X4_Editor
                                                     if (line.Contains(@"<replace") && line.Contains("sel") && line.Contains(@"/macros") && !line.Contains("@"))
                                                     {
                                                         parent.UIModel.UIModelWeapons[index] = m_XmlExtractor.ReadSingleWeapon(new FileInfo(file));
+                                                        if (indexVanilla >= 0)
+                                                            parent.UIModel.UIModelWeaponsVanilla[indexVanilla] = parent.UIModel.UIModelWeapons[index].Copy();
                                                         break;
                                                     }
 
@@ -630,8 +646,9 @@ namespace X4_Editor
                                                 parent.UIModel.UIModelWeapons.Add(extractedWeapon);
                                                 if (!activeMod)
                                                 {
-                                                    foreach (var item in parent.UIModel.UIModelWeapons)
-                                                        parent.UIModel.UIModelWeaponsVanilla.Add(item.Copy());
+                                                    //foreach (var item in parent.UIModel.UIModelWeapons)
+                                                        //parent.UIModel.UIModelWeaponsVanilla.Add(item.Copy());
+                                                        parent.UIModel.UIModelWeaponsVanilla.Add(parent.UIModel.UIModelWeapons.Last().Copy());
                                                 }
                                             }
                                         }
@@ -659,9 +676,12 @@ namespace X4_Editor
                                     {
                                         var weapon = parent.UIModel.UIModelMissiles.FirstOrDefault(x => x.File.Contains(fileName));
                                         var weaponVanilla = parent.UIModel.UIModelMissilesVanilla.FirstOrDefault(x => x.File.Contains(fileName));
+
                                         if (weapon != null)
                                         {
                                             int index = parent.UIModel.UIModelMissiles.IndexOf(weapon);
+                                            int indexVanilla = parent.UIModel.UIModelMissilesVanilla.IndexOf(weaponVanilla);
+
                                             string line;
                                             while (!sr.EndOfStream)
                                             {
@@ -670,6 +690,8 @@ namespace X4_Editor
                                                 if (line.Contains(@"<replace") && line.Contains("sel") && line.Contains(@"/macros") && !line.Contains("@"))
                                                 {
                                                     parent.UIModel.UIModelMissiles[index] = m_XmlExtractor.ReadSingleMissile(new FileInfo(file));
+                                                    if (indexVanilla >= 0)
+                                                        parent.UIModel.UIModelMissilesVanilla[indexVanilla] = parent.UIModel.UIModelMissiles[index].Copy();
                                                     break;
                                                 }
 
@@ -825,8 +847,9 @@ namespace X4_Editor
                                                 parent.UIModel.UIModelMissiles.Add(extractedMissile);
                                                 if (!activeMod)
                                                 {
-                                                    foreach (var item in parent.UIModel.UIModelMissiles)
-                                                        parent.UIModel.UIModelMissilesVanilla.Add(item.Copy());
+                                                    //foreach (var item in parent.UIModel.UIModelMissiles)
+                                                        //parent.UIModel.UIModelMissilesVanilla.Add(item.Copy());
+                                                        parent.UIModel.UIModelMissilesVanilla.Add(parent.UIModel.UIModelMissiles.Last().Copy());
                                                 }
                                             }
                                         }
@@ -863,6 +886,8 @@ namespace X4_Editor
                                             {
                                                 var shipVanilla = parent.UIModel.UIModelShipsVanilla.FirstOrDefault(x => x.File.Contains(fileName));
                                                 int index = parent.UIModel.UIModelShips.IndexOf(ship);
+                                                int indexVanilla = parent.UIModel.UIModelShipsVanilla.IndexOf(shipVanilla);
+
                                                 string line;
                                                 while (!sr.EndOfStream)
                                                 {
@@ -871,7 +896,11 @@ namespace X4_Editor
                                                     {
                                                         ship = m_XmlExtractor.ReadSingleShipFile(new FileInfo(file));
                                                         if (ship != null)
+                                                        {
                                                             parent.UIModel.UIModelShips[index] = m_XmlExtractor.ReadSingleShipFile(new FileInfo(file));
+                                                            if (indexVanilla >= 0)
+                                                                parent.UIModel.UIModelShipsVanilla[indexVanilla] = parent.UIModel.UIModelShips[index].Copy();
+                                                        }
                                                         else
                                                             MessageBox.Show(file + " could not be read. Something with that file is wrong.");
                                                         break;
@@ -979,7 +1008,7 @@ namespace X4_Editor
                                                     }
                                                 }
 
-                                                if (!activeMod)
+                                                if (!activeMod && ship != null)
                                                 {
                                                     //shipVanilla.Cargo = ship.Ammunition;
                                                     shipVanilla.ExplosionDamage = ship.ExplosionDamage;
@@ -1002,7 +1031,8 @@ namespace X4_Editor
                                                     shipVanilla.Yaw = ship.Yaw;
                                                     shipVanilla.Changed = false;
                                                 }
-                                                ship.Changed = false;
+                                                if (ship != null)
+                                                    ship.Changed = false;
                                             }
                                             else
                                             {
@@ -1012,8 +1042,9 @@ namespace X4_Editor
                                                     parent.UIModel.UIModelShips.Add(extractedShip);
                                                     if (!activeMod)
                                                     {
-                                                        foreach (var item in parent.UIModel.UIModelShips)
-                                                            parent.UIModel.UIModelShipsVanilla.Add(item.Copy());
+                                                        //foreach (var item in parent.UIModel.UIModelShips)
+                                                            //parent.UIModel.UIModelShipsVanilla.Add(item.Copy());
+                                                            parent.UIModel.UIModelShipsVanilla.Add(parent.UIModel.UIModelShips.Last().Copy());
                                                     }
                                                 }
                                             }

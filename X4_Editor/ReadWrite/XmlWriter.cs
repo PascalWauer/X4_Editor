@@ -272,7 +272,7 @@ namespace X4_Editor
                         if (vanillaItem.Speed != item.Speed)
                             sw.WriteLine("\t<replace sel=\"//macros/macro/properties/bullet/@speed\">" + String.Format(CultureInfo.InvariantCulture, "{0:0}", item.Speed) + "</replace>");
                         if (vanillaItem.Lifetime != item.Lifetime)
-                            sw.WriteLine("\t<replace sel=\"//macros/macro/properties/bullet/@lifetime\">" + String.Format(CultureInfo.InvariantCulture, "{0:0}", item.Lifetime) + "</replace>");
+                            sw.WriteLine("\t<replace sel=\"//macros/macro/properties/bullet/@lifetime\">" + String.Format(CultureInfo.InvariantCulture, "{0:0.00}", item.Lifetime) + "</replace>");
                         if (vanillaItem.Range != item.Range)
                             sw.WriteLine("\t<replace sel=\"//macros/macro/properties/bullet/@range\">" + String.Format(CultureInfo.InvariantCulture, "{0:0}", item.Range) + "</replace>");
                         if (vanillaItem.Amount != item.Amount)
