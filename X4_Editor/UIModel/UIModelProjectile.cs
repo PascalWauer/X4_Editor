@@ -71,9 +71,10 @@ namespace X4_Editor
         {
             get
             {
-                    if (Ammunition > 0)
-                        return (Ammunition * ( (Damage + Hull) * BeamDamageMultiplier * Amount * BarrelAmount) / ((AmmunitionReload + Ammunition) / ShotsPerSecond));
-                    return (((Damage + Hull) * BeamDamageMultiplier * Amount * BarrelAmount) / (AmmunitionReload + 1 / ShotsPerSecond));
+                return (DPS_Shield + DPS_Hull) * 0.5;
+                    //if (Ammunition > 0)
+                    //    return (Ammunition * ( (Damage + Hull) * BeamDamageMultiplier * Amount * BarrelAmount) / ((AmmunitionReload + Ammunition) / ShotsPerSecond));
+                    //return (((Damage + Hull) * BeamDamageMultiplier * Amount * BarrelAmount) / (AmmunitionReload + 1 / ShotsPerSecond));
             }
         }
 
@@ -82,8 +83,8 @@ namespace X4_Editor
             get
             {
                 if (Ammunition > 0)
-                    return (Ammunition * ((Damage + Shield) * BeamDamageMultiplier * Amount * BarrelAmount) / (AmmunitionReload + Ammunition / ShotsPerSecond));
-                return (((Damage + Shield) * BeamDamageMultiplier * Amount * BarrelAmount) / (AmmunitionReload + 1 / ShotsPerSecond));
+                    return (Ammunition * ((Damage + Shield) * BeamDamageMultiplier * Amount * BarrelAmount) / (AmmunitionReload + (Ammunition / ShotsPerSecond)));
+                return (((Damage + Shield) * BeamDamageMultiplier * Amount * BarrelAmount) / (AmmunitionReload + (1 / ShotsPerSecond)));
             }
         }
         public double DPS_Hull
@@ -91,8 +92,8 @@ namespace X4_Editor
             get
             {
                 if (Ammunition > 0)
-                    return (Ammunition * ((Damage + Hull) * BeamDamageMultiplier * Amount * BarrelAmount) / (AmmunitionReload + Ammunition / ShotsPerSecond));
-                return (((Damage + Hull) * BeamDamageMultiplier * Amount * BarrelAmount) / (AmmunitionReload + 1 / ShotsPerSecond));
+                    return (Ammunition * ((Damage + Hull) * BeamDamageMultiplier * Amount * BarrelAmount) / (AmmunitionReload + (Ammunition / ShotsPerSecond)));
+                return (((Damage + Hull) * BeamDamageMultiplier * Amount * BarrelAmount) / (AmmunitionReload + (1 / ShotsPerSecond)));
             }
         }
         private int m_Ammunition;

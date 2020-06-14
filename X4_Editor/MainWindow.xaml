@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:X4_Editor"
         mc:Ignorable="d"
-        Title="X4 Editor 1.0.8 Main Window" Height="900" Width="1395" MinHeight="900" MinWidth="1395" Background="DarkGray">
+        Title="X4 Editor 1.0.9 Main Window" Height="900" Width="1395" MinHeight="900" MinWidth="1395" Background="DarkGray">
     <Window.Resources>
         <Style x:Key="CustomCellStyle" TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
                 <Style.Triggers>
@@ -417,7 +417,7 @@
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="Size" Binding="{Binding Size, UpdateSourceTrigger=LostFocus}" IsReadOnly="True" Width="30">
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="DPS" Binding="{Binding DPS, Mode=OneWay, StringFormat={}{0:0.##}}" FontWeight="SemiBold" Width="50">
+                    <DataGridTextColumn Header="Avg. DPS" Binding="{Binding DPS, Mode=OneWay, StringFormat={}{0:0.##}}" FontWeight="SemiBold" Width="60">
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="DPS Shield" Binding="{Binding DPS_Shield, Mode=OneWay, StringFormat={}{0:0.##}}" FontWeight="SemiBold" Width="67">
                     </DataGridTextColumn>
