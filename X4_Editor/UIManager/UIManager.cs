@@ -923,6 +923,7 @@ namespace X4_Editor
                 m_ModFilesReader.ReadAllModFilesFromFolder(this.UIModel.ModPath6);
             }
             this.UIModel.AllWaresLoaded = true;
+            this.UIModel.CalculateWarePrices();
             Mouse.OverrideCursor = null;
         }
     }

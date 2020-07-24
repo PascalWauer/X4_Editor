@@ -59,13 +59,6 @@ namespace X4_Editor
                                 {
                                     foreach (var diff in diffNodes)
                                     {
-                                        //if (diff.Descendants().Where(x => x.Name.LocalName == "replace").ToList().Count > 0)
-                                        //{
-                                        //    var replacedWares = diff.Descendants().Where(x => x.Name.LocalName == "replace").ToList();
-
-
-                                        //    foreach (var item in replacedWares)
-                                        //    {
                                         XmlDocument xD = new XmlDocument();
                                         xD.LoadXml(diff.ToString());
                                         XmlNode xN = XmlHelper.ToXmlNode(diff);
@@ -85,11 +78,9 @@ namespace X4_Editor
                                                 string wareSel = item.Attributes["sel"].Value;
                                                 string wareID = wareSel.Split('\'')[1];
                                                 additionalErrorText = wareID;
-                                                var wareToChange = this.m_UIManager.UIModel.UIModelWares.Where(x => x.Name == wareID).FirstOrDefault();
-                                                var vanillaWareToChange = this.m_UIManager.UIModel.UIModelWaresVanilla.Where(x => x.Name == wareID).FirstOrDefault();
+                                                var wareToChange = this.m_UIManager.UIModel.UIModelWares.Where(x => x.ID == wareID).FirstOrDefault();
+                                                var vanillaWareToChange = this.m_UIManager.UIModel.UIModelWaresVanilla.Where(x => x.ID == wareID).FirstOrDefault();
 
-                                                if (wareToChange.Name.Contains("arawn"))
-                                                    additionalErrorText = wareID;
                                                 //check for direct changes "@property"
                                                 if (wareSel.Contains("@threshold"))
                                                 {
@@ -186,20 +177,16 @@ namespace X4_Editor
                         }
                     }
                     m_UIManager.UIModel.AllWaresLoaded = true;
-                    m_UIManager.UIModel.CalculateWarePrices();
+                    //m_UIManager.UIModel.CalculateWarePrices();
                     foreach (var item in m_UIManager.UIModel.UIModelWares)
                     {
                         item.Changed = false;
-                    }
-                    //TODO: this needs to be done only in case of vanilla and not mods
-                    //m_UIManager.UIModel.UIModelWaresVanilla.Clear();
-                    //if (!activeMod)
-                    {
-                        foreach (var item in m_UIManager.UIModel.UIModelWares)
-                        {
+                        //TODO: this needs to be done only in case of vanilla and not mods
+                        if (m_UIManager.UIModel.UIModelWaresVanilla.FirstOrDefault(x => x.ID == item.ID) == null)
                             m_UIManager.UIModel.UIModelWaresVanilla.Add(item.Copy());
-                        }
                     }
+
+
                 }
                 catch (Exception ex)
                 {
@@ -243,10 +230,19 @@ namespace X4_Editor
                             Min = Convert.ToInt32(priceNode.Attributes["min"].Value),
                             Avg = Convert.ToInt32(priceNode.Attributes["average"].Value),
                         };
+
                         if (useNode != null)
                         {
                             if (useNode.Attributes["threshold"] != null)
                                 uiModelWare.Threshold = Utility.ParseToDouble(useNode.Attributes["threshold"].Value);
+                        }
+                        if (item.SelectNodes("./component").Count == 1)
+                        {
+                            XmlNodeList componentNode = item.SelectNodes("./component");
+                            if (componentNode.Count > 0)
+                            {
+                                uiModelWare.Component = componentNode[0].Attributes["ref"].Value;
+                            }
                         }
                         if (item.SelectNodes("./production").Count == 1)
                         {
@@ -339,7 +335,9 @@ namespace X4_Editor
 
                         var wareWithSameId = m_UIManager.UIModel.UIModelWares.Where(x => x.ID.Equals(uiModelWare.ID)).ToList();
                         if (wareWithSameId.Count == 0)
+                        {
                             m_UIManager.UIModel.UIModelWares.Add(uiModelWare);
+                        }
                     }
                 }
             }

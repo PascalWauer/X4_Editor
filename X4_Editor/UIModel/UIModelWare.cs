@@ -122,6 +122,16 @@ namespace X4_Editor
                 NotifyPropertyChanged();
             }
         }
+        private string m_Component;
+        public string Component
+        {
+            get { return m_Component; }
+            set
+            {
+                m_Component = value;
+                Changed = true;
+            }
+        }
 
         private int m_Amount;
         public int Amount

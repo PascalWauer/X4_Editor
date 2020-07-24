@@ -906,37 +906,43 @@ namespace X4_Editor
                 foreach (var item in this.UIModelWares)
                 {
                     item.CalculatedPrice = 0;
-                    if (item.Ware1 != null)
-                    {
-                        var match = this.UIModelWares.FirstOrDefault(X => X.Name == item.Ware1);
-                        item.CalculatedPrice = item.CalculatedPrice + match.Avg * item.Amount1;
-                    }
-                    if (item.Ware2 != null)
-                    {
-                        var match = this.UIModelWares.FirstOrDefault(X => X.Name == item.Ware2);
-                        item.CalculatedPrice = item.CalculatedPrice + match.Avg * item.Amount2;
-                    }
-                    if (item.Ware3 != null)
-                    {
-                        var match = this.UIModelWares.FirstOrDefault(X => X.Name.Equals(item.Ware3));
-                        item.CalculatedPrice = item.CalculatedPrice + match.Avg * item.Amount3;
-                    }
-                    if (item.Ware4 != null)
-                    {
-                        var match = this.UIModelWares.FirstOrDefault(X => X.Name == item.Ware4);
-                        item.CalculatedPrice = item.CalculatedPrice + match.Avg * item.Amount4;
-                    }
-                    if (item.Ware5 != null)
-                    {
-                        var match = this.UIModelWares.FirstOrDefault(X => X.Name == item.Ware5);
-                        item.CalculatedPrice = item.CalculatedPrice + match.Avg * item.Amount5;
-                    }
-                    if (item.Amount > 1)
-                        item.CalculatedPrice = item.CalculatedPrice / item.Amount;
+                    CalculateWarePrice(item);
                     item.Update();
                 }
             }
         }
+
+        private void CalculateWarePrice(UIModelWare ware)
+        {
+            if (ware.Ware1 != null)
+            {
+                var match = this.UIModelWares.FirstOrDefault(X => X.Name == ware.Ware1);
+                ware.CalculatedPrice = ware.CalculatedPrice + match.Avg * ware.Amount1;
+            }
+            if (ware.Ware2 != null)
+            {
+                var match = this.UIModelWares.FirstOrDefault(X => X.Name == ware.Ware2);
+                ware.CalculatedPrice = ware.CalculatedPrice + match.Avg * ware.Amount2;
+            }
+            if (ware.Ware3 != null)
+            {
+                var match = this.UIModelWares.FirstOrDefault(X => X.Name.Equals(ware.Ware3));
+                ware.CalculatedPrice = ware.CalculatedPrice + match.Avg * ware.Amount3;
+            }
+            if (ware.Ware4 != null)
+            {
+                var match = this.UIModelWares.FirstOrDefault(X => X.Name == ware.Ware4);
+                ware.CalculatedPrice = ware.CalculatedPrice + match.Avg * ware.Amount4;
+            }
+            if (ware.Ware5 != null)
+            {
+                var match = this.UIModelWares.FirstOrDefault(X => X.Name == ware.Ware5);
+                ware.CalculatedPrice = ware.CalculatedPrice + match.Avg * ware.Amount5;
+            }
+            if (ware.Amount > 1)
+                ware.CalculatedPrice = ware.CalculatedPrice / ware.Amount;
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 
