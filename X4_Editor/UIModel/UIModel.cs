@@ -564,13 +564,13 @@ namespace X4_Editor
 
         public void SetFilters()
         {
-                m_ShieldsDataView.Filter = this.FilterShieldsData;
-                m_EnginesDataView.Filter = this.FilterEnginesData;
-                m_ProjectilesDataView.Filter = this.FilterProjectilesData;
-                m_MissilesDataView.Filter = this.FilterMissilesData;
-                m_ShipsDataView.Filter = this.FilterShipsData;
-                m_WeaponsDataView.Filter = this.FilterTurretsData;
-                m_WaresDataView.Filter = this.FilterWaresData;
+            m_ShieldsDataView.Filter = this.FilterShieldsData;
+            m_EnginesDataView.Filter = this.FilterEnginesData;
+            m_ProjectilesDataView.Filter = this.FilterProjectilesData;
+            m_MissilesDataView.Filter = this.FilterMissilesData;
+            m_ShipsDataView.Filter = this.FilterShipsData;
+            m_WeaponsDataView.Filter = this.FilterTurretsData;
+            m_WaresDataView.Filter = this.FilterWaresData;
         }
         private bool FilterShieldsData(object item)
         {

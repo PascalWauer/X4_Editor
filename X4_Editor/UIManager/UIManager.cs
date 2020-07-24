@@ -510,6 +510,15 @@ namespace X4_Editor
         }
         private void ExecuteFilterCommand(object sender, ExecutedRoutedEventArgs e)
         {
+            MainWindow.DG_Engines.CancelEdit();
+            MainWindow.DG_Missiles.CancelEdit();
+            MainWindow.DG_Projectiles.CancelEdit();
+            MainWindow.DG_Shields.CancelEdit();
+            MainWindow.DG_Ships.CancelEdit();
+            MainWindow.DG_Weapons.CancelEdit();
+            WaresWindow.DG_Wares.CommitEdit();
+            WaresWindow.DG_Wares.CancelEdit();
+
             this.UIModel.SetFilters();
         }
 
