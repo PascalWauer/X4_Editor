@@ -130,40 +130,43 @@ namespace X4_Editor
                                                     {
                                                         for (int i = 0; i < primaryNode.ChildNodes.Count; i++)
                                                         {
-                                                            if (i == 0)
+                                                            if (primaryNode.ChildNodes[i].Name == "ware")
                                                             {
-                                                                wareToChange.Ware1 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
-                                                                vanillaWareToChange.Ware1 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
-                                                                wareToChange.Amount1 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
-                                                                vanillaWareToChange.Amount1 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
-                                                            }
-                                                            if (i == 1)
-                                                            {
-                                                                wareToChange.Ware2 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
-                                                                vanillaWareToChange.Ware2 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
-                                                                wareToChange.Amount2 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
-                                                                vanillaWareToChange.Amount2 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
-                                                            }
-                                                            if (i == 2)
-                                                            {
-                                                                wareToChange.Ware3 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
-                                                                vanillaWareToChange.Ware3 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
-                                                                wareToChange.Amount3 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
-                                                                vanillaWareToChange.Amount3 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
-                                                            }
-                                                            if (i == 3)
-                                                            {
-                                                                wareToChange.Ware4 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
-                                                                vanillaWareToChange.Ware4 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
-                                                                wareToChange.Amount4 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
-                                                                vanillaWareToChange.Amount4 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
-                                                            }
-                                                            if (i == 4)
-                                                            {
-                                                                wareToChange.Ware5 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
-                                                                vanillaWareToChange.Ware5 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
-                                                                wareToChange.Amount5 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
-                                                                vanillaWareToChange.Amount5 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
+                                                                if (i == 0)
+                                                                {
+                                                                    wareToChange.Ware1 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
+                                                                    vanillaWareToChange.Ware1 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
+                                                                    wareToChange.Amount1 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
+                                                                    vanillaWareToChange.Amount1 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
+                                                                }
+                                                                if (i == 1)
+                                                                {
+                                                                    wareToChange.Ware2 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
+                                                                    vanillaWareToChange.Ware2 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
+                                                                    wareToChange.Amount2 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
+                                                                    vanillaWareToChange.Amount2 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
+                                                                }
+                                                                if (i == 2)
+                                                                {
+                                                                    wareToChange.Ware3 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
+                                                                    vanillaWareToChange.Ware3 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
+                                                                    wareToChange.Amount3 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
+                                                                    vanillaWareToChange.Amount3 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
+                                                                }
+                                                                if (i == 3)
+                                                                {
+                                                                    wareToChange.Ware4 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
+                                                                    vanillaWareToChange.Ware4 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
+                                                                    wareToChange.Amount4 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
+                                                                    vanillaWareToChange.Amount4 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
+                                                                }
+                                                                if (i == 4)
+                                                                {
+                                                                    wareToChange.Ware5 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
+                                                                    vanillaWareToChange.Ware5 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
+                                                                    wareToChange.Amount5 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
+                                                                    vanillaWareToChange.Amount5 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
+                                                                }
                                                             }
                                                         }
                                                     }
