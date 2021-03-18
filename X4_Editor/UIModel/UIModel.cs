@@ -952,7 +952,9 @@ namespace X4_Editor
             }
             catch (Exception ex)
             {
-                throw new Exception("Cant calculate price for ware: " + ware.Name);
+                MessageBox.Show("Cant calculate price for ware: " + ware.Name);
+                ware.CalculatedPrice = 0;
+                //throw new Exception("Cant calculate price for ware: " + ware.Name);
             }
         }
 
