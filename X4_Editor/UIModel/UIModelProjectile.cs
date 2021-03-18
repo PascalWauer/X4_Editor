@@ -126,8 +126,8 @@ namespace X4_Editor
             }
         }
 
-        private int m_Speed;
-        public int Speed
+        private double m_Speed;
+        public double Speed
         {
             get { return m_Speed; }
             set

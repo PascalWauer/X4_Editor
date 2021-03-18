@@ -192,7 +192,7 @@ namespace X4_Editor.Helper
                     }
                     if (dataGridCell.Column.DisplayIndex == 14)
                     {
-                        projectile.Speed = (int)Calculate(operation, projectile.Speed, ref counter);
+                        projectile.Speed = Calculate(operation, projectile.Speed, ref counter);
 
                     }
                     if (dataGridCell.Column.DisplayIndex == 15)
@@ -531,27 +531,27 @@ namespace X4_Editor.Helper
                         ware.Max = (int)Calculate(operation, ware.Max, ref counter);
 
                     }
-                    if (dataGridCell.Column.DisplayIndex == 7)
+                    if (dataGridCell.Column.DisplayIndex == 8)
                     {
                         ware.Amount = (int)Calculate(operation, ware.Amount, ref counter);
 
                     }
-                    if (dataGridCell.Column.DisplayIndex == 8)
+                    if (dataGridCell.Column.DisplayIndex == 9)
                     {
                         ware.Time = (int)Calculate(operation, ware.Time, ref counter);
 
                     }
-                    if (dataGridCell.Column.DisplayIndex == 10)
+                    if (dataGridCell.Column.DisplayIndex == 11)
                     {
                         ware.Amount1 = (int)Calculate(operation, ware.Amount1, ref counter);
 
                     }
-                    if (dataGridCell.Column.DisplayIndex == 12)
+                    if (dataGridCell.Column.DisplayIndex == 13)
                     {
                         ware.Amount2 = (int)Calculate(operation, ware.Amount2, ref counter);
 
                     }
-                    if (dataGridCell.Column.DisplayIndex == 14)
+                    if (dataGridCell.Column.DisplayIndex == 15)
                     {
                         ware.Amount3 = (int)Calculate(operation, ware.Amount3, ref counter);
 
@@ -561,12 +561,12 @@ namespace X4_Editor.Helper
                         ware.Amount4 = (int)Calculate(operation, ware.Amount4, ref counter);
 
                     }
-                    if (dataGridCell.Column.DisplayIndex == 18)
+                    if (dataGridCell.Column.DisplayIndex == 19)
                     {
                         ware.Amount5 = (int)Calculate(operation, ware.Amount5, ref counter);
 
                     }
-                    if (dataGridCell.Column.DisplayIndex == 19)
+                    if (dataGridCell.Column.DisplayIndex == 20)
                     {
                         ware.Threshold = Calculate(operation, ware.Threshold, ref counter);
                     }

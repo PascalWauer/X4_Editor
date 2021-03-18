@@ -755,7 +755,10 @@ namespace X4_Editor
             this.ReadAllShips(xmlShipsList);
 
             if (File.Exists(waresPath))
+            {
                 m_XmlExtractor.ReadAllWares(waresPath);
+                this.UIModel.CalculateWarePrices();
+            }
             else
                 MessageBox.Show("No valid wares found.", "No data found.");
         }

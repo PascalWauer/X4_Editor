@@ -392,7 +392,7 @@ namespace X4_Editor
                             if (weaponBulletNode.Count > 0)
                             {
                                 if (weaponBulletNode[0].Attributes["speed"] != null)
-                                    uiModelProjectile.Speed = Convert.ToInt32(weaponBulletNode[0].Attributes["speed"].Value);
+                                    uiModelProjectile.Speed = Utility.ParseToDouble(weaponBulletNode[0].Attributes["speed"].Value);
                                 if (weaponBulletNode[0].Attributes["lifetime"] != null)
                                     uiModelProjectile.Lifetime = Utility.ParseToDouble(weaponBulletNode[0].Attributes["lifetime"].Value);
                                 if (weaponBulletNode[0].Attributes["amount"] != null)

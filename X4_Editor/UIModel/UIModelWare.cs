@@ -72,6 +72,7 @@ namespace X4_Editor
                 X4Commands.RecalculatePriceCommand.Execute(null, null);
                 NotifyPropertyChanged();
                 NotifyPropertyChanged("Margin");
+                NotifyPropertyChanged("IncomePerHour");
             }
         }
 
@@ -97,6 +98,7 @@ namespace X4_Editor
                 Changed = true;
                 NotifyPropertyChanged();
                 NotifyPropertyChanged("Margin");
+                NotifyPropertyChanged("IncomePerHour");
             }
         }
         public int Margin
@@ -111,6 +113,15 @@ namespace X4_Editor
             }
         }
 
+        public double IncomePerHour
+        {
+            get
+            {
+                return (double)(((double)Amount * Avg) / (double)Time * 3600);
+                NotifyPropertyChanged();
+            }
+        }
+
         private double m_Time;
         public double Time
         {
@@ -120,6 +131,7 @@ namespace X4_Editor
                 m_Time = value;
                 Changed = true;
                 NotifyPropertyChanged();
+                NotifyPropertyChanged("IncomePerHour");
             }
         }
         private string m_Component;
@@ -144,6 +156,7 @@ namespace X4_Editor
                 X4Commands.RecalculatePriceCommand.Execute(null, null);
                 NotifyPropertyChanged();
                 NotifyPropertyChanged("Margin");
+                NotifyPropertyChanged("IncomePerHour");
             }
         }
 

@@ -363,7 +363,7 @@ namespace X4_Editor
                                                     if (line.Contains("@speed") && line.Contains("bullet"))
                                                     {
                                                         string value = line.Split('>')[1].Split('<')[0];
-                                                        weaponProjectile.Speed = Convert.ToInt32(value);
+                                                        weaponProjectile.Speed = Utility.ParseToDouble(value);
                                                     }
                                                     if (line.Contains("@lifetime") && line.Contains("bullet"))
                                                     {

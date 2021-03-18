@@ -914,33 +914,46 @@ namespace X4_Editor
 
         private void CalculateWarePrice(UIModelWare ware)
         {
-            if (ware.Ware1 != null)
+            if (ware.Name == "engine_ter_l_allround_01_mk1")
             {
-                var match = this.UIModelWares.FirstOrDefault(X => X.Name == ware.Ware1);
-                ware.CalculatedPrice = ware.CalculatedPrice + match.Avg * ware.Amount1;
+                string test = "bla";
+                if (test == "bla")
+                    test = "";
             }
-            if (ware.Ware2 != null)
+            try
             {
-                var match = this.UIModelWares.FirstOrDefault(X => X.Name == ware.Ware2);
-                ware.CalculatedPrice = ware.CalculatedPrice + match.Avg * ware.Amount2;
+                if (ware.Ware1 != null)
+                {
+                    var match = this.UIModelWares.FirstOrDefault(X => X.Name == ware.Ware1);
+                    ware.CalculatedPrice = ware.CalculatedPrice + match.Avg * ware.Amount1;
+                }
+                if (ware.Ware2 != null)
+                {
+                    var match = this.UIModelWares.FirstOrDefault(X => X.Name == ware.Ware2);
+                    ware.CalculatedPrice = ware.CalculatedPrice + match.Avg * ware.Amount2;
+                }
+                if (ware.Ware3 != null)
+                {
+                    var match = this.UIModelWares.FirstOrDefault(X => X.Name.Equals(ware.Ware3));
+                    ware.CalculatedPrice = ware.CalculatedPrice + match.Avg * ware.Amount3;
+                }
+                if (ware.Ware4 != null)
+                {
+                    var match = this.UIModelWares.FirstOrDefault(X => X.Name == ware.Ware4);
+                    ware.CalculatedPrice = ware.CalculatedPrice + match.Avg * ware.Amount4;
+                }
+                if (ware.Ware5 != null)
+                {
+                    var match = this.UIModelWares.FirstOrDefault(X => X.Name == ware.Ware5);
+                    ware.CalculatedPrice = ware.CalculatedPrice + match.Avg * ware.Amount5;
+                }
+                if (ware.Amount > 1)
+                    ware.CalculatedPrice = ware.CalculatedPrice / ware.Amount;
             }
-            if (ware.Ware3 != null)
+            catch (Exception ex)
             {
-                var match = this.UIModelWares.FirstOrDefault(X => X.Name.Equals(ware.Ware3));
-                ware.CalculatedPrice = ware.CalculatedPrice + match.Avg * ware.Amount3;
+                throw new Exception("Cant calculate price for ware: " + ware.Name);
             }
-            if (ware.Ware4 != null)
-            {
-                var match = this.UIModelWares.FirstOrDefault(X => X.Name == ware.Ware4);
-                ware.CalculatedPrice = ware.CalculatedPrice + match.Avg * ware.Amount4;
-            }
-            if (ware.Ware5 != null)
-            {
-                var match = this.UIModelWares.FirstOrDefault(X => X.Name == ware.Ware5);
-                ware.CalculatedPrice = ware.CalculatedPrice + match.Avg * ware.Amount5;
-            }
-            if (ware.Amount > 1)
-                ware.CalculatedPrice = ware.CalculatedPrice / ware.Amount;
         }
 
 
