@@ -731,7 +731,10 @@ namespace X4_Editor
                             {
                                 if (shielIdentificationNode[0].Attributes["makerrace"] != null)
                                     uiModelShield.Faction = shielIdentificationNode[0].Attributes["makerrace"].Value;
-                                uiModelShield.MK = shielIdentificationNode[0].Attributes["mk"].Value;
+                                if (shielIdentificationNode[0].Attributes["mk"] != null)
+                                    uiModelShield.MK = shielIdentificationNode[0].Attributes["mk"].Value;
+                                else
+                                    uiModelShield.MK = "0";
                                 if (shielIdentificationNode[0].Attributes["name"] != null)
                                     uiModelShield.IGName = this.GetIGName(shielIdentificationNode[0].Attributes["name"].Value);
                                 else
