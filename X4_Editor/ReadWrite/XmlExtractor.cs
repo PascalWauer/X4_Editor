@@ -128,10 +128,35 @@ namespace X4_Editor
 
                                                     if (primaryNode != null)
                                                     {
+                                                        wareToChange.Ware1 = null;
+                                                        vanillaWareToChange.Ware1 = null;
+                                                        wareToChange.Amount1 = 0;
+                                                        vanillaWareToChange.Amount1 = 0;
+
+                                                        wareToChange.Ware2 = null;
+                                                        vanillaWareToChange.Ware2 = null;
+                                                        wareToChange.Amount2 = 0;
+                                                        vanillaWareToChange.Amount2 = 0;
+
+                                                        wareToChange.Ware3 = null;
+                                                        vanillaWareToChange.Ware3 = null;
+                                                        wareToChange.Amount3 = 0;
+                                                        vanillaWareToChange.Amount3 = 0;
+
+                                                        wareToChange.Ware4 = null;
+                                                        vanillaWareToChange.Ware4 = null;
+                                                        wareToChange.Amount4 = 0;
+                                                        vanillaWareToChange.Amount4 = 0;
+
+                                                        wareToChange.Ware5 = null;
+                                                        vanillaWareToChange.Ware5 = null;
+                                                        wareToChange.Amount5 = 0;
+                                                        vanillaWareToChange.Amount5 = 0;
+
                                                         for (int i = 0; i < primaryNode.ChildNodes.Count; i++)
                                                         {
                                                             if (primaryNode.ChildNodes[i].Name == "ware")
-                                                            {
+                                                            {   
                                                                 if (i == 0)
                                                                 {
                                                                     wareToChange.Ware1 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
