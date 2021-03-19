@@ -151,7 +151,7 @@ namespace X4_Editor
         {
             MessageBox.Show
                 (
-                "Instructions for Use Version 1.00\r\r"
+                "Instructions for Use Version 1.13\r\r"
                 + "Before you start!\r"
                 + "ALWAYS backup your mods you use with this tool!\r"
                 + "Before you can use this tool you must have extracted all X4 data into a separate folder. You can use the 'X Rebirth Catalog Tool 1.10' to do this.\r"

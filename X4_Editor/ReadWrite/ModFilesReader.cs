@@ -48,7 +48,7 @@ namespace X4_Editor
                     foreach (string dir in ModDirectories)
                     {
                         //shields
-                        if (dir.Contains("assets\\props\\SurfaceElements\\macros"))
+                        if (dir.ToLower().Contains("assets\\props\\surfaceelements\\macros"))
                         {
                             List<string> files = Directory.GetFiles(dir).ToList();
 
@@ -142,7 +142,7 @@ namespace X4_Editor
                             }
                         }
                         //engines
-                        if (dir.Contains("assets\\props\\Engines\\macros"))
+                        if (dir.ToLower().Contains("assets\\props\\engines\\macros"))
                         {
                             List<string> files = Directory.GetFiles(dir).ToList();
 
@@ -313,7 +313,7 @@ namespace X4_Editor
                             }
                         }
                         //projectiles 
-                        if (dir.ToUpper().Contains("ASSETS\\FX\\WEAPONFX\\MACROS"))
+                        if (dir.ToLower().Contains("assets\\fx\\weaponfx\\macros"))
                         {
                             List<string> files = Directory.GetFiles(dir).ToList();
 
@@ -490,7 +490,7 @@ namespace X4_Editor
                             }
                         }
                         // weapons
-                        if (dir.Contains("assets\\props\\WeaponSystems\\") && dir.Contains("macros"))
+                        if (dir.ToLower().Contains("assets\\props\\weaponsystems\\") && dir.Contains("macros"))
                         {
                             List<string> files = new List<string>();
 
@@ -661,7 +661,7 @@ namespace X4_Editor
                             }
                         }
                         // missiles
-                        if (dir.Contains(@"assets\props\WeaponSystems\missile\macros"))
+                        if (dir.ToLower().Contains(@"assets\props\weaponsystems\missile\macros"))
                         {
                             List<string> files = Directory.GetFiles(dir).ToList();
 
