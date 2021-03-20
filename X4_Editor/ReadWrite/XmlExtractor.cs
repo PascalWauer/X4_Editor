@@ -34,15 +34,40 @@ namespace X4_Editor
                     {
                         {
                             XDocument doc = XDocument.Load(waresPath);
+
+                            // gehe jeden Knoten durch der add oder replace enthält oder wenn auf oberster ebene knowten wares ist (vanilla)
+                            // wenn add und nicht gleichzeitig /wares" enthalten ist, handelt es sich um eine neue ware, andernfalls (oder wenn replace) um eine Änderung
+
+                            var NewWares = doc.Descendants("add").Where(x => x.Attribute("sel").Value == "/wares").ToList();//.Where(x => x.Name.LocalName == "replace" && (x.Attribute("sel").Value.Contains("\"/wares\"")).ToList();
+                            
+                            foreach (var item in NewWares.Nodes())
+                            {
+                                int t = NewWares.Nodes().Count();
+                            }
+                            var WaresToModify = doc.Descendants().Where(x => x.Name.LocalName == "replace" || (x.Name.LocalName == "add" && x.Attribute("sel").Value != "/wares")).ToList();
+
+
                             bool addedWaresByMod = false;
-                            if (doc.Descendants().Where(x => x.Name.LocalName == "add").ToList().Count > 0)
+                            if (doc.Descendants().Where(x => x.Name.LocalName == "add" && x.Attribute("sel").Value.Contains("\"/wares\"")).ToList().Count > 0)
                                 addedWaresByMod = true;
                             if (doc.Descendants().Where(x => x.Name.LocalName == "wares").ToList().Count > 0 || addedWaresByMod)
                             {
                                 ReadNewWares(waresPath, doc, addedWaresByMod);
                             }
 
-                            if (doc.Descendants().Where(x => x.Name.LocalName == "diff").ToList().Count > 0)
+
+                            foreach (var item in WaresToModify)
+                            {
+                                additionalErrorText = ChangeWare(additionalErrorText, item);
+                            }
+
+                            if (NewWares.Count > 0)
+                            {
+                                XDocument newWaresXDoc = new XDocument(NewWares);
+                                ReadNewWares(waresPath, newWaresXDoc, true);
+                            }
+
+                            if (false && doc.Descendants().Where(x => x.Name.LocalName == "diff").ToList().Count > 0)
                             {
                                 // this part is for ware properties replaced by a mod
                                 var diffNodes = doc.Descendants().Where(x => x.Name.LocalName == "diff").ToList();
@@ -62,143 +87,8 @@ namespace X4_Editor
                                         XmlDocument xD = new XmlDocument();
                                         xD.LoadXml(diff.ToString());
                                         XmlNode xN = XmlHelper.ToXmlNode(diff);
-                                        XmlNodeList wareNodes = xN.SelectNodes("//replace");
-
-
-                                        foreach (XmlNode wareNode in wareNodes)
-                                        {
-                                            XmlDocument xDD = new XmlDocument();
-                                            xDD.LoadXml(wareNode.OuterXml);
-                                            XmlNode item = xDD.FirstChild;
-
-                                            //XmlNode item = XmlHelper.ToXmlNode(wareNode.OuterXml.ToXElement());
-
-                                            if (item.Attributes["sel"] != null)
-                                            {
-                                                string wareSel = item.Attributes["sel"].Value;
-                                                string wareID = wareSel.Split('\'')[1];
-                                                additionalErrorText = wareID;
-                                                var wareToChange = this.m_UIManager.UIModel.UIModelWares.Where(x => x.ID == wareID).FirstOrDefault();
-                                                var vanillaWareToChange = this.m_UIManager.UIModel.UIModelWaresVanilla.Where(x => x.ID == wareID).FirstOrDefault();
-
-                                                //check for direct changes "@property"
-                                                if (wareSel.Contains("@threshold"))
-                                                {
-                                                    wareToChange.Threshold = Utility.ParseToDouble(item.InnerText);
-                                                    vanillaWareToChange.Threshold = Utility.ParseToDouble(item.InnerText);
-
-                                                }
-                                                if (wareSel.Contains("@amount"))
-                                                {
-                                                    wareToChange.Amount = Convert.ToInt32(item.InnerText);
-                                                    vanillaWareToChange.Amount = Convert.ToInt32(item.InnerText);
-                                                }
-                                                if (wareSel.Contains("@time"))
-                                                {
-                                                    wareToChange.Time = Convert.ToInt32(item.InnerText);
-                                                    vanillaWareToChange.Time = Convert.ToInt32(item.InnerText);
-                                                }
- 
-
-                                                if (wareToChange != null && item.FirstChild != null)
-                                                {
-                                                    if (item.FirstChild.LocalName == "price")
-                                                    {
-                                                        wareToChange.Min = Convert.ToInt32(item.FirstChild.Attributes["min"].Value);
-                                                        vanillaWareToChange.Min = Convert.ToInt32(item.FirstChild.Attributes["min"].Value);
-                                                        wareToChange.Max = Convert.ToInt32(item.FirstChild.Attributes["max"].Value);
-                                                        vanillaWareToChange.Max = Convert.ToInt32(item.FirstChild.Attributes["max"].Value);
-                                                        wareToChange.Avg = Convert.ToInt32(item.FirstChild.Attributes["average"].Value);
-                                                        vanillaWareToChange.Avg = Convert.ToInt32(item.FirstChild.Attributes["average"].Value);
-                                                    }
-                                                    XmlNode primaryNode = null;
-
-                                                    foreach (XmlNode node in item.ChildNodes)
-                                                    {
-                                                        if (node.LocalName == "primary")
-                                                        {
-                                                            primaryNode = node;
-                                                        }
-                                                        if (node.LocalName == "production")
-                                                        {
-                                                            if (node.FirstChild != null)
-                                                                primaryNode = node.FirstChild;
-                                                        }
-                                                    }
-
-                                                    if (primaryNode != null)
-                                                    {
-                                                        wareToChange.Ware1 = null;
-                                                        vanillaWareToChange.Ware1 = null;
-                                                        wareToChange.Amount1 = 0;
-                                                        vanillaWareToChange.Amount1 = 0;
-
-                                                        wareToChange.Ware2 = null;
-                                                        vanillaWareToChange.Ware2 = null;
-                                                        wareToChange.Amount2 = 0;
-                                                        vanillaWareToChange.Amount2 = 0;
-
-                                                        wareToChange.Ware3 = null;
-                                                        vanillaWareToChange.Ware3 = null;
-                                                        wareToChange.Amount3 = 0;
-                                                        vanillaWareToChange.Amount3 = 0;
-
-                                                        wareToChange.Ware4 = null;
-                                                        vanillaWareToChange.Ware4 = null;
-                                                        wareToChange.Amount4 = 0;
-                                                        vanillaWareToChange.Amount4 = 0;
-
-                                                        wareToChange.Ware5 = null;
-                                                        vanillaWareToChange.Ware5 = null;
-                                                        wareToChange.Amount5 = 0;
-                                                        vanillaWareToChange.Amount5 = 0;
-
-                                                        for (int i = 0; i < primaryNode.ChildNodes.Count; i++)
-                                                        {
-                                                            if (primaryNode.ChildNodes[i].Name == "ware")
-                                                            {   
-                                                                if (i == 0)
-                                                                {
-                                                                    wareToChange.Ware1 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
-                                                                    vanillaWareToChange.Ware1 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
-                                                                    wareToChange.Amount1 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
-                                                                    vanillaWareToChange.Amount1 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
-                                                                }
-                                                                if (i == 1)
-                                                                {
-                                                                    wareToChange.Ware2 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
-                                                                    vanillaWareToChange.Ware2 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
-                                                                    wareToChange.Amount2 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
-                                                                    vanillaWareToChange.Amount2 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
-                                                                }
-                                                                if (i == 2)
-                                                                {
-                                                                    wareToChange.Ware3 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
-                                                                    vanillaWareToChange.Ware3 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
-                                                                    wareToChange.Amount3 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
-                                                                    vanillaWareToChange.Amount3 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
-                                                                }
-                                                                if (i == 3)
-                                                                {
-                                                                    wareToChange.Ware4 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
-                                                                    vanillaWareToChange.Ware4 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
-                                                                    wareToChange.Amount4 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
-                                                                    vanillaWareToChange.Amount4 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
-                                                                }
-                                                                if (i == 4)
-                                                                {
-                                                                    wareToChange.Ware5 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
-                                                                    vanillaWareToChange.Ware5 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
-                                                                    wareToChange.Amount5 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
-                                                                    vanillaWareToChange.Amount5 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    wareToChange.Changed = false;
-                                                }
-                                            }
-                                        }
+                                        XmlNodeList wareNodes = xN.SelectNodes("//replace | //add");
+                                        additionalErrorText = ChangeWare(additionalErrorText, wareNodes);
                                     }
                                 }
                             }
@@ -223,9 +113,164 @@ namespace X4_Editor
             }
         }
 
+        private string ChangeWare(string additionalErrorText, XmlNodeList wareNodes)
+        {
+            foreach (XElement wareNode in wareNodes)
+            {
+                ChangeWare(additionalErrorText, wareNode);
+            }
+
+            return additionalErrorText;
+        }
+
+        private string ChangeWare(string additionalErrorText, XElement wareNode)
+        {
+            XmlDocument xDD = new XmlDocument();
+            xDD.LoadXml(wareNode.ToString());
+            XmlNode item = xDD.FirstChild;
+
+            if (item.Attributes["sel"] != null)
+            {
+                string wareSel = item.Attributes["sel"].Value;
+                string wareID = "";
+                if (wareSel.Split('\'').Length > 1)
+                    wareID = wareSel.Split('\'')[1];
+
+
+                additionalErrorText = wareID;
+                //if (wareID == "countermeasure_flares_01")
+                    //return "test";
+                var wareToChange = this.m_UIManager.UIModel.UIModelWares.Where(x => x.ID == wareID).FirstOrDefault();
+                var vanillaWareToChange = this.m_UIManager.UIModel.UIModelWaresVanilla.Where(x => x.ID == wareID).FirstOrDefault();
+
+                if (wareToChange == null || vanillaWareToChange == null)
+                    return additionalErrorText;
+                //check for direct changes "@property"
+                if (wareSel.Contains("@threshold"))
+                {
+                    wareToChange.Threshold = Utility.ParseToDouble(item.InnerText);
+                    vanillaWareToChange.Threshold = Utility.ParseToDouble(item.InnerText);
+
+                }
+                if (wareSel.Contains("@amount"))
+                {
+                    wareToChange.Amount = Convert.ToInt32(item.InnerText);
+                    vanillaWareToChange.Amount = Convert.ToInt32(item.InnerText);
+                }
+                if (wareSel.Contains("@time"))
+                {
+                    wareToChange.Time = Convert.ToInt32(item.InnerText);
+                    vanillaWareToChange.Time = Convert.ToInt32(item.InnerText);
+                }
+
+                if (wareToChange != null && item.FirstChild != null)
+                {
+                    if (item.FirstChild.LocalName == "price")
+                    {
+                        wareToChange.Min = Convert.ToInt32(item.FirstChild.Attributes["min"].Value);
+                        vanillaWareToChange.Min = Convert.ToInt32(item.FirstChild.Attributes["min"].Value);
+                        wareToChange.Max = Convert.ToInt32(item.FirstChild.Attributes["max"].Value);
+                        vanillaWareToChange.Max = Convert.ToInt32(item.FirstChild.Attributes["max"].Value);
+                        wareToChange.Avg = Convert.ToInt32(item.FirstChild.Attributes["average"].Value);
+                        vanillaWareToChange.Avg = Convert.ToInt32(item.FirstChild.Attributes["average"].Value);
+                    }
+                    XmlNode primaryNode = null;
+
+                    string method = "default";
+                    foreach (XmlNode node in item.ChildNodes)
+                    {
+                        if (node.LocalName == "primary" || node.OuterXml.Contains(method))
+                        {
+                            primaryNode = node;
+                        }
+                        if ((node.LocalName == "production") && (node.Attributes["method"].Value == method || node.OuterXml.Contains(method)))
+                        {
+                            if (node.FirstChild != null)
+                                primaryNode = node.FirstChild;
+                        }
+                        else
+                            primaryNode = null;
+                    }
+
+                    if (primaryNode != null)
+                    {
+                        wareToChange.Ware1 = null;
+                        vanillaWareToChange.Ware1 = null;
+                        wareToChange.Amount1 = 0;
+                        vanillaWareToChange.Amount1 = 0;
+
+                        wareToChange.Ware2 = null;
+                        vanillaWareToChange.Ware2 = null;
+                        wareToChange.Amount2 = 0;
+                        vanillaWareToChange.Amount2 = 0;
+
+                        wareToChange.Ware3 = null;
+                        vanillaWareToChange.Ware3 = null;
+                        wareToChange.Amount3 = 0;
+                        vanillaWareToChange.Amount3 = 0;
+
+                        wareToChange.Ware4 = null;
+                        vanillaWareToChange.Ware4 = null;
+                        wareToChange.Amount4 = 0;
+                        vanillaWareToChange.Amount4 = 0;
+
+                        wareToChange.Ware5 = null;
+                        vanillaWareToChange.Ware5 = null;
+                        wareToChange.Amount5 = 0;
+                        vanillaWareToChange.Amount5 = 0;
+
+                        for (int i = 0; i < primaryNode.ChildNodes.Count; i++)
+                        {
+                            if (primaryNode.ChildNodes[i].Name == "ware")
+                            {
+                                if (i == 0)
+                                {
+                                    wareToChange.Ware1 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
+                                    vanillaWareToChange.Ware1 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
+                                    wareToChange.Amount1 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
+                                    vanillaWareToChange.Amount1 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
+                                }
+                                if (i == 1)
+                                {
+                                    wareToChange.Ware2 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
+                                    vanillaWareToChange.Ware2 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
+                                    wareToChange.Amount2 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
+                                    vanillaWareToChange.Amount2 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
+                                }
+                                if (i == 2)
+                                {
+                                    wareToChange.Ware3 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
+                                    vanillaWareToChange.Ware3 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
+                                    wareToChange.Amount3 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
+                                    vanillaWareToChange.Amount3 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
+                                }
+                                if (i == 3)
+                                {
+                                    wareToChange.Ware4 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
+                                    vanillaWareToChange.Ware4 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
+                                    wareToChange.Amount4 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
+                                    vanillaWareToChange.Amount4 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
+                                }
+                                if (i == 4)
+                                {
+                                    wareToChange.Ware5 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
+                                    vanillaWareToChange.Ware5 = primaryNode.ChildNodes[i].Attributes["ware"].Value;
+                                    wareToChange.Amount5 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
+                                    vanillaWareToChange.Amount5 = Convert.ToInt32(primaryNode.ChildNodes[i].Attributes["amount"].Value);
+                                }
+                            }
+                        }
+                    }
+                    wareToChange.Changed = false;
+                }
+            }
+            return additionalErrorText;
+        }
+
         private void ReadNewWares(string waresPath, XDocument doc, bool addedWaresByMod)
         {
             var wares = doc.Descendants("wares");
+
             if (addedWaresByMod)
                 wares = doc.Descendants("add");
 
