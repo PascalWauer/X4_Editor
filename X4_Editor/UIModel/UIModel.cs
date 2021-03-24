@@ -579,6 +579,12 @@ namespace X4_Editor
 
             UIModelShield shield = item as UIModelShield;
             List<string> searchArray = new List<string>();
+            List<string> searchArrayExceptNegatives = new List<string>();
+            if (this.SearchText != null && this.SearchText.Length > 0)
+            {
+                searchArray = this.SearchText.Split(' ').ToList();
+                searchArrayExceptNegatives = searchArray.Where(x => !x.StartsWith("-")).ToList();
+            }
 
             if ((Size_S && shield.Size == "S") || (m_Size_M && shield.Size == "M") || (m_Size_L && shield.Size == "L") || (m_Size_XL && shield.Size == "XL") || (m_Size_Other && (shield.Size != "S" && shield.Size != "M" && shield.Size != "L" && shield.Size != "XL" )))
             {
@@ -594,7 +600,11 @@ namespace X4_Editor
                     {
                         if (searchString.Length > 0)
                         {
-
+                            if (searchString.StartsWith("-"))
+                            {
+                                if (shield.Name.ToUpper().Contains(searchString.Replace("-", "").ToUpper()))
+                                    return false;
+                            }
                             if (shield.Name.ToUpper().Contains(searchString.ToUpper()) || shield.IGName.ToUpper().Contains(searchString.ToUpper()))
                             {
                                 found = true;
@@ -633,6 +643,12 @@ namespace X4_Editor
         {
             UIModelWeapon weapon = item as UIModelWeapon;
             List<string> searchArray = new List<string>();
+            List<string> searchArrayExceptNegatives = new List<string>();
+            if (this.SearchText != null && this.SearchText.Length > 0)
+            {
+                searchArray = this.SearchText.Split(' ').ToList();
+                searchArrayExceptNegatives = searchArray.Where(x => !x.StartsWith("-")).ToList();
+            }
 
             bool found = false;
 
@@ -652,13 +668,15 @@ namespace X4_Editor
                 return false;
 
             UIModelWeapon weapon = item as UIModelWeapon;
-            List<string> searchArray = new List<string>();
 
             if ((Size_S && weapon.Size == "S") || (m_Size_M && weapon.Size == "M") || (m_Size_L && weapon.Size == "L") || (m_Size_XL && weapon.Size == "XL") || (m_Size_Other && (weapon.Size != "S" && weapon.Size != "M" && weapon.Size != "L" && weapon.Size != "XL")))
             {
+                List<string> searchArray = new List<string>();
+                List<string> searchArrayExceptNegatives = new List<string>();
                 if (this.SearchText != null && this.SearchText.Length > 0)
                 {
                     searchArray = this.SearchText.Split(' ').ToList();
+                    searchArrayExceptNegatives = searchArray.Where(x => !x.StartsWith("-")).ToList();
                 }
                 // filter entered
                 if (searchArray.Count > 0)
@@ -668,7 +686,12 @@ namespace X4_Editor
                     {
                         if (searchString.Length > 0)
                         {
-                            if (weapon.Name.ToUpper().Contains(searchString.ToUpper()) || weapon.Projectile.ToUpper().Contains(searchString.ToUpper()) || weapon.IGName.ToUpper().Contains(searchString.ToUpper()) )
+                            if (searchString.StartsWith("-"))
+                            {
+                                if (weapon.Name.ToUpper().Contains(searchString.Replace("-", "").ToUpper()))
+                                    return false;
+                            }
+                            if (searchArrayExceptNegatives.Count == 0 || weapon.Name.ToUpper().Contains(searchString.ToUpper()) || weapon.Projectile.ToUpper().Contains(searchString.ToUpper()) || weapon.IGName.ToUpper().Contains(searchString.ToUpper()) )
                             {
                                 found = true;
                             }
@@ -691,9 +714,11 @@ namespace X4_Editor
             if ((Size_S && engine.Size == "S") || (m_Size_M && engine.Size == "M") || (m_Size_L && engine.Size == "L") || (m_Size_XL && engine.Size == "XL") || (m_Size_Other && (engine.Size != "S" && engine.Size != "M" && engine.Size != "L" && engine.Size != "XL")))
             {
                 List<string> searchArray = new List<string>();
+                List<string> searchArrayExceptNegatives = new List<string>();
                 if (this.SearchText != null && this.SearchText.Length > 0)
                 {
                     searchArray = this.SearchText.Split(' ').ToList();
+                    searchArrayExceptNegatives = searchArray.Where(x => !x.StartsWith("-")).ToList();
                 }
                 // filter entered
                 if (searchArray.Count > 0)
@@ -703,7 +728,12 @@ namespace X4_Editor
                     {
                         if (searchString.Length > 0)
                         {
-                            if (engine.Name.ToUpper().Contains(searchString.ToUpper()) || engine.IGName.ToUpper().Contains(searchString.ToUpper()))
+                            if (searchString.StartsWith("-"))
+                            {
+                                if (engine.Name.ToUpper().Contains(searchString.Replace("-", "").ToUpper()))
+                                    return false;
+                            }
+                            if (searchArrayExceptNegatives.Count == 0 || engine.Name.ToUpper().Contains(searchString.ToUpper()) || engine.IGName.ToUpper().Contains(searchString.ToUpper()))
                             {
                                 found = true;
                             }
@@ -725,9 +755,11 @@ namespace X4_Editor
             if ((Size_S && projectile.Size == "S") || (m_Size_M && projectile.Size == "M") || (m_Size_L && projectile.Size == "L") || (m_Size_XL && projectile.Size == "XL") || (m_Size_Other && (projectile.Size != "S" && projectile.Size != "M" && projectile.Size != "L" && projectile.Size != "XL")))
             {
                 List<string> searchArray = new List<string>();
+                List<string> searchArrayExceptNegatives = new List<string>();
                 if (this.SearchText != null && this.SearchText.Length > 0)
                 {
                     searchArray = this.SearchText.Split(' ').ToList();
+                    searchArrayExceptNegatives = searchArray.Where(x => !x.StartsWith("-")).ToList();
                 }
                 // filter entered
                 if (searchArray.Count > 0)
@@ -737,8 +769,12 @@ namespace X4_Editor
                     {
                         if (searchString.Length > 0)
                         {
-
-                            if (projectile.Name.ToUpper().Contains(searchString.ToUpper()))
+                            if (searchString.StartsWith("-"))
+                            {
+                                if (projectile.Name.ToUpper().Contains(searchString.Replace("-", "").ToUpper()))
+                                    return false;
+                            }
+                            if (searchArrayExceptNegatives.Count == 0 || projectile.Name.ToUpper().Contains(searchString.ToUpper()))
                             {
                                 found = true;
                             }
@@ -758,10 +794,11 @@ namespace X4_Editor
 
             UIModelMissile missile = item as UIModelMissile;
             List<string> searchArray = new List<string>();
-
+            List<string> searchArrayExceptNegatives = new List<string>();
             if (this.SearchText != null && this.SearchText.Length > 0)
             {
                 searchArray = this.SearchText.Split(' ').ToList();
+                searchArrayExceptNegatives = searchArray.Where(x => !x.StartsWith("-")).ToList();
             }
             // filter entered
             if (searchArray.Count > 0)
@@ -771,7 +808,12 @@ namespace X4_Editor
                 {
                     if (searchString.Length > 0)
                     {
-                        if (missile.Name.ToUpper().Contains(searchString.ToUpper()) || missile.IGName.ToUpper().Contains(searchString.ToUpper()))
+                        if (searchString.StartsWith("-"))
+                        {
+                            if (missile.Name.ToUpper().Contains(searchString.Replace("-", "").ToUpper()))
+                                return false;
+                        }
+                        if (searchArrayExceptNegatives.Count == 0 || missile.Name.ToUpper().Contains(searchString.ToUpper()) || missile.IGName.ToUpper().Contains(searchString.ToUpper()))
                         {
                             found = true;
                         }
@@ -792,9 +834,11 @@ namespace X4_Editor
             if ((Size_S && ship.Size == "S") || (m_Size_M && ship.Size == "M") || (m_Size_L && ship.Size == "L") || (m_Size_XL && ship.Size == "XL") || (m_Size_Other && (ship.Size != "S" && ship.Size != "M" && ship.Size != "L" && ship.Size != "XL")))
             {
                 List<string> searchArray = new List<string>();
+                List<string> searchArrayExceptNegatives = new List<string>();
                 if (this.SearchText != null && this.SearchText.Length > 0)
                 {
                     searchArray = this.SearchText.Split(' ').ToList();
+                    searchArrayExceptNegatives = searchArray.Where(x => !x.StartsWith("-")).ToList();
                 }
                 // filter entered
                 if (searchArray.Count > 0)
@@ -804,7 +848,12 @@ namespace X4_Editor
                     {
                         if (searchString.Length > 0)
                         {
-                            if (ship.Name.ToUpper().Contains(searchString.ToUpper()) || ship.IGName.ToUpper().Contains(searchString.ToUpper()))
+                            if (searchString.StartsWith("-"))
+                            {
+                                if (ship.Name.ToUpper().Contains(searchString.Replace("-", "").ToUpper()))
+                                    return false;
+                            }
+                            if (searchArrayExceptNegatives.Count == 0 || ship.Name.ToUpper().Contains(searchString.ToUpper()) || ship.IGName.ToUpper().Contains(searchString.ToUpper()))
                             {
                                 found = true;
                             }
@@ -825,9 +874,11 @@ namespace X4_Editor
                 if ((Size_S && ware.Size == "S") || (m_Size_M && ware.Size == "M") || (m_Size_L && ware.Size == "L") || (m_Size_XL && ware.Size == "XL") || (m_Size_Other && (ware.Size != "S" && ware.Size != "M" && ware.Size != "L" && ware.Size != "XL")))
                 {
                     List<string> searchArray = new List<string>();
+                    List<string> searchArrayExceptNegatives = new List<string>();
                     if (this.SearchText != null && this.SearchText.Length > 0)
                     {
                         searchArray = this.SearchText.Split(' ').ToList();
+                        searchArrayExceptNegatives = searchArray.Where(x => !x.StartsWith("-")).ToList();
                     }
                     // filter entered
                     if (searchArray.Count > 0)
@@ -837,7 +888,12 @@ namespace X4_Editor
                         {
                             if (searchString.Length > 0)
                             {
-                                if (ware.Name.ToUpper().Contains(searchString.ToUpper()))
+                                if (searchString.StartsWith("-"))
+                                {
+                                    if (ware.Name.ToUpper().Contains(searchString.Replace("-", "").ToUpper()))
+                                        return false;
+                                }
+                                if (searchArrayExceptNegatives.Count == 0 || ware.Name.ToUpper().Contains(searchString.ToUpper()))
                                 {
                                     found = true;
                                 }
