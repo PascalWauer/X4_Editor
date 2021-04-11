@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:X4_Editor"
         mc:Ignorable="d"
-        Title="X4 Editor 1.1.4 Main Window" Height="900" Width="1395" MinHeight="900" MinWidth="1395" Background="DarkGray">
+        Title="X4 Editor 1.1.5 Main Window" Height="900" Width="1395" MinHeight="900" MinWidth="1395" Background="DarkGray">
     <Window.Resources>
         <Style x:Key="CustomCellStyle" TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
                 <Style.Triggers>
@@ -214,6 +214,8 @@
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="InRoll" Binding="{Binding InertiaRoll, UpdateSourceTrigger=LostFocus}" Width="60">
                         </DataGridTextColumn>
+                        <DataGridTextColumn Header="Price" Binding="{Binding Price, StringFormat=N0}" Width="50" IsReadOnly="True">
+                        </DataGridTextColumn>
                         <DataGridTextColumn Header="Ship Name" Binding="{Binding Name}" Width="210" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
                         </DataGridTextColumn>
                     </DataGrid.Columns>
@@ -280,6 +282,8 @@
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Threshold" Binding="{Binding Threshold, UpdateSourceTrigger=LostFocus}" Width="60">
                         </DataGridTextColumn>
+                        <DataGridTextColumn Header="Price" Binding="{Binding Price, StringFormat=N0}" Width="50" IsReadOnly="True">
+                        </DataGridTextColumn>
                         <DataGridTextColumn Header="Engine Name" Binding="{Binding Name}" Width="200" IsReadOnly="True" SortDirection="Descending" FontWeight="Bold">
                         </DataGridTextColumn>
                     </DataGrid.Columns>
@@ -330,6 +334,8 @@
                         <DataGridTextColumn Header="Hull" Binding="{Binding MaxHull, UpdateSourceTrigger=LostFocus}" Width="40">
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Threshold" Binding="{Binding Threshold, UpdateSourceTrigger=LostFocus}" Width="60">
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Price" Binding="{Binding Price, StringFormat=N0}" Width="50" IsReadOnly="True">
                         </DataGridTextColumn>
                     </DataGrid.Columns>
                     <DataGrid.RowStyle>
@@ -383,7 +389,9 @@
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Threshold" Binding="{Binding HullThreshold, UpdateSourceTrigger=LostFocus}" Width="50">
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="Weapon Name" Binding="{Binding Name}" Width="190" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
+                        <DataGridTextColumn Header="Price" Binding="{Binding Price, StringFormat=N0}" Width="50" IsReadOnly="True">
+                        </DataGridTextColumn>
+                    <DataGridTextColumn Header="Weapon Name" Binding="{Binding Name}" Width="190" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
                         </DataGridTextColumn>
                     </DataGrid.Columns>
                     <DataGrid.RowStyle>
@@ -526,6 +534,8 @@
                     <DataGridTextColumn Header="InYaw" Binding="{Binding InertiaYaw, UpdateSourceTrigger=LostFocus}" Width="50">
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="InRoll" Binding="{Binding InertiaRoll, UpdateSourceTrigger=LostFocus}" Width="50">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Price" Binding="{Binding Price, StringFormat=N0}" Width="50" IsReadOnly="True">
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="Missile Name" Binding="{Binding Name}" Width="180" SortDirection="Descending" FontWeight="Bold" IsReadOnly="True">
                     </DataGridTextColumn>

@@ -964,18 +964,54 @@ namespace X4_Editor
                     item.CalculatedPrice = 0;
                     CalculateWarePrice(item);
                     item.Update();
+                    SetPriceOnModule(item);
+                }
+            }
+        }
+
+        private void SetPriceOnModule(UIModelWare item)
+        {
+            var ship = this.UIModelShips.FirstOrDefault(x => x.Name == item.Component);
+            if (ship != null)
+            {
+                ship.Price = item.Avg;
+            }
+            else
+            {
+                var shield = this.UIModelShields.FirstOrDefault(x => x.Name == item.Component);
+                if (shield != null)
+                {
+                    shield.Price = item.Avg;
+                }
+                else
+                {
+                    var engine = this.UIModelEngines.FirstOrDefault(x => x.Name == item.Component);
+                    if (engine != null)
+                    {
+                        engine.Price = item.Avg;
+                    }
+                    else
+                    {
+                        var weapon = this.UIModelWeapons.FirstOrDefault(x => x.Name == item.Component);
+                        if (weapon != null)
+                        {
+                            weapon.Price = item.Avg;
+                        }
+                        else
+                        {
+                            var missile = this.UIModelMissiles.FirstOrDefault(x => x.Name == item.Component);
+                            if (missile != null)
+                            {
+                                missile.Price = item.Avg;
+                            }
+                        }
+                    }
                 }
             }
         }
 
         private void CalculateWarePrice(UIModelWare ware)
         {
-            if (ware.Name == "engine_ter_l_allround_01_mk1")
-            {
-                string test = "bla";
-                if (test == "bla")
-                    test = "";
-            }
             try
             {
                 if (ware.Ware1 != null)
@@ -1005,6 +1041,7 @@ namespace X4_Editor
                 }
                 if (ware.Amount > 1)
                     ware.CalculatedPrice = ware.CalculatedPrice / ware.Amount;
+                SetPriceOnModule(ware);
             }
             catch (Exception ex)
             {

@@ -556,7 +556,7 @@ namespace X4_Editor.Helper
                         ware.Amount3 = (int)Calculate(operation, ware.Amount3, ref counter);
 
                     }
-                    if (dataGridCell.Column.DisplayIndex == 16)
+                    if (dataGridCell.Column.DisplayIndex == 17)
                     {
                         ware.Amount4 = (int)Calculate(operation, ware.Amount4, ref counter);
 

@@ -287,6 +287,18 @@ namespace X4_Editor
             }
         }
 
+        private int m_Price;
+        public int Price
+        {
+            get { return m_Price; }
+            set
+            {
+                m_Price = value;
+                Changed = true;
+                NotifyPropertyChanged();
+            }
+        }
+
         public UIModelShip Copy()
         {
             UIModelShip clone = (UIModelShip)this.MemberwiseClone();

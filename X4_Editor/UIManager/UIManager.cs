@@ -936,6 +936,7 @@ namespace X4_Editor
             }
             this.UIModel.AllWaresLoaded = true;
             this.UIModel.CalculateWarePrices();
+
             Mouse.OverrideCursor = null;
         }
     }

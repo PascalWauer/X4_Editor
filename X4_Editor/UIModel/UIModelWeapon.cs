@@ -210,7 +210,18 @@ namespace X4_Editor
                 NotifyPropertyChanged();
             }
         }
-        
+
+        private int m_Price;
+        public int Price
+        {
+            get { return m_Price; }
+            set
+            {
+                m_Price = value;
+                Changed = true;
+                NotifyPropertyChanged();
+            }
+        }
         public UIModelWeapon Copy()
         {
             return (UIModelWeapon)this.MemberwiseClone();

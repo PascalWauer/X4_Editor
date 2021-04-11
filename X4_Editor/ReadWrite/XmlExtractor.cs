@@ -1418,25 +1418,23 @@ namespace X4_Editor
 
         private string FindFileInFolder(string folder, string searchedFile)
         {
+            string file = null;
             if (folder == this.m_UIManager.UIModel.Path)
-                return this.m_UIManager.VanillaXmlFiles.Where(x => x.Contains("\\" + searchedFile)).FirstOrDefault();
-            if (folder.Contains(this.m_UIManager.UIModel.ModPath1))
-                return this.m_UIManager.Mod1XmlFiles.Where(x => x.Contains("\\" + searchedFile)).FirstOrDefault();
-            if (folder.Contains(this.m_UIManager.UIModel.ModPath2))
-                return this.m_UIManager.Mod2XmlFiles.Where(x => x.Contains("\\" + searchedFile)).FirstOrDefault();
-            if (folder.Contains(this.m_UIManager.UIModel.ModPath3))
-                return this.m_UIManager.Mod3XmlFiles.Where(x => x.Contains("\\" + searchedFile)).FirstOrDefault();
-            if (folder.Contains(this.m_UIManager.UIModel.ModPath4))
-                return this.m_UIManager.Mod4XmlFiles.Where(x => x.Contains("\\" + searchedFile)).FirstOrDefault();
-            if (folder.Contains(this.m_UIManager.UIModel.ModPath5))
-                return this.m_UIManager.Mod5XmlFiles.Where(x => x.Contains("\\" + searchedFile)).FirstOrDefault();
-            if (folder.Contains(this.m_UIManager.UIModel.ModPath6))
-                return this.m_UIManager.Mod6XmlFiles.Where(x => x.Contains("\\" + searchedFile)).FirstOrDefault();
-            //if (Directory.Exists(folder))
-            //{
-            //    return Directory.EnumerateFiles(folder, searchedFile, SearchOption.AllDirectories).FirstOrDefault();
-            //}
-            return String.Empty;
+                file = this.m_UIManager.VanillaXmlFiles.Where(x => x.Contains("\\" + searchedFile)).FirstOrDefault();
+            if (file == null || folder.Contains(this.m_UIManager.UIModel.ModPath1))
+                file = this.m_UIManager.Mod1XmlFiles.Where(x => x.Contains("\\" + searchedFile)).FirstOrDefault();
+            if (file == null || folder.Contains(this.m_UIManager.UIModel.ModPath2))
+                file = this.m_UIManager.Mod2XmlFiles.Where(x => x.Contains("\\" + searchedFile)).FirstOrDefault();
+            if (file == null || folder.Contains(this.m_UIManager.UIModel.ModPath3))
+                file = this.m_UIManager.Mod3XmlFiles.Where(x => x.Contains("\\" + searchedFile)).FirstOrDefault();
+            if (file == null || folder.Contains(this.m_UIManager.UIModel.ModPath4))
+                file = this.m_UIManager.Mod4XmlFiles.Where(x => x.Contains("\\" + searchedFile)).FirstOrDefault();
+            if (file == null || folder.Contains(this.m_UIManager.UIModel.ModPath5))
+                file = this.m_UIManager.Mod5XmlFiles.Where(x => x.Contains("\\" + searchedFile)).FirstOrDefault();
+            if (file == null || folder.Contains(this.m_UIManager.UIModel.ModPath6))
+                file = this.m_UIManager.Mod6XmlFiles.Where(x => x.Contains("\\" + searchedFile)).FirstOrDefault();
+
+            return file;
         }
 
         private void CalculateModules(FileInfo file, ref int shields_S, ref int shields_M, ref int shields_L, ref int shields_XL, ref int turrets_M, ref int turrets_L, ref int weapons_S, ref int weapons_M, ref int weapons_L, List<XElement> Connections, List<string> Names, ref string NoUniqueNameIds)
