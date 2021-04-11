@@ -218,7 +218,6 @@ namespace X4_Editor
             set
             {
                 m_Price = value;
-                Changed = true;
                 NotifyPropertyChanged();
             }
         }

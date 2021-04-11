@@ -148,7 +148,7 @@ namespace X4_Editor
 
 
                     additionalErrorText = wareID;
-                    if (wareID == "countermeasure_flares_01")
+                    if (wareID == "energycells")
                         return "test";
                     var wareToChange = this.m_UIManager.UIModel.UIModelWares.Where(x => x.ID == wareID).FirstOrDefault();
                     var vanillaWareToChange = this.m_UIManager.UIModel.UIModelWaresVanilla.Where(x => x.ID == wareID).FirstOrDefault();
@@ -315,8 +315,10 @@ namespace X4_Editor
                                 }
                             }
                         }
-                        wareToChange.Changed = false;
                     }
+
+                    vanillaWareToChange.Changed = false;
+                    wareToChange.Changed = false;
                 }
                 return additionalErrorText;
             }

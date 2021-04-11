@@ -23,6 +23,8 @@ namespace X4_Editor
             get { return m_Changed; }
             set
             {
+                if (Name == "energycells")
+                    this.NotifyPropertyChanged();
                 if (value == m_Changed)
                     return;
                 m_Changed = value;

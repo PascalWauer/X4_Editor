@@ -934,9 +934,9 @@ namespace X4_Editor
                 Mod6XmlFiles.AddRange(Directory.GetFiles(UIModel.ModPath6, "*.xml", SearchOption.AllDirectories));
                 m_ModFilesReader.ReadAllModFilesFromFolder(this.UIModel.ModPath6);
             }
-            this.UIModel.AllWaresLoaded = true;
+            
             this.UIModel.CalculateWarePrices();
-
+            this.UIModel.AllWaresLoaded = true;
             Mouse.OverrideCursor = null;
         }
     }
