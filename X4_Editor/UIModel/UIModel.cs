@@ -965,7 +965,6 @@ namespace X4_Editor
                     CalculateWarePrice(item);
                     item.Update();
                     SetPriceOnModule(item);
-                    item.Changed = false;
                 }
             }
         }

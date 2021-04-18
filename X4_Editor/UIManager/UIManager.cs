@@ -936,6 +936,10 @@ namespace X4_Editor
             }
             
             this.UIModel.CalculateWarePrices();
+            foreach(var ware in UIModel.UIModelWares)
+            {
+                ware.Changed = false;
+            }
             this.UIModel.AllWaresLoaded = true;
             Mouse.OverrideCursor = null;
         }

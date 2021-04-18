@@ -23,8 +23,6 @@ namespace X4_Editor
             get { return m_Changed; }
             set
             {
-                if (Name == "energycells")
-                    this.NotifyPropertyChanged();
                 if (value == m_Changed)
                     return;
                 m_Changed = value;
@@ -57,6 +55,8 @@ namespace X4_Editor
             get { return m_PriceMin; }
             set
             {
+                if (value == m_PriceMin)
+                    return;
                 m_PriceMin = value;
                 Changed = true;
                 NotifyPropertyChanged();
@@ -69,6 +69,8 @@ namespace X4_Editor
             get { return m_PriceAvg; }
             set
             {
+                if (value == m_PriceAvg)
+                    return;
                 m_PriceAvg = value;
                 Changed = true;
                 X4Commands.RecalculatePriceCommand.Execute(null, null);
@@ -84,6 +86,8 @@ namespace X4_Editor
             get { return m_PriceMax; }
             set
             {
+                if (value == m_PriceMax)
+                    return;
                 m_PriceMax = value;
                 Changed = true;
                 NotifyPropertyChanged();
@@ -96,8 +100,9 @@ namespace X4_Editor
             get { return m_CalculatedPrice; }
             set
             {
+                if (value == m_CalculatedPrice)
+                    return;
                 m_CalculatedPrice = value;
-                Changed = true;
                 NotifyPropertyChanged();
                 NotifyPropertyChanged("Margin");
                 NotifyPropertyChanged("IncomePerHour");
@@ -130,6 +135,8 @@ namespace X4_Editor
             get { return m_Time; }
             set
             {
+                if (value == m_Time)
+                    return;
                 m_Time = value;
                 Changed = true;
                 NotifyPropertyChanged();
@@ -142,6 +149,8 @@ namespace X4_Editor
             get { return m_Component; }
             set
             {
+                if (value == m_Component)
+                    return;
                 m_Component = value;
                 Changed = true;
             }
@@ -153,6 +162,8 @@ namespace X4_Editor
             get { return m_Amount; }
             set
             {
+                if (value == m_Amount)
+                    return;
                 m_Amount = value;
                 Changed = true;
                 X4Commands.RecalculatePriceCommand.Execute(null, null);
@@ -168,6 +179,8 @@ namespace X4_Editor
             get { return m_Ware1; }
             set
             {
+                if (value == m_Ware1)
+                    return;
                 m_Ware1 = value;
                 Changed = true;
                 X4Commands.RecalculatePriceCommand.Execute(null, null);
@@ -181,6 +194,8 @@ namespace X4_Editor
             get { return m_Amount1; }
             set
             {
+                if (value == m_Amount1)
+                    return;
                 m_Amount1 = value;
                 Changed = true;
                 X4Commands.RecalculatePriceCommand.Execute(null, null);
@@ -195,6 +210,8 @@ namespace X4_Editor
             get { return m_Ware2; }
             set
             {
+                if (value == m_Ware2)
+                    return;
                 m_Ware2 = value;
                 Changed = true;
                 X4Commands.RecalculatePriceCommand.Execute(null, null);
@@ -208,6 +225,8 @@ namespace X4_Editor
             get { return m_Amount2; }
             set
             {
+                if (value == m_Amount2)
+                    return;
                 m_Amount2 = value;
                 Changed = true;
                 X4Commands.RecalculatePriceCommand.Execute(null, null);
@@ -222,6 +241,8 @@ namespace X4_Editor
             get { return m_Ware3; }
             set
             {
+                if (value == m_Ware3)
+                    return;
                 m_Ware3 = value;
                 Changed = true;
                 X4Commands.RecalculatePriceCommand.Execute(null, null);
@@ -235,6 +256,8 @@ namespace X4_Editor
             get { return m_Amount3; }
             set
             {
+                if (value == m_Amount3)
+                    return;
                 m_Amount3 = value;
                 Changed = true;
                 X4Commands.RecalculatePriceCommand.Execute(null, null);
@@ -249,6 +272,8 @@ namespace X4_Editor
             get { return m_Ware4; }
             set
             {
+                if (value == m_Ware4)
+                    return;
                 m_Ware4 = value;
                 Changed = true;
                 X4Commands.RecalculatePriceCommand.Execute(null, null);
@@ -262,6 +287,8 @@ namespace X4_Editor
             get { return m_Amount4; }
             set
             {
+                if (value == m_Amount4)
+                    return;
                 m_Amount4 = value;
                 Changed = true;
                 X4Commands.RecalculatePriceCommand.Execute(null, null);
@@ -276,6 +303,8 @@ namespace X4_Editor
             get { return m_Ware5; }
             set
             {
+                if (value == m_Ware5)
+                    return;
                 m_Ware5 = value;
                 Changed = true;
                 X4Commands.RecalculatePriceCommand.Execute(null, null);
@@ -289,6 +318,8 @@ namespace X4_Editor
             get { return m_Amount5; }
             set
             {
+                if (value == m_Amount5)
+                    return;
                 m_Amount5 = value;
                 Changed = true;
                 X4Commands.RecalculatePriceCommand.Execute(null, null);
@@ -303,6 +334,8 @@ namespace X4_Editor
             get { return m_Threshold; }
             set
             {
+                if (value == m_Threshold)
+                    return;
                 m_Threshold = value;
                 Changed = true;
                 NotifyPropertyChanged();

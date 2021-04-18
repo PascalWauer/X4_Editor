@@ -148,8 +148,8 @@ namespace X4_Editor
 
 
                     additionalErrorText = wareID;
-                    if (wareID == "energycells")
-                        return "test";
+//                    if (wareID == "ship_ter_s_fighter_01_a")
+//                        return "test";
                     var wareToChange = this.m_UIManager.UIModel.UIModelWares.Where(x => x.ID == wareID).FirstOrDefault();
                     var vanillaWareToChange = this.m_UIManager.UIModel.UIModelWaresVanilla.Where(x => x.ID == wareID).FirstOrDefault();
 
@@ -198,7 +198,11 @@ namespace X4_Editor
                         string method = "default";
                         // hier den passenden knoten raussuchen mit extra methode
                         XmlNode productionNode = GetNode(item, "production");
-                        XmlNode primaryNode = GetNode(item, "primary", method);
+                        XmlNode primaryNode = null;
+                        if (item.Attributes["sel"].Value.Contains("/primary"))
+                            primaryNode = GetNode(item, "primary", null);
+                        else
+                            primaryNode = GetNode(item, "primary", method);
 
                         //foreach (XmlNode node in item.ChildNodes)
                         //{
